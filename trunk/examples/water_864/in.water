@@ -1,0 +1,34 @@
+units		real
+atom_style	hybrid sphere dipole
+
+lattice		fcc 4.93
+region		box block -3 3 -3 3 -3 3
+create_box	1 box
+create_atoms	1 box
+
+mass 		1 40.0
+set		group all mass 40.0
+set		group all dipole/random 98934 0.479 # moment/(e*angstrom)
+velocity	all create 303.15 87287 
+pair_style	dipole/sf 12. # rCut/angstrom
+pair_coeff	* * 0.466 3.0 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+neighbor	1 bin
+neigh_modify	delay 1
+
+fix		integrate all nve/sphere update dipole
+fix 		thermostat all langevin 303.15 303.15 100.0 48279 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
+
+compute		erot all erotate/sphere
+thermo_style	custom step etotal pe epair c_erot press temp
+thermo		100
+
+dump		trj all custom 100 dump.trj id type x y z mux muy muz
+dump_modify	trj sort id
+
+timestep	10
+run		1000
+
+fix		baro all press/berendsen aniso 1 1 500 modulus 22222
+run		1000
