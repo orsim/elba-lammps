@@ -1,25 +1,26 @@
 # Copyright (C) 2011 Mario Orsi
-# This file is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free
-# Software Foundation, either version 3 of the License, or (at your option)
-# any later version. This file is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-# Public License for more details: <http://www.gnu.org/licenses/>. 
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #---------------------------------------------------------------------------
 # This script reads the LAMMPS dump file "dump.trj" and outputs the
 # trajectory file "trajectory.pdb", which can be read in VMD.
-#
 # Dipoles in "dump.trj" are described by mass center coordinates and
 # orientations (x-, y-, and z- projections of the dipole vectors). Since
 # VMD does not (currently) allow visualization of dipoles, this script uses
 # the orientation information to convert every dipolar atom into two atoms
 # representing the "+" and "-" ends of the original dipole. Such two atoms
 # are spaced 1 Angstrom apart. 
-#
 # USAGE: $python trj2pdb.py
-#---------------------------------------------------------------------------
 
 import sys, string, linecache
 from math import sqrt
