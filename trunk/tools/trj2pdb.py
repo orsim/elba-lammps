@@ -1,37 +1,39 @@
-## Copyright (C) 2011 Mario Orsi
-## This file is free software: you can redistribute it and/or modify it under
-## the terms of the GNU General Public License as published by the Free
-## Software Foundation, either version 3 of the License, or (at your option)
-## any later version. This file is distributed in the hope that it will be
-## useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-## Public License for more details: <http://www.gnu.org/licenses/>. 
+# Copyright (C) 2011 Mario Orsi
+# This file is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version. This file is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details: <http://www.gnu.org/licenses/>. 
 
-#############################################################################
-# This script reads the LAMMPS dump file "dump.lammpstrj" and outputs the
+#---------------------------------------------------------------------------
+# This script reads the LAMMPS dump file "dump.trj" and outputs the
 # trajectory file "trajectory.pdb", which can be read in VMD.
 #
-# Dipoles in "dump.lammpstrj" are described by mass center coordinates and
+# Dipoles in "dump.trj" are described by mass center coordinates and
 # orientations (x-, y-, and z- projections of the dipole vectors). Since
 # VMD does not (currently) allow visualization of dipoles, this script uses
 # the orientation information to convert every dipolar atom into two atoms
 # representing the "+" and "-" ends of the original dipole. Such two atoms
 # are spaced 1 Angstrom apart. 
 #
-# USAGE: python trj2pdb.py
+# USAGE: $python trj2pdb.py
+#---------------------------------------------------------------------------
 
 import sys, string, linecache
 from math import sqrt
 
-print "Processing file dump.lammpstrj ..."
-line = linecache.getline('dump.lammpstrj', 4)
+inFile = open("dump.trj", "r")
+
+print "Processing file dump.trj ..."
+line = linecache.getline('dump.trj', 4)
 words = string.split(line)
 nSites = int(words[0])
 print "Number of sites: %d" % nSites
 
 outFile = open("trajectory.pdb", "w")
 
-inFile = open("dump.lammpstrj", "r")
 lines = inFile.readlines()
 
 s=0.5; # [Angstrom] scaling factor
@@ -48,7 +50,30 @@ for line in lines:
                 outFile.write('ENDMDL\n')
                 nExtra=0;
             outFile.write('MODEL\n')
-    if len(words) == 9:
+    if len(words) == 8: # water-only system
+        n=int(words[0]) + nExtra # atom identifier
+        t=int(words[1]) # type identifier
+        x=float(words[2])
+        y=float(words[3])
+        z=float(words[4])
+        mux=float(words[5])
+        muy=float(words[6])
+        muz=float(words[7])
+        muMag=sqrt(mux*mux+muy*muy+muz*muz)
+        # compute coordinate of dipole's "+" tip:
+        xPlus=x+s*mux/muMag
+        yPlus=y+s*muy/muMag
+        zPlus=z+s*muz/muMag
+        # compute coordinate of dipole's "-" tail:
+        xMinus=x-s*mux/muMag
+        yMinus=y-s*muy/muMag
+        zMinus=z-s*muz/muMag
+        outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
+                      %(n,"OW WAT",nExtra+1,xMinus,yMinus,zMinus ))
+        outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
+                      %(n+1,"HW WAT",nExtra+1,xPlus,yPlus,zPlus ))
+        nExtra=nExtra+1
+    if len(words) == 9: # lipids+water system
         n=int(words[0]) + nExtra # atom identifier
         t=int(words[1]) # type identifier
         m=float(words[2]) # molecule identifier
