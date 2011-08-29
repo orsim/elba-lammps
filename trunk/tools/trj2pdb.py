@@ -12,32 +12,34 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #---------------------------------------------------------------------------
-# This script reads the LAMMPS dump file "dump.trj" and outputs the
-# trajectory file "trajectory.pdb", which can be read in VMD.
-# Dipoles in "dump.trj" are described by mass center coordinates and
-# orientations (x-, y-, and z- projections of the dipole vectors). Since
-# VMD does not (currently) allow visualization of dipoles, this script uses
-# the orientation information to convert every dipolar atom into two atoms
-# representing the "+" and "-" ends of the original dipole. Such two atoms
-# are spaced 1 Angstrom apart. 
-# USAGE: $python trj2pdb.py
+# Purpose: this script reads a LAMMPS ".trj" trajectory (dump) file and 
+#          converts it into a trajectory file "trajectory.pdb", which can
+#          be read in VMD.
+#          Point-dipoles in LAMMPS ".trj" files are described by mass center
+#          coordinates and orientations (x-, y-, and z- projections of the
+#          dipole vectors). Since VMD does not allow visualization of point-
+#          dipoles, this script uses the orientation information to convert
+#          every dipolar atom into two atoms representing the "+" and "-"
+#          ends of the original dipole. Such two atoms are spaced 1 Angstrom
+#          apart. 
+# Usage:   python trj2pdb.py dump.trj
 
 import sys, string, linecache
 from math import sqrt
 
-inFile = open("dump.trj", "r")
+inFileName = sys.argv[1]
+inFile = open(inFileName, "r")
 
-print "Processing file dump.trj ..."
-line = linecache.getline('dump.trj', 4)
+print "Processing file %s ..." % inFileName
+line = linecache.getline(inFileName, 4)
 words = string.split(line)
-nSites = int(words[0])
-print "Number of sites: %d" % nSites
+nAtoms = int(words[0])
+print "Number of atoms: %d" % nAtoms
 
 outFile = open("trajectory.pdb", "w")
-
 lines = inFile.readlines()
 
-s=0.5; # [Angstrom] scaling factor
+HALF_ANGSTROM=0.5; # [Angstrom] scaling factor
 nLine=0; # line counter
 nExtra=0; # extra atoms used to represent dipoles
 
@@ -62,13 +64,13 @@ for line in lines:
         muz=float(words[7])
         muMag=sqrt(mux*mux+muy*muy+muz*muz)
         # compute coordinate of dipole's "+" tip:
-        xPlus=x+s*mux/muMag
-        yPlus=y+s*muy/muMag
-        zPlus=z+s*muz/muMag
+        xPlus=x+HALF_ANGSTROM*mux/muMag
+        yPlus=y+HALF_ANGSTROM*muy/muMag
+        zPlus=z+HALF_ANGSTROM*muz/muMag
         # compute coordinate of dipole's "-" tail:
-        xMinus=x-s*mux/muMag
-        yMinus=y-s*muy/muMag
-        zMinus=z-s*muz/muMag
+        xMinus=x-HALF_ANGSTROM*mux/muMag
+        yMinus=y-HALF_ANGSTROM*muy/muMag
+        zMinus=z-HALF_ANGSTROM*muz/muMag
         outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
                       %(n,"OW WAT",nExtra+1,xMinus,yMinus,zMinus ))
         outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
@@ -87,13 +89,13 @@ for line in lines:
         muMag=sqrt(mux*mux+muy*muy+muz*muz)
         if muMag>0.0:
             # compute coordinate of dipole's "+" tip:
-            xPlus=x+s*mux/muMag
-            yPlus=y+s*muy/muMag
-            zPlus=z+s*muz/muMag
+            xPlus=x+HALF_ANGSTROM*mux/muMag
+            yPlus=y+HALF_ANGSTROM*muy/muMag
+            zPlus=z+HALF_ANGSTROM*muz/muMag
             # compute coordinate of dipole's "-" tail:
-            xMinus=x-s*mux/muMag
-            yMinus=y-s*muy/muMag
-            zMinus=z-s*muz/muMag
+            xMinus=x-HALF_ANGSTROM*mux/muMag
+            yMinus=y-HALF_ANGSTROM*muy/muMag
+            zMinus=z-HALF_ANGSTROM*muz/muMag
         if t == 1: # water type
             outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
                           %(n,"OW WAT",m,xMinus,yMinus,zMinus ))
