@@ -1,6 +1,6 @@
 *** Installing LAMMPS ***
 Detailed information on how to build LAMMPS can be found on the official
-website (http://lammps.sandia.gov). Please read carefully.
+website (http://lammps.sandia.gov). 
 Specific packages that need to be included because required by the ELBA model:
 - DIPOLE
 - MOLECULE
