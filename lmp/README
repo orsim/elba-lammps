@@ -1,8 +1,8 @@
 This is a repository of my contributions to LAMMPS. It is for my personal use,
 but feel free to have a look if you like.
 Most of the files in this folder should be shipped with the official LAMMPS 
-distribution. Those that are not, are experimental pieces of code, drafts of
-future functionalities, etc.  
-The rest of the elba-lammps toolkit should not require any of the material
+distribution. Any other files are experimental pieces of code, drafts of
+future functionalities, etc., that I am working on.  
+The rest of the ELBA-LAMMPS toolkit should not require any of the material
 included here.
 - Mario Orsi

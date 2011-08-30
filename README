@@ -1,30 +1,3 @@
 This is the ELBA-LAMMPS toolkit, a collection of tools to assist in the 
 simulation of the ELBA model in LAMMPS. The various folders should contain 
 usage information in the form of README files. 
-
-*** Installing LAMMPS ***
-Detailed information on how to build LAMMPS can be found on the official
-website (http://lammps.sandia.gov). Please read carefully.
-Specific packages that need to be included for the ELBA model:
-- DIPOLE
-- MOLECULE
-- USER-MISC
-In general, LAMMPS installation procedures are specific to users's local 
-machine(s). As examples, the next sections give protocols that work for me.
-
-** How to build LAMMPS on UOS machines **
-This is how I install LAMMPS on my University of Southampton GNU/LINUX desktop.
-- Download and extract LAMMPS tarball from official website
-- Edit "src/MAKE/Makefile.linux":
-	[...]
-	MPI_INC =  -I/local/software/openmpi/1.2.4/pgi-7.1/include
-	MPI_PATH =  	-L/local/software/openmpi/1.2.4/pgi-7.1/lib
-	MPI_LIB =	-lmpi -lpthread
-	[...]
-	FFT_INC = [leave blank, no need for FFT...]     
-	FFT_PATH = [leave blank, no need for FFT...]     
-	FFT_LIB = [leave blank, no need for FFT...]     
-- cd src/
-- make no-all
-- make yes-dipole yes-molecule yes-user-misc
-- make linux
