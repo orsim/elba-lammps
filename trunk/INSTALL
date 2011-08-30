@@ -1,0 +1,34 @@
+*** Installing LAMMPS ***
+Detailed information on how to build LAMMPS can be found on the official
+website (http://lammps.sandia.gov). Please read carefully.
+Specific packages that need to be included because required by the ELBA model:
+- DIPOLE
+- MOLECULE
+- USER-MISC
+In general, LAMMPS installation procedures are specific to users's local 
+machine(s). As examples, the next sections give protocols that work for me.
+
+** Installing LAMMPS on the Iridis supercomputer **
+This is how I install LAMMPS on the Iridis HPC machine at the University of 
+Southampton.
+- Download and extract LAMMPS tarball from official website
+- Edit "src/MAKE/Makefile.linux":
+	CC = mpicxx
+	LINK = mpicxx
+- cd src/
+- make no-all
+- make yes-dipole yes-molecule yes-user-misc
+- make linux
+
+** Installing LAMMPS on UOS machines **
+This is how I install LAMMPS on my University of Southampton GNU/LINUX desktop.
+- Download and extract LAMMPS tarball from official website
+- Edit "src/MAKE/Makefile.linux":
+	MPI_INC =  -I/local/software/openmpi/1.2.4/pgi-7.1/include
+	MPI_PATH =  	-L/local/software/openmpi/1.2.4/pgi-7.1/lib
+	MPI_LIB =	-lmpi -lpthread
+- cd src/
+- make no-all
+- make yes-dipole yes-molecule yes-user-misc
+- make linux
+
