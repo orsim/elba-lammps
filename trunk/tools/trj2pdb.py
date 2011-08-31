@@ -41,6 +41,7 @@ lines = inFile.readlines()
 
 HALF_ANGSTROM=0.5; # [Angstrom] scaling factor
 nLine=0; # line counter
+nCount=0; # counter
 nExtra=0; # extra atoms used to represent dipoles
 
 print "Start scanning coordinates and orientations..."
@@ -53,6 +54,15 @@ for line in lines:
                 outFile.write('ENDMDL\n')
                 nExtra=0;
             outFile.write('MODEL\n')
+            outFile.write('CRYST1')
+        else:
+            nCount=nCount+1
+            negCoord=float(words[0])
+            plusCoord=float(words[1])
+            boxLength=plusCoord-negCoord
+            outFile.write('%9.3f' % boxLength)
+            if nCount%3 == 0:
+                outFile.write('  90.00  90.00  90.00 P  1  1  1    1\n')
     if len(words) == 8: # water-only system
         n=int(words[0]) + nExtra # atom identifier
         t=int(words[1]) # type identifier
@@ -124,5 +134,4 @@ for line in lines:
         elif t == 6: # tail type
             outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
                           %(n,"CH2 LIP",m,x,y,z ))
-        
 print "Done scanning - end of script."
