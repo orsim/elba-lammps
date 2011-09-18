@@ -1,10 +1,12 @@
 *** Installing LAMMPS ***
 Detailed information on how to build LAMMPS can be found on the official
-website (http://lammps.sandia.gov). 
+website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
+read the official LAMMPS compilation instructions, build the default LAMMPS 
+executable, and make sure that you can reproduce the official examples.
+
 Specific packages that need to be included because required by the ELBA model:
 - DIPOLE
 - MOLECULE
-- USER-MISC
 In general, LAMMPS installation procedures are specific to users's local 
 machine(s). As examples, the next sections give protocols that work for me.
 These should be good starting points, but some tweaks are likely to be needed.
@@ -27,13 +29,3 @@ official LAMMPS distribution.
 - cd lammps-xx/src
 - module load openmpi
 - make iridis
-
-** Compiling LAMMPS on UOS machines **
-This is how I install LAMMPS on my University of Southampton GNU/LINUX desktop.
-- Edit "src/MAKE/Makefile.linux":
-	MPI_INC =  -I/local/software/openmpi/1.2.4/pgi-7.1/include
-	MPI_PATH =  	-L/local/software/openmpi/1.2.4/pgi-7.1/lib
-	MPI_LIB =	-lmpi -lpthread
-- module load openmpi
-- make linux
-
