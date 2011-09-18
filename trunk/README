@@ -1,3 +1,7 @@
 This is the ELBA-LAMMPS toolkit, a collection of tools to assist in the 
 simulation of the ELBA model in LAMMPS. The various folders should contain 
 usage information in the form of README files. 
+
+The place to start is probably the 'install' directory, which contains
+instructions on how to build LAMMPS with the necessary features to simulate
+the ELBA model.

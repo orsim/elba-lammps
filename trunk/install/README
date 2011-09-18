@@ -7,28 +7,33 @@ Specific packages that need to be included because required by the ELBA model:
 - USER-MISC
 In general, LAMMPS installation procedures are specific to users's local 
 machine(s). As examples, the next sections give protocols that work for me.
+These should be good starting points, but some tweaks are likely to be needed.
 
-** Installing LAMMPS on the Iridis supercomputer **
-This is how I install LAMMPS on the Iridis HPC machine at the University of 
-Southampton.
+i) Pre-compilation
 - Download and extract LAMMPS tarball from official website
-- Edit "src/MAKE/Makefile.linux":
-	CC = mpicxx
-	LINK = mpicxx
-- cd src/
+- cd lammps-xx/src/
 - make no-all
-- make yes-dipole yes-molecule yes-user-misc
-- make linux
+- make yes-dipole yes-molecule 
+- cp USER-MISC/pair_dipole_sf.* .
+- cp USER-MISC/bond_dipole.* .
 
-** Installing LAMMPS on UOS machines **
+ii) Compilation
+- Prepare a "Makefile" suitable for your machine. It's probably best to start
+from the makefiles provided in this directory, or those shipped with the 
+official LAMMPS distribution. 
+ 
+*) Example: Compiling LAMMPS on the Iridis HPC machine (U Southampton):
+- cp elba-lammps/install/Makefile.iridis lammps-xx/src/MAKE
+- cd lammps-xx/src
+- module load openmpi
+- make iridis
+
+** Compiling LAMMPS on UOS machines **
 This is how I install LAMMPS on my University of Southampton GNU/LINUX desktop.
-- Download and extract LAMMPS tarball from official website
 - Edit "src/MAKE/Makefile.linux":
 	MPI_INC =  -I/local/software/openmpi/1.2.4/pgi-7.1/include
 	MPI_PATH =  	-L/local/software/openmpi/1.2.4/pgi-7.1/lib
 	MPI_LIB =	-lmpi -lpthread
-- cd src/
-- make no-all
-- make yes-dipole yes-molecule yes-user-misc
+- module load openmpi
 - make linux
 
