@@ -1,8 +1,7 @@
 *** Installing LAMMPS ***
 Detailed information on how to build LAMMPS can be found on the official
 website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
-read the official LAMMPS compilation instructions, build the default LAMMPS 
-executable, and make sure that you can reproduce the official examples.
+read the official LAMMPS compilation instructions.
 
 Specific packages that need to be included because required by the ELBA model:
 - DIPOLE
@@ -14,18 +13,24 @@ These should be good starting points, but some tweaks are likely to be needed.
 i) Pre-compilation
 - Download and extract LAMMPS tarball from official website
 - cd lammps-xx/src/
-- make no-all
+- make no-all 
 - make yes-dipole yes-molecule 
 - cp USER-MISC/pair_dipole_sf.* .
-- cp USER-MISC/bond_dipole.* .
+- cp elba-lammps/lmp/src/bond_dipole.* .
+- comment out line 377 of 'special.cpp'
 
 ii) Compilation
 - Prepare a "Makefile" suitable for your machine. It's probably best to start
 from the makefiles provided in this directory, or those shipped with the 
 official LAMMPS distribution. 
  
-*) Example: Compiling LAMMPS on the Iridis HPC machine (U Southampton):
+*) HPC example: compiling LAMMPS on the Iridis HPC machine (U Southampton):
 - cp elba-lammps/install/Makefile.iridis lammps-xx/src/MAKE
 - cd lammps-xx/src
 - module load openmpi
 - make iridis
+
+*) Desktop example: compiling LAMMPS on my UOS desktop
+- cp elba-lammps/install/Makefile.uos lammps-xx/src/MAKE 
+- cd lammps-xx/src
+- make uos
