@@ -167,7 +167,7 @@ display eyesep       0.065000
 display focallength  2.000000
 display height       6.000000
 display distance     -2.000000
-display projection   Orthographic
+display projection   Perspective
 display nearclip set 0.500000
 display farclip  set 10.000000
 display depthcue   off
@@ -177,9 +177,9 @@ display cuedensity 0.400000
 display cuemode    Exp2
 mol new trajectory.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
-mol representation VDW 0.500000 8.000000
-mol color ColorID 0
-mol selection {name OW}
+mol representation VDW 1.000000 8.000000
+mol color Name
+mol selection {name CHO PHO}
 mol material Opaque
 mol addrep top
 mol selupdate 0 top 0
@@ -211,9 +211,9 @@ mol clipplane center 5 0 top {0.0 0.0 0.0}
 mol clipplane color  5 0 top {0.5 0.5 0.5 }
 mol clipplane normal 5 0 top {0.0 0.0 1.0}
 mol clipplane status 5 0 top {0}
-mol representation VDW 1.500000 8.000000
-mol color ColorID 4
-mol selection {name CHO}
+mol representation VDW 1.000000 8.000000
+mol color ColorID 3
+mol selection {name CH2}
 mol material Opaque
 mol addrep top
 mol selupdate 1 top 0
@@ -245,9 +245,9 @@ mol clipplane center 5 1 top {0.0 0.0 0.0}
 mol clipplane color  5 1 top {0.5 0.5 0.5 }
 mol clipplane normal 5 1 top {0.0 0.0 1.0}
 mol clipplane status 5 1 top {0}
-mol representation VDW 1.500000 8.000000
-mol color ColorID 4
-mol selection {name PHO}
+mol representation VDW 1.000000 8.000000
+mol color ColorID 1
+mol selection {name Em Gm}
 mol material Opaque
 mol addrep top
 mol selupdate 2 top 0
@@ -279,9 +279,9 @@ mol clipplane center 5 2 top {0.0 0.0 0.0}
 mol clipplane color  5 2 top {0.5 0.5 0.5 }
 mol clipplane normal 5 2 top {0.0 0.0 1.0}
 mol clipplane status 5 2 top {0}
-mol representation VDW 0.600000 8.000000
-mol color ColorID 3
-mol selection {name CH2}
+mol representation VDW 1.000000 8.000000
+mol color ColorID 8
+mol selection {name Ep Gp}
 mol material Opaque
 mol addrep top
 mol selupdate 3 top 0
@@ -313,42 +313,8 @@ mol clipplane center 5 3 top {0.0 0.0 0.0}
 mol clipplane color  5 3 top {0.5 0.5 0.5 }
 mol clipplane normal 5 3 top {0.0 0.0 1.0}
 mol clipplane status 5 3 top {0}
-mol representation VDW 1.000000 8.000000
-mol color ColorID 9
-mol selection {name Gm Ep}
-mol material Opaque
-mol addrep top
-mol selupdate 4 top 0
-mol colupdate 4 top 0
-mol scaleminmax top 4 0.000000 0.000000
-mol smoothrep top 4 0
-mol drawframes top 4 {now}
-mol clipplane center 0 4 top {0.0 0.0 0.0}
-mol clipplane color  0 4 top {0.5 0.5 0.5 }
-mol clipplane normal 0 4 top {0.0 0.0 1.0}
-mol clipplane status 0 4 top {0}
-mol clipplane center 1 4 top {0.0 0.0 0.0}
-mol clipplane color  1 4 top {0.5 0.5 0.5 }
-mol clipplane normal 1 4 top {0.0 0.0 1.0}
-mol clipplane status 1 4 top {0}
-mol clipplane center 2 4 top {0.0 0.0 0.0}
-mol clipplane color  2 4 top {0.5 0.5 0.5 }
-mol clipplane normal 2 4 top {0.0 0.0 1.0}
-mol clipplane status 2 4 top {0}
-mol clipplane center 3 4 top {0.0 0.0 0.0}
-mol clipplane color  3 4 top {0.5 0.5 0.5 }
-mol clipplane normal 3 4 top {0.0 0.0 1.0}
-mol clipplane status 3 4 top {0}
-mol clipplane center 4 4 top {0.0 0.0 0.0}
-mol clipplane color  4 4 top {0.5 0.5 0.5 }
-mol clipplane normal 4 4 top {0.0 0.0 1.0}
-mol clipplane status 4 4 top {0}
-mol clipplane center 5 4 top {0.0 0.0 0.0}
-mol clipplane color  5 4 top {0.5 0.5 0.5 }
-mol clipplane normal 5 4 top {0.0 0.0 1.0}
-mol clipplane status 5 4 top {0}
 mol rename top trajectory.pdb
-set viewpoints([molinfo top]) {{{1.000000 0.000000 0.000000 -0.179171} {0.000000 1.000000 0.000000 -0.409501} {0.000000 0.000000 1.000000 -0.064151} {0.000000 0.000000 0.000000 1.000000}} {{-0.001292 0.999991 -0.005151 0.000000} {0.006028 0.005159 0.999973 0.000000} {0.999985 0.001260 -0.006034 0.000000} {0.000000 0.000000 0.000000 1.000000}} {{0.027295 0.000000 0.000000 0.000000} {0.000000 0.027295 0.000000 0.000000} {0.000000 0.000000 0.027295 0.000000} {0.000000 0.000000 0.000000 1.000000}} {{1.000000 0.000000 0.000000 0.000000} {0.000000 1.000000 0.000000 0.000000} {0.000000 0.000000 1.000000 0.000000} {0.000000 0.000000 0.000000 1.000000}}}
+set viewpoints([molinfo top]) {{{1.000000 0.000000 0.000000 11.532000} {0.000000 1.000000 0.000000 -12.962000} {0.000000 0.000000 1.000000 -13.775000} {0.000000 0.000000 0.000000 1.000000}} {{0.987088 -0.126267 0.098608 0.000000} {-0.005758 0.587144 0.809467 0.000000} {-0.160104 -0.799579 0.578835 0.000000} {0.000000 0.000000 0.000000 1.000000}} {{0.019717 0.000000 0.000000 0.000000} {0.000000 0.019717 0.000000 0.000000} {0.000000 0.000000 0.019717 0.000000} {0.000000 0.000000 0.000000 1.000000}} {{1.000000 0.000000 0.000000 0.055108} {0.000000 1.000000 0.000000 0.328287} {0.000000 0.000000 1.000000 0.772859} {0.000000 0.000000 0.000000 1.000000}}}
 lappend viewplist [molinfo top]
 set topmol [molinfo top]
 # done with molecule 0
@@ -377,7 +343,6 @@ color scale colors BlkW {0.0 0.0 0.0} {0.5 0.5 0.5} {1.0 1.0 1.0}
 color scale colors WBlk {1.0 1.0 1.0} {0.5 0.5 0.5} {0.0 0.0 0.0}
   color scale method RWB
   set colorcmds {
-    {color Display {Background} white}
     {color Display {BackgroundTop} black}
     {color Display {BackgroundBot} blue2}
     {color Display {FPS} white}
@@ -495,7 +460,6 @@ color scale colors WBlk {1.0 1.0 1.0} {0.5 0.5 0.5} {0.0 0.0 0.0}
     {color Segname {} blue}
     {color Conformation {all} blue}
     {color Molecule {0} blue}
-    {color Molecule {trajectory.pdb} blue}
     {color Structure {3_10_Helix} blue}
     {color Surface {Grasp} gray}
     {color Labels {Springs} orange}

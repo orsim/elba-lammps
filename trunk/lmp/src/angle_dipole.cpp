@@ -96,15 +96,11 @@ void AngleDipole::compute(int eflag, int vflag)
     torque[iDip][1] += tangle * (delz*mu[iDip][0] - delx*mu[iDip][2]);
     torque[iDip][2] += tangle * (delx*mu[iDip][1] - dely*mu[iDip][0]);
     
-    f1[0] = 0.0;
-    f1[1] = 0.0;
-    f1[2] = 0.0;
-    f3[0] = 0.0;
-    f3[1] = 0.0;
-    f3[2] = 0.0;
+    f1[0] = f1[1] = f1[2] = f3[0] = f3[1] = f3[2] = 0.0;
     
-    if (evflag) ev_tally(iRef,iDip,iDummy,nlocal,newton_bond,eangle,f1,f3,
- 			 delx,dely,delz,delx,dely,delz);
+    if (evflag) // tally energy (virial=0 because force=0)
+      ev_tally(iRef,iDip,iDummy,nlocal,newton_bond,eangle,f1,f3,
+ 			 0.0,0.0,0.0,0.0,0.0,0.0);
   }
 }
 
@@ -128,7 +124,7 @@ void AngleDipole::allocate()
 
 void AngleDipole::coeff(int narg, char **arg)
 {
-  if (narg != 3) error->all("Incorrect args for angle coefficients");
+  if (narg != 3) error->all(FLERR,"Incorrect args for angle coefficients");
   if (!allocated) allocate();
 
   int ilo,ihi;
@@ -147,7 +143,7 @@ void AngleDipole::coeff(int narg, char **arg)
     count++;
   }
 
-  if (count == 0) error->all("Incorrect args for angle coefficients");
+  if (count == 0) error->all(FLERR,"Incorrect args for angle coefficients");
 }
 
 /* ---------------------------------------------------------------------- */
