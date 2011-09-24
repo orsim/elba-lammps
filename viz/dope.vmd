@@ -177,7 +177,7 @@ display cuedensity 0.400000
 display cuemode    Exp2
 mol new trajectory.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
-mol representation VDW 0.700000 8.000000
+mol representation VDW 0.500000 8.000000
 mol color ColorID 0
 mol selection {name OW}
 mol material Opaque
@@ -211,7 +211,7 @@ mol clipplane center 5 0 top {0.0 0.0 0.0}
 mol clipplane color  5 0 top {0.5 0.5 0.5 }
 mol clipplane normal 5 0 top {0.0 0.0 1.0}
 mol clipplane status 5 0 top {0}
-mol representation VDW 1.500000 8.000000
+mol representation VDW 1.300000 8.000000
 mol color ColorID 4
 mol selection {name CHO}
 mol material Opaque
@@ -245,7 +245,7 @@ mol clipplane center 5 1 top {0.0 0.0 0.0}
 mol clipplane color  5 1 top {0.5 0.5 0.5 }
 mol clipplane normal 5 1 top {0.0 0.0 1.0}
 mol clipplane status 5 1 top {0}
-mol representation VDW 2.000000 8.000000
+mol representation VDW 1.800000 8.000000
 mol color ColorID 4
 mol selection {name PHO}
 mol material Opaque
@@ -279,7 +279,7 @@ mol clipplane center 5 2 top {0.0 0.0 0.0}
 mol clipplane color  5 2 top {0.5 0.5 0.5 }
 mol clipplane normal 5 2 top {0.0 0.0 1.0}
 mol clipplane status 5 2 top {0}
-mol representation VDW 1.500000 8.000000
+mol representation VDW 1.300000 8.000000
 mol color ColorID 3
 mol selection {name CH2}
 mol material Opaque
@@ -313,7 +313,7 @@ mol clipplane center 5 3 top {0.0 0.0 0.0}
 mol clipplane color  5 3 top {0.5 0.5 0.5 }
 mol clipplane normal 5 3 top {0.0 0.0 1.0}
 mol clipplane status 5 3 top {0}
-mol representation VDW 1.700000 8.000000
+mol representation VDW 1.400000 8.000000
 mol color ColorID 9
 mol selection {name Gm Ep}
 mol material Opaque

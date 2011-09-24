@@ -1,4 +1,5 @@
 *** Installing LAMMPS ***
+
 Detailed information on how to build LAMMPS can be found on the official
 website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
 read the official LAMMPS compilation instructions.
@@ -16,8 +17,7 @@ i) Pre-compilation
 - make no-all 
 - make yes-dipole yes-molecule 
 - cp USER-MISC/pair_dipole_sf.* .
-- cp elba-lammps/lmp/src/bond_dipole.* .
-- comment out line 377 of 'special.cpp'
+- cp elba-lammps/lmp/src/angle_dipole.* .
 
 ii) Compilation
 - Prepare a "Makefile" suitable for your machine. It's probably best to start
@@ -33,4 +33,7 @@ official LAMMPS distribution.
 *) Desktop example: compiling LAMMPS on my UOS desktop
 - cp elba-lammps/install/Makefile.uos lammps-xx/src/MAKE 
 - cd lammps-xx/src
+- module load icc openmpi
 - make uos
+
+Mario Orsi (orsimario@gmail.com) - September 2011
