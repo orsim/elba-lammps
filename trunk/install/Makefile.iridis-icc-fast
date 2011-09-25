@@ -1,4 +1,4 @@
-# iridis = Iridis cluster (U Southampton), Intel icc, openmpi
+# iridis-icc-fast = Iridis cluster (U Southampton), Intel icc -fast, openmpi
 
 SHELL = /bin/sh
 
@@ -6,10 +6,10 @@ SHELL = /bin/sh
 # compiler/linker settings
 # specify flags and libraries needed for your compiler
 
-CC =		mpicxx
-CCFLAGS =	-O
+CC =		icc
+CCFLAGS =	-fast
 DEPFLAGS =	-M
-LINK =		mpicxx
+LINK =		icc
 LINKFLAGS =	-O
 LIB =           -lstdc++
 ARCHIVE =	ar
@@ -33,9 +33,9 @@ LMP_INC =	-DLAMMPS_GZIP
 # PATH = path for MPI library
 # LIB = name of MPI library
 
-MPI_INC =       
-MPI_PATH = 
-MPI_LIB =	
+MPI_INC = -I/local/software/rh53/openmpi/1.3.3/intel/include/      
+MPI_PATH = -L/local/software/rh53/openmpi/1.3.3/intel/lib/
+MPI_LIB = -lmpi -lpthread
 
 # FFT library, OPTIONAL
 # see discussion in doc/Section_start.html#2_2 (step 6)
