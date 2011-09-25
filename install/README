@@ -2,9 +2,12 @@
 
 Detailed information on how to build LAMMPS can be found on the official
 website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
-read the official LAMMPS compilation instructions.
+read the official LAMMPS compilation instructions. 
 
 i) Pre-compilation
+
+The following protocol assembles the ELBA-required source code and discards 
+non-required components:
 
 - Download and extract LAMMPS tarball from official website
 - cd lammps-xx/src/
@@ -21,7 +24,7 @@ suitable for your machine. The Makefiles provided in this directory, or those
 shipped with the official LAMMPS distribution, should be useful starting 
 points.
  
-As examples, these are compilation protocols that work for me on systems 
+As examples, these are compilation protocols that work for me on computers 
 running GNU/Linux operating systems:
  
 *) HPC example: compiling LAMMPS on the Iridis HPC machine (U Southampton):
