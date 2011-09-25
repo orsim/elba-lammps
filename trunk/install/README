@@ -4,14 +4,8 @@ Detailed information on how to build LAMMPS can be found on the official
 website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
 read the official LAMMPS compilation instructions.
 
-Specific packages that need to be included because required by the ELBA model:
-- DIPOLE
-- MOLECULE
-In general, LAMMPS installation procedures are specific to users's local 
-machine(s). As examples, the next sections give protocols that work for me.
-These should be good starting points, but some tweaks are likely to be needed.
-
 i) Pre-compilation
+
 - Download and extract LAMMPS tarball from official website
 - cd lammps-xx/src/
 - make no-all 
@@ -20,15 +14,21 @@ i) Pre-compilation
 - cp elba-lammps/lmp/src/angle_dipole.* .
 
 ii) Compilation
-- Prepare a "Makefile" suitable for your machine. It's probably best to start
-from the makefiles provided in this directory, or those shipped with the 
-official LAMMPS distribution. 
+
+Compiling LAMMPS can be non-trivial, as compilation protocols tend to be 
+specific to each different system. So you have to have a "Makefile" which is
+suitable for your machine. The Makefiles provided in this directory, or those 
+shipped with the official LAMMPS distribution, should be useful starting 
+points.
+ 
+As examples, these are compilation protocols that work for me on systems 
+running GNU/Linux operating systems:
  
 *) HPC example: compiling LAMMPS on the Iridis HPC machine (U Southampton):
-- cp elba-lammps/install/Makefile.iridis lammps-xx/src/MAKE
+- cp elba-lammps/install/Makefile.iridis-icc-fast lammps-xx/src/MAKE
 - cd lammps-xx/src
 - module load openmpi
-- make iridis
+- make iridis-icc-fast
 
 *) Desktop example: compiling LAMMPS on my UOS desktop
 - cp elba-lammps/install/Makefile.uos lammps-xx/src/MAKE 
