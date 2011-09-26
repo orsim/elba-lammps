@@ -1,0 +1,45 @@
+pair_style dipole/sf 12
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+mass    1   40.000
+mass    2   90.000
+mass    3   90.000
+mass    4   62.000
+mass    5   62.000
+mass    6   42.000
+
+pair_coeff    1    1	  0.1 3.000
+pair_coeff    1    2	  0.1 4.100
+pair_coeff    1    3	  0.1 4.100
+pair_coeff    1    4	  0.1 3.800
+pair_coeff    1    5	  0.1 3.800
+pair_coeff    1    6	  0.1 3.750
+pair_coeff    2    2	  0.1 5.200
+pair_coeff    2    3	  0.1 5.200
+pair_coeff    2    4	  0.1 4.900
+pair_coeff    2    5	  0.1 4.900
+pair_coeff    2    6	  0.1 4.850
+pair_coeff    3    3	  0.1 5.200
+pair_coeff    3    4	  0.1 4.900
+pair_coeff    3    5	  0.1 4.900
+pair_coeff    3    6	  0.1 4.850
+pair_coeff    4    4	  0.1 4.600
+pair_coeff    4    5	  0.1 4.600
+pair_coeff    4    6	  0.1 4.550
+pair_coeff    5    5	  0.1 4.600
+pair_coeff    5    6	  0.1 4.550
+pair_coeff    6    6	  0.1 4.500
+
+bond_coeff    1     1506.0  4.680
+bond_coeff    2     1506.0  4.410
+bond_coeff    3     1506.0  4.140
+bond_coeff    4     1506.0  4.095
+bond_coeff    5     1506.0  4.050
+
+angle_coeff    1  cosine/squared 35851  115.00
+angle_coeff    2  cosine/squared 35851  160.00
+angle_coeff    3  cosine/squared 35851  180.00
+angle_coeff    4  cosine/squared 35851  120.00
+angle_coeff    5  dipole   1000.0  0.0
+

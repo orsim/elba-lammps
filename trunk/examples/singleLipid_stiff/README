@@ -1,0 +1,3 @@
+This example uses a set of very stiff rigidity constants for intramolecular
+interactions. While unrealistic, this enables checking of the reference
+(equilibrium) values for bonds and angles.
