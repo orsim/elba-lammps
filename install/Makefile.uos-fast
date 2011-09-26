@@ -1,4 +1,4 @@
-# uos = RedHat Gnu/Linux U Southampton desktop, Intel icc
+# uos = RedHat GNU/Linux U Southampton desktop, Intel icc -fast
 
 SHELL = /bin/sh
 
@@ -7,7 +7,7 @@ SHELL = /bin/sh
 # specify flags and libraries needed for your compiler
 
 CC =		icc
-CCFLAGS =	-O
+CCFLAGS =	-fast
 DEPFLAGS =	-M
 LINK =		icc
 LINKFLAGS =	-O
