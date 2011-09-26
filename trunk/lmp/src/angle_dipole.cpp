@@ -48,7 +48,7 @@ AngleDipole::~AngleDipole()
 void AngleDipole::compute(int eflag, int vflag)
 /* ----------------------------------------------------------------------
    This function implements an intramolecular pair interaction between a
-   dipolar atom 'iDip' and a reference atom 'iRef'.
+   dipolar atom 'iDip' and a reference atom 'iRef' (see manual for details).
    A torque is applied on 'iDip' to restrain the dipole orientation along
    the direction defined by the vector 'x[iRef] - x[iDip]'.
 ------------------------------------------------------------------------- */
@@ -62,18 +62,21 @@ void AngleDipole::compute(int eflag, int vflag)
   if (eflag || vflag) ev_setup(eflag,vflag);
   else evflag = 0;
 
-  double **x = atom->x; 
-  double **mu = atom->mu; // point dipole
+  double **x = atom->x; // position vector
+  double **mu = atom->mu; // point-dipole components and moment magnitude
   double **torque = atom->torque;
   int **anglelist = neighbor->anglelist;
   int nanglelist = neighbor->nanglelist;
   int nlocal = atom->nlocal;
   int newton_bond = force->newton_bond;
 
+  if (!newton_bond) 
+    error->all(FLERR,"'newton' flag for bonded interactions must be 'on'");
+
   for (n = 0; n < nanglelist; n++) {
-    iDip = anglelist[n][0];
-    iRef = anglelist[n][1];
-    iDummy = anglelist[n][2];
+    iDip = anglelist[n][0]; // dipole whose orientation is to be restrained
+    iRef = anglelist[n][1]; // reference atom toward which dipole will point
+    iDummy = anglelist[n][2]; // dummy atom - irrelevant to the interaction
     type = anglelist[n][3];
 
     delx = x[iRef][0] - x[iDip][0];
@@ -100,7 +103,7 @@ void AngleDipole::compute(int eflag, int vflag)
     
     if (evflag) // tally energy (virial=0 because force=0)
       ev_tally(iRef,iDip,iDummy,nlocal,newton_bond,eangle,f1,f3,
- 			 0.0,0.0,0.0,0.0,0.0,0.0);
+	       0.0,0.0,0.0,0.0,0.0,0.0);
   }
 }
 
@@ -182,7 +185,7 @@ void AngleDipole::read_restart(FILE *fp)
 }
 
 /* ----------------------------------------------------------------------
-   used by ComputeBondLocal - not relevant here
+   used by ComputeAngleLocal
 ------------------------------------------------------------------------- */
 
 double AngleDipole::single(int type, int iRef, int iDip, int iDummy)

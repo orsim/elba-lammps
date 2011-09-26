@@ -34,9 +34,9 @@ running GNU/Linux operating systems:
 - make iridis-icc-fast
 
 *) Desktop example: compiling LAMMPS on my UOS desktop
-- cp elba-lammps/install/Makefile.uos lammps-xx/src/MAKE 
+- cp elba-lammps/install/Makefile.uos-icc lammps-xx/src/MAKE 
 - cd lammps-xx/src
 - module load icc openmpi
-- make uos
+- make uos-icc
 
 Mario Orsi (orsimario@gmail.com) - September 2011
