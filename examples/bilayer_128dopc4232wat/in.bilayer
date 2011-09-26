@@ -5,8 +5,8 @@ include 	forcefield.dopc
 special_bonds	lj/coul 0.0 1.0 1.0 
 velocity	all create 0.0 87287 
 
-neighbor	1 bin
-neigh_modify	delay 2
+neighbor	2 bin
+neigh_modify	delay 0
 
 group		lipids type 2 3 4 5 6
 group		water type 1
@@ -18,22 +18,22 @@ fix             removeMomentum all momentum 1 linear 1 1 1
 
 compute		erot all erotate/sphere
 thermo_style	custom step etotal pe epair c_erot press temp
-thermo		100
+thermo		10
 
 dump		trj all custom 100 dump.trj id type mol x y z mux muy muz
 dump_modify	trj sort id
 
 timestep	1
-run		1000
+run		100
 
 timestep	2
-run		1000
+run		100
 
 timestep	5
-run		1000
+run		100
 
 timestep	10
-run		1000
+run		100
 
 fix		baro all press/berendsen aniso 1 1 500 couple xy modulus 22222
-run		1000
+run		100

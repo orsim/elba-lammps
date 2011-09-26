@@ -1,0 +1,265 @@
+LAMMPS (25 Sep 2011)
+units		real
+atom_style	hybrid angle dipole sphere 
+
+read_data 	data.singleLipid
+  2 = max bonds/atom
+  2 = max angles/atom
+  orthogonal box = (-60 -60 -60) to (60 60 60)
+  1 by 1 by 1 processor grid
+  15 atoms
+  14 bonds
+  16 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.stiff
+pair_style dipole/sf 12
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+mass    1   40.000
+mass    2   90.000
+mass    3   90.000
+mass    4   62.000
+mass    5   62.000
+mass    6   42.000
+
+pair_coeff    1    1	  0.1 3.000
+pair_coeff    1    2	  0.1 4.100
+pair_coeff    1    3	  0.1 4.100
+pair_coeff    1    4	  0.1 3.800
+pair_coeff    1    5	  0.1 3.800
+pair_coeff    1    6	  0.1 3.750
+pair_coeff    2    2	  0.1 5.200
+pair_coeff    2    3	  0.1 5.200
+pair_coeff    2    4	  0.1 4.900
+pair_coeff    2    5	  0.1 4.900
+pair_coeff    2    6	  0.1 4.850
+pair_coeff    3    3	  0.1 5.200
+pair_coeff    3    4	  0.1 4.900
+pair_coeff    3    5	  0.1 4.900
+pair_coeff    3    6	  0.1 4.850
+pair_coeff    4    4	  0.1 4.600
+pair_coeff    4    5	  0.1 4.600
+pair_coeff    4    6	  0.1 4.550
+pair_coeff    5    5	  0.1 4.600
+pair_coeff    5    6	  0.1 4.550
+pair_coeff    6    6	  0.1 4.500
+
+bond_coeff    1     1506.0  4.680
+bond_coeff    2     1506.0  4.410
+bond_coeff    3     1506.0  4.140
+bond_coeff    4     1506.0  4.095
+bond_coeff    5     1506.0  4.050
+
+angle_coeff    1  cosine/squared 35851  115.00
+angle_coeff    2  cosine/squared 35851  160.00
+angle_coeff    3  cosine/squared 35851  180.00
+angle_coeff    4  cosine/squared 35851  120.00
+angle_coeff    5  dipole   1000.0  0.0
+
+
+special_bonds	lj/coul 0.0 1.0 1.0 
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+
+velocity	all create 0.0 87287 mom no
+
+neighbor	1 bin
+neigh_modify 	delay 1
+
+fix		1 all nve/sphere update dipole
+fix 		2 all langevin 303.15 303.15 100.0 48279 omega yes
+
+compute		erot all erotate/sphere
+thermo_style	custom step etotal pe epair c_erot press temp
+thermo		100
+
+dump		1 all custom 10 dump.trj id type mol x y z mux muy muz
+dump_modify	1 sort id
+
+timestep	0.01
+run		1000
+Memory usage per processor = 4.25673 Mbytes
+Step TotEng PotEng E_pair erot Press Temp 
+       0    543372.14    543372.14    318812.67            0    51600.193            0 
+     100    536718.54    201326.78    940.33244     19.83398    9727.6808    8036927.6 
+     200    529139.06    118824.05    153.50938     78.38026    11265.886    9832298.9 
+     300    521144.87    126163.05    31.692667    176.31332    10311.922    9464872.4 
+     400    513352.39     142154.2    29.433837    314.37314    8636.9484    8894950.2 
+     500    506328.97    172922.27    71.596899    485.70776    6072.8373    7989359.9 
+     600    500154.34    228685.43    162.14581    700.82045    2514.6891    6505156.9 
+     700    495045.13    274187.66    279.54307    929.62331   -786.99422    5292364.5 
+     800    490718.42    305642.96    341.16236    1198.5697   -3392.5487    4434927.3 
+     900    487244.35    342609.14     390.8136    1476.4942   -5463.0166    3465865.4 
+    1000    484301.38    359597.18    651.40952    1773.1036   -6111.4087    2988262.5 
+Loop time of 0.012922 on 1 procs for 1000 steps with 15 atoms
+
+Pair  time (%) = 0.00307536 (23.7993)
+Bond  time (%) = 0.00156403 (12.1035)
+Neigh time (%) = 0.000595331 (4.6071)
+Comm  time (%) = 0.000531912 (4.11631)
+Outpt time (%) = 0.00425124 (32.8991)
+Other time (%) = 0.00290418 (22.4746)
+
+Nlocal:    15 ave 15 max 15 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    63 ave 63 max 63 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 63
+Ave neighs/atom = 4.2
+Ave special neighs/atom = 1.86667
+Neighbor list builds = 33
+Dangerous builds = 1000
+
+timestep	0.1
+run		1000
+Memory usage per processor = 4.25673 Mbytes
+Step TotEng PotEng E_pair erot Press Temp 
+    1000    484301.38    359597.18    651.40952    1773.1036   -6111.4087    2988262.5 
+    1100    431802.26    205552.72    24.051672    3855.7469    610.01958    5421573.7 
+    1200    390221.41    243734.69    1.1146499    3314.7296   -4276.4746    3510232.7 
+    1300    356850.95     208644.5  0.037397027    1685.4669    -4638.412    3551442.4 
+    1400    323979.15    122678.27 -0.040305512    221.80084    965.02317    4823733.7 
+    1500     285638.3    92525.573  -0.38921935    1890.4417    2364.5846    4627522.6 
+    1600    251975.46    83326.559    310.81214     2846.969     1600.157    4041300.9 
+    1700    226786.41    101352.06    5.0854541    2852.6206   -766.44634    3005758.9 
+    1800    202280.41    95532.623   0.41919614    2430.5382   -802.06508    2557976.5 
+    1900    182644.84    83438.003   0.25430613    1506.5626   -613.45542    2377274.1 
+    2000    160507.18    55576.998    1050.4478    1370.7105    1188.9621    2514421.5 
+Loop time of 0.0139639 on 1 procs for 1000 steps with 15 atoms
+
+Pair  time (%) = 0.00176334 (12.6278)
+Bond  time (%) = 0.00159502 (11.4224)
+Neigh time (%) = 0.00268126 (19.2013)
+Comm  time (%) = 0.000687838 (4.92581)
+Outpt time (%) = 0.00426769 (30.5622)
+Other time (%) = 0.00296879 (21.2604)
+
+Nlocal:    15 ave 15 max 15 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    44 ave 44 max 44 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 44
+Ave neighs/atom = 2.93333
+Ave special neighs/atom = 1.86667
+Neighbor list builds = 152
+Dangerous builds = 1000
+
+timestep	1
+run		1000
+Memory usage per processor = 4.25673 Mbytes
+Step TotEng PotEng E_pair erot Press Temp 
+    2000    160507.18    55576.998    1050.4478    1370.7105    1188.9621    2514421.5 
+    2100    51878.221     22384.28     1.074603    403.50161    459.04282    706757.57 
+    2200    17269.076    8070.5592    4.7992839    64.288438    387.42042    220422.27 
+    2300    5657.7965    2488.6278    17.921365    151.36466   -9.3605528    75942.174 
+    2400    2017.8671    901.36432    8.4599277    77.859574    85.822354    26754.539 
+    2500    701.34439     398.7186    18.222754    42.230884    46.092436     7251.763 
+    2600    283.55825    167.33672    21.446428    19.125934   -38.275547     2784.994 
+    2700    141.48917    107.73029    45.269579    10.525576   -17.946323    808.95751 
+    2800    116.89749    74.872553     27.83879    11.536546   -7.0712339    1007.0353 
+    2900    89.291436    67.406123    34.132922    13.697774    10.204752    524.43351 
+    3000    79.023442    63.806073    28.912501    14.436168    11.791215    364.65086 
+Loop time of 0.0138001 on 1 procs for 1000 steps with 15 atoms
+
+Pair  time (%) = 0.00195193 (14.1443)
+Bond  time (%) = 0.00153875 (11.1503)
+Neigh time (%) = 0.00255394 (18.5066)
+Comm  time (%) = 0.000711679 (5.15704)
+Outpt time (%) = 0.00420713 (30.4862)
+Other time (%) = 0.0028367 (20.5556)
+
+Nlocal:    15 ave 15 max 15 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    42 ave 42 max 42 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 42
+Ave neighs/atom = 2.8
+Ave special neighs/atom = 1.86667
+Neighbor list builds = 146
+Dangerous builds = 1000
+
+timestep	2
+run		1000
+Memory usage per processor = 4.25673 Mbytes
+Step TotEng PotEng E_pair erot Press Temp 
+    3000    79.023442    63.806073    28.912501    14.436168    11.791215    364.65086 
+    3100    71.401709    61.327505    30.395128    22.085683   -11.829777    241.40619 
+    3200    76.650301    59.858961    28.799825    11.643846    8.5383812    402.36761 
+    3300    74.113097    62.877183    41.839229    13.059284    10.014328    269.24403 
+    3400    75.555682    58.438081    28.891505    20.603246   -1.7094115    410.18575 
+    3500    70.110954    58.403812    27.435086    10.917567    1.3409444    280.53596 
+    3600    72.720795    58.812912    34.361338    25.200256   -3.4516385    333.27189 
+    3700    73.809351    60.627961    32.300853    10.545737   -10.864538    315.86309 
+    3800    75.698547     67.19493    23.589623    16.732683    2.8939736    203.77054 
+    3900    77.360492    60.480359    36.741438    10.432423    4.4128913    404.49534 
+    4000    72.288699    59.202245     34.32943    18.085661    3.6805172    313.58814 
+Loop time of 0.011102 on 1 procs for 1000 steps with 15 atoms
+
+Pair  time (%) = 0.00183892 (16.5639)
+Bond  time (%) = 0.00155449 (14.0019)
+Neigh time (%) = 0.000234365 (2.11103)
+Comm  time (%) = 0.000520468 (4.68807)
+Outpt time (%) = 0.00417185 (37.5776)
+Other time (%) = 0.00278187 (25.0574)
+
+Nlocal:    15 ave 15 max 15 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    41 ave 41 max 41 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 41
+Ave neighs/atom = 2.73333
+Ave special neighs/atom = 1.86667
+Neighbor list builds = 13
+Dangerous builds = 1000
+
+unfix		2
+run		1000Memory usage per processor = 4.25673 Mbytes
+Step TotEng PotEng E_pair erot Press Temp 
+    4000    72.288699    59.202245     34.32943    18.085661    3.6805172    313.58814 
+    4100    72.431158    60.988655    31.278558    20.143125   -9.4148949    274.19448 
+    4200    73.486858    61.802947    29.166893    19.930202    7.4390025    279.97927 
+    4300     73.56002    60.408758    30.247234     20.11061   -4.3006191    315.14115 
+    4400    73.854613    61.468999     31.87785    19.941277   -5.8451841    296.79407 
+    4500    73.769658    65.279192    31.927077     20.19754    1.5397485    203.45539 
+    4600     73.57903    60.884323    32.696292    19.819803   -2.7941677     304.2008 
+    4700    73.762649    60.227484    30.965709    20.063363   -10.395118    324.34054 
+    4800    73.657125    62.859615    28.672941    19.790097   -6.0224029    258.73862 
+    4900    72.764061    62.485482    30.375579    19.799922   -4.3611464    246.30359 
+    5000    72.339395    59.514029    30.164869     19.37363     1.543364    307.33176 
+Loop time of 0.00906897 on 1 procs for 1000 steps with 15 atoms
+
+Pair  time (%) = 0.00178671 (19.7014)
+Bond  time (%) = 0.00154328 (17.0172)
+Neigh time (%) = 0.00027442 (3.02592)
+Comm  time (%) = 0.000494242 (5.44981)
+Outpt time (%) = 0.00409365 (45.1391)
+Other time (%) = 0.000876665 (9.66665)
+
+Nlocal:    15 ave 15 max 15 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    41 ave 41 max 41 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 41
+Ave neighs/atom = 2.73333
+Ave special neighs/atom = 1.86667
+Neighbor list builds = 15
+Dangerous builds = 1000
