@@ -46,12 +46,6 @@ AngleDipole::~AngleDipole()
 /* ---------------------------------------------------------------------- */
 
 void AngleDipole::compute(int eflag, int vflag)
-/* ----------------------------------------------------------------------
-   This function implements an intramolecular pair interaction between a
-   dipolar atom 'iDip' and a reference atom 'iRef' (see manual for details).
-   A torque is applied on 'iDip' to restrain the dipole orientation along
-   the direction defined by the vector 'x[iRef] - x[iDip]'.
-------------------------------------------------------------------------- */
 {
   int iRef,iDip,iDummy,n,type;
   double delx,dely,delz;
@@ -149,7 +143,9 @@ void AngleDipole::coeff(int narg, char **arg)
   if (count == 0) error->all(FLERR,"Incorrect args for angle coefficients");
 }
 
-/* ---------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------
+   used by SHAKE
+------------------------------------------------------------------------- */
 
 double AngleDipole::equilibrium_angle(int i)
 {
@@ -190,5 +186,20 @@ void AngleDipole::read_restart(FILE *fp)
 
 double AngleDipole::single(int type, int iRef, int iDip, int iDummy)
 {
-  return 0.0;
+  double **x = atom->x; // position vector
+  double **mu = atom->mu; // point-dipole components and moment magnitude
+
+  double delx = x[iRef][0] - x[iDip][0];
+  double dely = x[iRef][1] - x[iDip][1];
+  double delz = x[iRef][2] - x[iDip][2];
+
+  domain->minimum_image(delx,dely,delz);
+
+  double r = sqrt(delx*delx + dely*dely + delz*delz);
+  double rmu = r * mu[iDip][3];
+  double cosGamma = (mu[iDip][0]*delx+mu[iDip][1]*dely+mu[iDip][2]*delz) / rmu;
+  double deltaGamma = cosGamma - cos(gamma0[type]);
+  double kdg = k[type] * deltaGamma;
+
+  return kdg * deltaGamma; // energy  
 }

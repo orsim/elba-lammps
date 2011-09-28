@@ -10,11 +10,12 @@ usage information in the form of README files.
 	as starting points for new simulations 
 
 - bench: benchmark simulations, useful to check performances on large 
-	number of processors
+	numbers of processors
 
-- tools: scripts performing various operations - check info at the top of
-	each file to
+- tools: scripts performing various operations - check comments at the top 
+	of each file to get usage information
 
 - viz: VMD status files for optimal visualization of ELBA systems
 
 Mario Orsi (orsimario@gmail.com) - September 2011
+http://www.personal.soton.ac.uk/orsi
