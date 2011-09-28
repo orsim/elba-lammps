@@ -1,0 +1,122 @@
+LAMMPS (25 Sep 2011)
+units		real
+atom_style	hybrid angle dipole sphere 
+read_data 	data.1024dope8216wat
+  2 = max bonds/atom
+  2 = max angles/atom
+  orthogonal box = (-62 -62 -25) to (62 62 75)
+  2 by 2 by 1 processor grid
+  24576 atoms
+  14336 bonds
+  16384 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.dope
+pair_style dipole/sf 12
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+mass    1   40.000
+mass    2   42.000
+mass    3   90.000
+mass    4   62.000
+mass    5   62.000
+mass    6   42.000
+
+pair_coeff    1    1	  0.466  3.000
+pair_coeff    1    2	  0.671  3.750
+pair_coeff    1    3	  1.054  4.100
+pair_coeff    1    4	  0.574  3.800
+pair_coeff    1    5	  0.765  3.800
+pair_coeff    1    6	  0.447  3.750
+pair_coeff    2    2	  0.837  4.500
+pair_coeff    2    3	  2.738  4.850
+pair_coeff    2    4	  1.341  4.550
+pair_coeff    2    5	  2.236  4.550
+pair_coeff    2    6	  0.837  4.500
+pair_coeff    3    3	  1.434  5.200
+pair_coeff    3    4	  1.171  4.900
+pair_coeff    3    5	  1.171  4.900
+pair_coeff    3    6	  1.095  4.850
+pair_coeff    4    4	  0.956  4.600
+pair_coeff    4    5	  0.956  4.600
+pair_coeff    4    6	  0.894  4.550
+pair_coeff    5    5	  0.956  4.600
+pair_coeff    5    6	  0.894  4.550
+pair_coeff    6    6	  0.837  4.500
+
+bond_coeff    1    1.506  4.365
+bond_coeff    2    1.506  4.410
+bond_coeff    3    1.506  4.140
+bond_coeff    4    1.506  4.095
+bond_coeff    5    1.506  4.050
+
+angle_coeff    1  cosine/squared  3.5851  115.00
+angle_coeff    2  cosine/squared  3.5851  160.00
+angle_coeff    3  cosine/squared  3.5851  180.00
+angle_coeff    4  cosine/squared  3.5851  120.00
+angle_coeff    5  dipole          1.1950    0.00
+
+special_bonds	lj/coul 0.0 1.0 1.0 
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+velocity	all create 0.0 87287 
+
+neighbor	1 bin
+neigh_modify	delay 0
+
+group		lipids type 2 3 4 5 6
+15360 atoms in group lipids
+group		water type 1
+9216 atoms in group water
+
+fix		integrate all nve/sphere update dipole
+fix 		tempLip lipids langevin 295.65 295.65 10.0 48279 omega yes
+fix 		tempWat water langevin 295.65 295.65 10.0 48279 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
+
+thermo_style	custom step etotal pe press temp
+thermo		10
+dump		trj all custom 50 dump.trj id type mol x y z mux muy muz
+dump_modify	trj sort id
+
+timestep	2
+run		100
+Memory usage per processor = 9.45609 Mbytes
+Step TotEng PotEng Press Temp 
+       0   -143055.57   -143055.57    498.51727            0 
+      10   -121840.98   -143319.24    1086.3859    293.20494 
+      20   -121443.97   -143082.47    1131.6118    295.39233 
+      30   -121312.64   -142733.39    1190.7155    292.41983 
+      40   -120935.43   -142478.54    1240.2858    294.09018 
+      50    -120594.9   -142237.74    1281.9425    295.45157 
+      60   -120574.62   -142050.65    1310.6045    293.17443 
+      70   -120243.66   -141920.28    1336.3065    295.91282 
+      80   -120056.23   -141764.47    1359.3272    296.34438 
+      90   -120092.85    -141611.9     1387.558    293.76181 
+     100   -120147.55   -141629.14     1385.232    293.25034 
+Loop time of 5.8867 on 4 procs for 100 steps with 24576 atoms
+
+Pair  time (%) = 5.08669 (86.4099)
+Bond  time (%) = 0.0796564 (1.35316)
+Neigh time (%) = 0.0260496 (0.442515)
+Comm  time (%) = 0.252767 (4.29387)
+Outpt time (%) = 0.224466 (3.81311)
+Other time (%) = 0.217069 (3.68744)
+
+Nlocal:    6144 ave 6166 max 6117 min
+Histogram: 1 0 1 0 0 0 0 0 0 2
+Nghost:    10049 ave 10072 max 10030 min
+Histogram: 1 0 0 1 1 0 0 0 0 1
+Neighs:    478656 ave 484016 max 473789 min
+Histogram: 1 0 0 0 2 0 0 0 0 1
+
+Total # of neighbors = 1914626
+Ave neighs/atom = 77.9063
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 1
+Dangerous builds = 0
+
+
