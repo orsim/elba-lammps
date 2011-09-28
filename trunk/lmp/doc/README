@@ -1,0 +1,4 @@
+Protocol to generate ".jpg" files for the equations:
+- prepare standard latex file, eg, "my_eq.tex"
+- latex2html my_eq.tex
+- gimp my_eq/img1.png, save as my_eq.jpg
