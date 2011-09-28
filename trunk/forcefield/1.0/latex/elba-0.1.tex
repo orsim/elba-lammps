@@ -1,7 +1,6 @@
 \documentclass[10pt]{article}
-%\documentclass[titlepage]{article}
 
-% Packages to load (all standard on a modern LaTeX system on Linux)
+% Packages to load (all standard on a modern LaTeX system on GNU/Linux)
 
 \usepackage{setspace} 
 \usepackage{wrapfig} 
@@ -25,15 +24,9 @@
 \setlength{\headheight}{-1.in} 
 \setlength{\topmargin}{.5in} % decrease to optimise space  
 \setlength{\textheight}{10.2in}
-%\setlength{\headheight}{-0.2in} 
-%\setlength{\topmargin}{-0.5in}  
-%\setlength{\textheight}{10in}
 
+\thispagestyle{empty} 
 
-\title{ELBA forcefield}
-
-% Revision date - uncomment to exclude date in the final version
-\date{}
 
 \begin{document}
 \large{
@@ -63,7 +56,7 @@ $\epsilon_{AE}$  & $2.5\sqrt{\epsilon_{AA}\,\epsilon_{EE}} $ & 2.236\,kcal/mol&\
  $\mu_G$ & $1.6$\,D & 0.333\,e\,\AA&\\
  $\mu_E$ & $2$\,D & 0.416\,e\,\AA&\\
  $\mu_W$ &$2.3$\,D & 0.479\,e\,\AA&\\
- $k$& 1260\,kJ/(mol\,nm$^{2}$)& 3.011\,kcal/(mol\,\AA$^2$)&\\
+ $k$& 1260\,kJ/(mol\,nm$^{2}$)& 2*1.505\,kcal/(mol\,\AA$^2$)&\\
  $w$& 30\,kJ/mol& 2*3.585\,kcal/mol&\\
  $c$& 10\,kJ/mol& 2*1.195\,kcal/mol&\\
  $\alpha_{0_{CPG}}$, $\alpha_{0_{APG}}$ & $115^{\circ}$& $115^{\circ}$& $2.01$\,rad\\

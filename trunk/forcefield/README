@@ -1,0 +1,11 @@
+This directory contains all versions of the ELBA force field. The general
+features of the ELBA model are described in this paper:
+
+Orsi, M. and J. W. Essex. The ELBA force field for coarse-grain modeling 
+of lipid membranes (submitted).
+
+The ELBA force field is being constantly updated, extended and (hopefully)
+improved, hence the "best" version to use is probably the latest.
+
+Mario Orsi (orsimario@gmail.com) - September 2011
+http://www.personal.soton.ac.uk/orsi
