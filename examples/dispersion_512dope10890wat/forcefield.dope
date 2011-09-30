@@ -34,18 +34,18 @@ pair_coeff    5    6	  0.894  4.550 # ester-tail
 pair_coeff    6    6	  0.837  4.500 # tail-tail
 
 # harmonic bond coeffs:  K [kcal/(mol*angstrom^2)] r0 [angstrom] 
-bond_coeff    1   1.506  4.680 # choline--phosphate
-bond_coeff    2   1.506  4.410 # phosphate--glycerol
-bond_coeff    3   1.506  4.140 # glycerol--ester
-bond_coeff    4   1.506  4.095 # ester--tail
-bond_coeff    5   1.506  4.050 # tail--tail
+bond_coeff    1   1.505  4.680 # choline--phosphate
+bond_coeff    2   1.505  4.410 # phosphate--glycerol
+bond_coeff    3   1.505  4.140 # glycerol--ester
+bond_coeff    4   1.505  4.095 # ester--tail
+bond_coeff    5   1.505  4.050 # tail--tail
 
 # angle coeffs: K [kcal/mol] theta0 [degrees]
-angle_coeff 1 cosine/squared 3.5851 115.00 # choline-phosphate-glycerol
-angle_coeff 2 cosine/squared 3.5851 160.00 # phosphate-glycerol-ester
-angle_coeff 3 cosine/squared 3.5851 180.00 # gly-est-tail, tail-tail-tail (sat)
-angle_coeff 4 cosine/squared 3.5851 120.00 # tail-tail-tail (unsat)
+angle_coeff 1 cosine/squared 3.585 115.00 # choline-phosphate-glycerol
+angle_coeff 2 cosine/squared 3.585 160.00 # phosphate-glycerol-ester
+angle_coeff 3 cosine/squared 3.585 180.00 # gly-est-tail, tail-tail-tail (sat)
+angle_coeff 4 cosine/squared 3.585 120.00 # tail-tail-tail (unsat)
 # dipole angle coeffs:  K [kcal/mol] gamma0 [degrees] 
-angle_coeff 5  dipole    1.195  0.000 # glyDipole-phosphate, estDipole-tail
+angle_coeff 5 dipole 1.195 0.000 # glyDipole-phosphate, estDipole-tail
 
 
