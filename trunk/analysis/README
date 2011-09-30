@@ -1,0 +1,6 @@
+This directory contains scripts to process LAMMPS output files and extract
+properties of interest. See guidelines at the top of each script for usage
+information.
+
+Mario Orsi (orsimario@gmail.com) - September 2011
+http://www.personal.soton.ac.uk/orsi
