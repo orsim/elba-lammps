@@ -1,17 +1,6 @@
-# Copyright (C) 2011 Mario Orsi
+#!/usr/bin/env python
 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-#---------------------------------------------------------------------------
+# Script:  trj2pdb.py
 # Purpose: this script reads a LAMMPS ".trj" trajectory (dump) file and 
 #          converts it into a trajectory file "trajectory.pdb", which can
 #          be read in VMD.
@@ -22,7 +11,7 @@
 #          every dipolar atom into two atoms representing the "+" and "-"
 #          ends of the original dipole. Such two atoms are spaced 1 Angstrom
 #          apart. 
-# Usage:   python trj2pdb.py dump.trj
+# Syntax:  trj2pdb.py dump.trj
 
 import sys, string, linecache
 from math import sqrt
