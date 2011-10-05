@@ -16,15 +16,13 @@ if len(sys.argv) != 3:
   sys.exit()
 
 inFileName = sys.argv[1]
-area = float(sys.argv[2])
+A_in_m = 1e-10 # angstrom in meter
+area = float(sys.argv[2]) * A_in_m**2
 inFile = open(inFileName, "r")
 lines = inFile.readlines()
 inFile.close()
-
 eps0 = 8.854e-12 # [C/(Vm)] permittivity of free space
 e_in_C = 1.6021766e-19 # magnitude of electron charge in Coulomb
-A_in_m = 1e-10 # angstrom in meter
-cFac = e_in_C / ( A_in_m * A_in_m ) # conversion factor for LAMMPS units 
 
 # find bin thickness (delta):
 for line in lines:
@@ -37,10 +35,8 @@ for line in lines:
                 coordLower = float(words[1])
             if int(words[0]) == nBins:
                 coordUpper = float(words[1])
-delta = abs( coordUpper - coordLower ) / ( nBins - 1 )
-
+delta = abs( coordUpper - coordLower ) * A_in_m / ( nBins - 1 )
 slabVolume = area * delta
-
 # calculate and output electric field:
 outFile = open('elecField.dat', 'w')
 qDensInt = 0.0
@@ -49,14 +45,11 @@ for line in lines:
         words = string.split(line)
         if len(words) == 4:
             coord = float(words[1])
-            qDens = float(words[2]) * float(words[3]) / slabVolume
-            #print '%f %f ' % (coord, qDens)
+            qDens = float(words[2]) * float(words[3]) * e_in_C / slabVolume
             qDensInt = qDensInt + delta * qDens
-            elecField = qDensInt * cFac / eps0
-            outFile.write('%f %f\n' % (coord, elecField)) # [V/m]
-            #print '%f %f ' % (coord, qDensInt)
+            elecField = qDensInt / eps0
+            outFile.write('%f %f\n' % (coord, elecField)) # [A, V/m]
 outFile.close()
-
 # calculate electrostatic potential:
 inFile = open('elecField.dat', 'r')
 elFieldInt = 0.0
@@ -66,9 +59,6 @@ for line in lines:
     words = string.split(line)
     coord = float(words[0])
     elField = float(words[1])
-    elFieldInt = elFieldInt + delta * A_in_m * elField
+    elFieldInt = elFieldInt + delta * elField
     elPot = - elFieldInt 
-    print coord,elPot
-
-    
-
+    print coord,elPot # [A, V]
