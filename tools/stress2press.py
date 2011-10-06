@@ -23,7 +23,7 @@ inFile = open(inFileName, "r")
 lines = inFile.readlines()
 inFile.close()
 
-# find bin thickness (delta):
+# find slab thickness (delta):
 for line in lines:
     if line[0] != '#': # ignore comments
         words = string.split(line)
@@ -37,7 +37,7 @@ for line in lines:
 delta = abs( coordUpper - coordLower ) / ( nBins - 1 )
 slabVolume = area * delta
 
-# calculate and output pressures:
+# calculate & output press principal components (file) and profile (screen):
 outFile = open('zPress_xyz.dat', 'w')
 for line in lines:
     if line[0] != '#': # ignore comments
@@ -47,13 +47,11 @@ for line in lines:
             nCount = float(words[2])
             xxStress = float(words[3]) * nCount / slabVolume
             yyStress = float(words[4]) * nCount / slabVolume
-            zzStress = float(words[5]) * nCount / slabVolume
-            
+            zzStress = float(words[5]) * nCount / slabVolume      
             xxPress = -xxStress
             yyPress = -yyStress
             zzPress = -zzStress
             outFile.write('%f %f %f %f\n' % (coord,xxPress,yyPress,zzPress))
-
             latPressProf = 0.5*(xxPress+yyPress) - zzPress
             print coord, latPressProf # [A, atm]
 outFile.close()
