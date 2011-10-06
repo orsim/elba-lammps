@@ -7,9 +7,9 @@
 # Syntax: lpp2st.py inputFile
 #         inputFile = coordinate | lpp(z)
 # Notes: - coordinates (first col of input file) is in Angstrom
-#        - lateral pressure (second col of input file) is in Atm 
+#        - lateral pressure Pt-Pn (second col of input file) is in Atm 
 # Example: lpp2st.py lpp.dat 
-# References: - Harries & Ben-Shaul, J Chem Phys 106, 1609 (1997)
+# References: - Alejandre et al, J Chem Phys 102, 4574 (1995)
 
 import sys,os,string, linecache
 
