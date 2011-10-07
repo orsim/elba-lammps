@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# Script:  box.py
+# Script: box.py
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: this script reads a LAMMPS ".trj" trajectory (dump) file and 
 #          extracts information on the simulation box.
 # Output: 'vol.dat': box volume [angstrom^3]
@@ -9,7 +10,7 @@
 #         'xyArea.dat': area of xy plane [angstrom^2]
 #         'xzArea.dat': area of xz plane [angstrom^2]
 #         'yzArea.dat': area of yz plane [angstrom^2]
-# Usage:   python box.py dump.trj
+# Usage: box.py dump.trj
 
 import sys, string, linecache
 from math import sqrt
