@@ -6,14 +6,15 @@
 #          elastic parameters (per monolayer)
 # Syntax: lpp2curv.py inputFile
 #         inputFile = coordinate | lpp(z)
-# Notes: - coordinates (first col of input file) in Angstrom
-#        - lateral pressure Pt-Pn (second col of input file) in Atm 
+# Notes: - Coordinates (first col of input file) in Angstrom
+#        - Lateral pressure Pt-Pn (second col of input file) in Atm
+#        - Coordinates' origin = bilayer center
+#        - Not tested on odd numbers of slabs
 # Example: lpp2curv.py lpp.dat 
-# References: - Orsi et al, J Phys Condens Matter 22, 155106 (2010),
-#               section 5.3
+# References: - Orsi & Essex, PLoS ONE, submitted
+#             - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
 #             - Cantor, Biophys J 80, 2284 (2001)
-#             - Ben-Shaul, Structure and dynamics of membranes,
-#               Elsevier (1995)  
+#             - Ben-Shaul, Structure and dynamics of membranes (1995)  
 
 import sys,os,string
 
@@ -23,7 +24,7 @@ if len(sys.argv) != 2:
 
 atmA2__in__J_nm = 1.01325e-24 # atm*A^2 = 1.01325e-24 J/nm
 atmA3__in__J = 1.01325e-25 # atm*A^3 = 1.01325e-25 J
-J__in__kBTroom = 1.0/4.0453e-21 # kB*Troom = 4.0453e-21 J (Troom = 293 K)
+J__in__kBTroom = 1.0/4.0453e-21 # kB*Troom = 4.0453e-21 J (Troom=293 K)
 
 inFileName = sys.argv[1]
 inFile = open(inFileName, "r")
