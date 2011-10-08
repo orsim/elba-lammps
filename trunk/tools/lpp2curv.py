@@ -12,18 +12,18 @@
 # References: - Orsi et al, J Phys Condens Matter 22, 155106 (2010),
 #               section 5.3
 #             - Cantor, Biophys J 80, 2284 (2001)
+#             - Ben-Shaul, Structure and dynamics of membranes,
+#               Elsevier (1995)  
 
-
-import sys,os,string, linecache
-
-atmA2__in__J_nm = 1.01325e-24 # atm*A^2 = 1.01325e-24 J/nm
-J__in__kBTroom = 1.0/4.0453e-21 # kB*Troom = 4.0453e-21 J (Troom = 293 K)
-
-cFac = 0.00025048
+import sys,os,string
 
 if len(sys.argv) != 2:
   print "Syntax: lpp2curv.py inputFile"
   sys.exit()
+
+atmA2__in__J_nm = 1.01325e-24 # atm*A^2 = 1.01325e-24 J/nm
+atmA3__in__J = 1.01325e-25 # atm*A^3 = 1.01325e-25 J
+J__in__kBTroom = 1.0/4.0453e-21 # kB*Troom = 4.0453e-21 J (Troom = 293 K)
 
 inFileName = sys.argv[1]
 inFile = open(inFileName, "r")
@@ -46,41 +46,44 @@ delta = zBox / ( nSlabs - 1 )
 
 nSlabsHalf = nSlabs / 2;
 
-tau1m_z = [] # fist int mom profile 
-outFile = open('tau1m.dat', 'w')
+tau1m_z = [] # fist int mom profile
+tau2m_z = [] # second int mom profile
+outFile1 = open('tau1m.dat', 'w')
+outFile2 = open('tau2m.dat', 'w')
 
 # calc 1st integral moment of lpp across 'negative' monolayer:
-z0 = -coord[nSlabsHalf-1] # coord at bilayer center
-zh = -coord[0] # coord at box edge (int is over half-box)
-tau1m_0 = 0.5 * delta * z0*lp[nSlabsHalf-1]
-tau1m_h = 0.5 * delta * zh*lp[0]
-tau1m = tau1m_0 + tau1m_h 
-tau1m_z.append( tau1m_0 )
-outFile.write( '%f %f\n' % ( -zh, tau1m_h ) )
-for i in range( 1, nSlabsHalf-1 ): # i = 1, ..., nSlabsHalf-2
-  tau1m += - delta * coord[i] * lp[i]
-  tau1m_z.append(tau1m)
-  outFile.write( '%f %f\n' % (coord[i],tau1m) )
+tau1m = 0 # initialize 1st mom integral sum
+tau2m = 0 # initialize 2nd mom integral sum
+for i in range( nSlabsHalf-1, -1, -1 ): # i = nSlabsHalf-1, ..., 0
+  tau1m += (-coord[i]) * lp[i] * delta
+  tau2m += coord[i]**2 * lp[i] * delta
+  tau1m_z.insert(0,tau1m) # insert at the front
+  tau2m_z.insert(0,tau2m) # insert at the front
 tau1m = tau1m * atmA2__in__J_nm
-outFile.write('%f %f\n' % (-z0, tau1m_0))
+tau2m = tau2m * atmA3__in__J
 print ( '1st int mom for \'-\' monolayer: tau1m = %e J/nm = %f kBT/nm'
         % ( tau1m, tau1m * J__in__kBTroom ) )
+print ( '2nd int mom for \'-\' monolayer: tau2m = %e J = %f kBT'
+        % ( tau2m, tau2m * J__in__kBTroom ) )
+
+# sort and dump 'negative' profiles:
+for i in range( 0, nSlabsHalf ):
+  outFile1.write( '%f %f\n' % (coord[i],-tau1m_z[i]) )
+  outFile2.write( '%f %f\n' % (coord[i], tau2m_z[i]) )
 
 # calc 1st integral moment of lpp across 'positive' monolayer:
-z0 = coord[nSlabsHalf] # coord at bilayer center
-zh = coord[nSlabs-1] # coord at box edge (int is over half-box)
-tau1m_0 = 0.5 * delta * z0*lp[nSlabsHalf]
-tau1m_h = 0.5 * delta * zh*lp[nSlabs-1]
-tau1m = tau1m_0 + tau1m_h 
-tau1m_z.append( tau1m_0 )
-outFile.write( '%f %f\n' % ( z0, tau1m_0) )
-for i in range( nSlabsHalf+1, nSlabs-1 ): # i = nSlabsHalf+1, ..., nSlabs-2
-  tau1m += delta * coord[i] * lp[i] 
-  tau1m_z.append(tau1m)
-  outFile.write( '%f %f\n' % (coord[i],tau1m) )
-tau1m = tau1m * delta * atmA2__in__J_nm
-outFile.write( '%f %f\n' % (zh, tau1m_h) )
+tau1m = 0 # initialize 1st mom integral sum
+tau2m = 0 # initialize 2nd mom integral sum
+for i in range( nSlabsHalf, nSlabs ): # i = nSlabsHalf, ..., nSlabs-1
+  tau1m += coord[i] * lp[i] * delta
+  tau2m += coord[i]**2 * lp[i] * delta
+  outFile1.write( '%f %f\n' % (coord[i],tau1m) )
+  outFile2.write( '%f %f\n' % (coord[i],tau2m) )
+tau1m = tau1m * atmA2__in__J_nm
+tau2m = tau2m * atmA3__in__J
 print ( '1st int mom for \'+\' monolayer: tau1m = %e J/nm = %f kBT/nm'
         % ( tau1m, tau1m * J__in__kBTroom ) )
+print ( '2nd int mom for \'+\' monolayer: tau2m = %e J = %f kBT'
+        % ( tau2m, tau2m * J__in__kBTroom ) )
 
 
