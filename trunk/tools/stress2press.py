@@ -57,5 +57,3 @@ for line in lines:
             latPressProf = 0.5*(xxPress+yyPress) - zzPress
             print coord, latPressProf # [A, atm]
 outFile.close()
-    
-

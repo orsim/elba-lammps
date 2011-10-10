@@ -14,7 +14,8 @@
 # References: - Orsi & Essex, PLoS ONE, submitted
 #             - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
 #             - Cantor, Biophys J 80, 2284 (2001)
-#             - Ben-Shaul, Structure and dynamics of membranes (1995)  
+#             - Ben-Shaul, in 'Structure and dynamics of membranes',
+#               eds Lipowsky & Sackmann, Elsevier (1995)  
 
 import sys,os,string
 
