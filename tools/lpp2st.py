@@ -13,6 +13,12 @@
 
 import sys,os,string, linecache
 
+def Integral( iStart, iEnd, f, delta ):
+  fInt = 0.0
+  for i in range( iStart, iEnd ): # i = iStart, ..., iEnd-1
+    fInt += f[i]
+  return fInt*delta
+
 cFac = 1.01325e-2 # conversion factor: atm*A = 1.01325e-5 mN/m
 
 if len(sys.argv) != 2:
@@ -21,7 +27,6 @@ if len(sys.argv) != 2:
 
 inFileName = sys.argv[1]
 inFile = open(inFileName, "r")
-
 lines = inFile.readlines()
 inFile.close()
 
@@ -33,32 +38,18 @@ for line in lines:
   words = string.split(line)
   if len(words) == 2:
     nSlabs = nSlabs + 1
-    coord.append(words[0])
-    lp.append(words[1])
-zBox = float(coord[nSlabs-1]) - float(coord[0])
+    coord.append(float(words[0]))
+    lp.append(float(words[1]))
+zBox = coord[nSlabs-1] - coord[0]
 delta = zBox / ( nSlabs - 1 )
 
-# integrate lpp across whole box
-lpInt = 0.5 * ( float(lp[0]) + float(lp[nSlabs-1]) )
-for i in range( 1, nSlabs-1 ): # i = 1, ..., nSlabs-2
-  lpInt += float( lp[i] )
-st = - 0.5 * lpInt * delta * cFac
+st = - 0.5 * Integral( 0, nSlabs, lp, delta ) * cFac
 print 'Surface tension per monolayer from entire lpp: %f mN/m' % st
 
-nSlabsHalf = nSlabs / 2;
-
-# integrate lpp across first half-box
-lpInt = 0.5 * ( float(lp[0]) + float(lp[nSlabsHalf-1]) )
-for i in range( 1, nSlabsHalf-1 ): # i = 1, ..., nSlabsHalf-2
-  lpInt += float( lp[i] )
-st = - lpInt * delta * cFac
+st = - Integral( 0, nSlabs/2, lp, delta ) * cFac
 print 'Surface tension on \'-\' monolayer: %f mN/m' % st
 
-# integrate lpp across second half-box
-lpInt = 0.5 * ( float(lp[nSlabsHalf]) + float(lp[nSlabs-1]) )
-for i in range( nSlabsHalf+1, nSlabs-1 ): # i = nSlabsHalf+1, ..., nSlabs-2
-  lpInt += float( lp[i] )
-st = - lpInt * delta * cFac
+st = - Integral( nSlabs/2, nSlabs, lp, delta ) * cFac
 print 'Surface tension on \'+\' monolayer: %f mN/m' % st
 
 
