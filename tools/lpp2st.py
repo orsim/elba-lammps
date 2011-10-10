@@ -6,12 +6,13 @@
 #          surface tension per monolayer
 # Syntax: lpp2st.py inputFile
 #         inputFile = coordinate | lpp(z)
-# Notes: - coordinates (first col of input file) is in Angstrom
-#        - lateral pressure Pt-Pn (second col of input file) is in Atm 
+# Notes: - Coordinates (first col of input file) in Angstrom
+#        - Lateral pressure Pt-Pn (second col of input file) in Atm 
+#        - Coordinates' origin = bilayer center
 # Example: lpp2st.py lpp.dat 
 # References: - Alejandre et al, J Chem Phys 102, 4574 (1995)
 
-import sys,os,string, linecache
+import sys,os,string
 
 def Integral( iStart, iEnd, f, delta ):
   fInt = 0.0
