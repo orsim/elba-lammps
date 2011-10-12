@@ -1,0 +1,11 @@
+Simulation of preassembled lipid bilayer.
+
+Various profiles are evaluated and averaged 'on the fly' - see
+'profiles/*.zProfile'. These files can be further processed (using
+the scripts in 'tools/') to obtain the 'profiles/*.dat' data.
+
+References:
+- Orsi & Essex, PLoS ONE, submitted
+- Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
+
+Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Oct 2011
