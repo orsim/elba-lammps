@@ -1,21 +1,27 @@
 #!/usr/bin/env python
 
 # Script: trj2pdb.py
+# Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and converts it
+#          into a VMD-compatible file "trajectory.pdb". Dedicated 'state'
+#          files can be found in 'elba-lammps/viz/'.
+# Syntax: trj2pdb.py inputFile
+# Example: trj2pdb.py dump.trj
+# Notes: Point-dipoles in LAMMPS ".trj" files are described by mass center
+#        coordinates and orientations (x-, y-, and z- projections of the
+#        dipole vectors). Since VMD does not allow visualization of point-
+#        dipoles, this script uses the orientation information to convert
+#        every dipolar atom into two atoms representing the "+" and "-"
+#        ends of the original dipole. Such two atoms are spaced 1 Angstrom
+#        apart. 
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
-# Purpose: this script reads a LAMMPS ".trj" trajectory (dump) file and 
-#          converts it into a trajectory file "trajectory.pdb", which can
-#          be read in VMD.
-#          Point-dipoles in LAMMPS ".trj" files are described by mass center
-#          coordinates and orientations (x-, y-, and z- projections of the
-#          dipole vectors). Since VMD does not allow visualization of point-
-#          dipoles, this script uses the orientation information to convert
-#          every dipolar atom into two atoms representing the "+" and "-"
-#          ends of the original dipole. Such two atoms are spaced 1 Angstrom
-#          apart. 
-# Syntax: trj2pdb.py dump.trj
+# Reference: http://www.ks.uiuc.edu/Research/vmd
 
 import sys, string, linecache
 from math import sqrt
+
+if len(sys.argv) != 2:
+  print "Syntax: trj2pdb.py inputFile"
+  sys.exit()
 
 inFileName = sys.argv[1]
 inFile = open(inFileName, "r")
@@ -24,7 +30,7 @@ print "Processing file %s ..." % inFileName
 line = linecache.getline(inFileName, 4)
 words = string.split(line)
 nAtoms = int(words[0])
-print "Number of atoms: %d" % nAtoms
+print "Number of \'atoms\': %d" % nAtoms
 
 outFile = open("trajectory.pdb", "w")
 lines = inFile.readlines()

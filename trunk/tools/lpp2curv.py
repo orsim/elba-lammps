@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
 # Script: lpp2curv.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Process a lateral pressure profile to extract curvature
 #          elastic parameters (per monolayer)
 # Syntax: lpp2curv.py inputFile
-#         inputFile = coordinate | lpp(z)
-# Notes: - Coordinates (first col of input file) in Angstrom
+# Example: lpp2curv.py lpp.dat 
+# Notes: - inputFile format = coordinate | lpp(z)
+#        - Coordinates (first col of input file) in Angstrom
 #        - Lateral pressure Pt-Pn (second col of input file) in Atm
 #        - Coordinates' origin = bilayer center
-# Example: lpp2curv.py lpp.dat 
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # References: - Orsi & Essex, PLoS ONE, submitted
 #             - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
 #             - Cantor, Biophys J 80, 2284 (2001)
