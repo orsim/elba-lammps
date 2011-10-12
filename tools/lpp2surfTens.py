@@ -1,18 +1,23 @@
 #!/usr/bin/env python
 
-# Script: lpp2st.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Script: lpp2surfTens.py
 # Purpose: Integrates a lateral pressure profile to get the corresponding
 #          surface tension per monolayer
-# Syntax: lpp2st.py inputFile
-#         inputFile = coordinate | lpp(z)
-# Notes: - Coordinates (first col of input file) in Angstrom
+# Syntax: lpp2surfTens.py inputFile
+# Example: lpp2surfTens.py lpp.dat 
+# Notes: - inputFile format = coordinate | lpp(z)
+#        - Coordinates (first col of input file) in Angstrom
 #        - Lateral pressure Pt-Pn (second col of input file) in Atm 
 #        - Coordinates' origin = bilayer center
-# Example: lpp2st.py lpp.dat 
-# References: - Alejandre et al, J Chem Phys 102, 4574 (1995)
+#        - Units: mN/m = dyn/cm
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Reference: Alejandre et al, J Chem Phys 102, 4574 (1995)
 
 import sys,os,string
+
+if len(sys.argv) != 2:
+  print "Syntax: lpp2surfTens.py inputFile"
+  sys.exit()
 
 def Integral( iStart, iEnd, f, delta ):
   fInt = 0.0
@@ -20,18 +25,14 @@ def Integral( iStart, iEnd, f, delta ):
     fInt += f[i]
   return fInt*delta
 
-cFac = 1.01325e-2 # conversion factor: atm*A = 1.01325e-5 mN/m
-
-if len(sys.argv) != 2:
-  print "Syntax: lpp2st.py inputFile"
-  sys.exit()
+atmA__in__mN_m = 1.01325e-2 # conversion factor: atm*A = 1.01325e-5 mN/m
 
 inFileName = sys.argv[1]
 inFile = open(inFileName, "r")
 lines = inFile.readlines()
 inFile.close()
 
-# find slab thickness (delta), #slabs and box size:
+# find slab thickness (delta), number of slabs, and box size:
 coord = [] # coordinate
 lp = [] # lateral pressure
 nSlabs = 0
@@ -44,13 +45,13 @@ for line in lines:
 zBox = coord[nSlabs-1] - coord[0]
 delta = zBox / ( nSlabs - 1 )
 
-st = - 0.5 * Integral( 0, nSlabs, lp, delta ) * cFac
-print 'Surface tension per monolayer from entire lpp: %f mN/m' % st
-
-st = - Integral( 0, nSlabs/2, lp, delta ) * cFac
+st = - Integral( 0, nSlabs/2, lp, delta ) * atmA__in__mN_m
 print 'Surface tension on \'-\' monolayer: %f mN/m' % st
 
-st = - Integral( nSlabs/2, nSlabs, lp, delta ) * cFac
+st = - Integral( nSlabs/2, nSlabs, lp, delta ) * atmA__in__mN_m
 print 'Surface tension on \'+\' monolayer: %f mN/m' % st
+
+st = - 0.5 * Integral( 0, nSlabs, lp, delta ) * atmA__in__mN_m
+print 'Avg surf tens per monolayer from entire lpp: %f mN/m' % st
 
 

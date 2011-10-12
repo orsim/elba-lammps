@@ -1,21 +1,26 @@
 #!/usr/bin/env python
 
 # Script: box.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
-# Purpose: this script reads a LAMMPS ".trj" trajectory (dump) file and 
+# Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and 
 #          extracts information on the simulation box.
+# Syntax: box.py inputFile
+# Example: box.py dump.trj
 # Output: 'vol.dat': box volume [angstrom^3]
 #         'numDens.dat': number density [1/angstrom^3] 
 #         'watDens.dat': water density [g/cm^3]
 #         'xyArea.dat': area of xy plane [angstrom^2]
 #         'xzArea.dat': area of xz plane [angstrom^2]
 #         'yzArea.dat': area of yz plane [angstrom^2]
-# Usage: box.py dump.trj
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 
 import sys, string, linecache
 from math import sqrt
 
-A3_IN_cm3 = 1e-24; # conversion factor: Angstrom^3 -> cm^3
+if len(sys.argv) != 2:
+  print "Syntax: box.py inputFile"
+  sys.exit()
+
+A3_in_cm3 = 1e-24; # conversion factor: Angstrom^3 -> cm^3
 #watMass_g = 3e-23; # water molecular mass in grams
 watMass_g = 18.01528/6.0221367e23; # water molecular mass in grams
 
@@ -60,5 +65,5 @@ for line in lines:
         outXZFile.write("%f\n" % xzArea)
         outYZFile.write("%f\n" % yzArea)
         outNumDensFile.write("%f\n" % (nAtoms/volume))
-        outWatDensFile.write("%f\n" % (nAtoms*watMass_g/(volume*A3_IN_cm3)))
+        outWatDensFile.write("%f\n" % (nAtoms*watMass_g/(volume*A3_in_cm3)))
         

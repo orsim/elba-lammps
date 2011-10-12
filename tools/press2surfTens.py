@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 
 # Script: press2surfTens.py
-# Author: Mario Orsi (orsimario at gmail.com)
-# Purpose: this script calculates the surface tension using the
-#          standard formula: 0.5*Lz*(Pzz-0.5(Pxx+Pyy))
-# Assumptions: Pxx, Pyy and Pzz are provided in units of atm (LAMMPS
-#              convention for 'units real' style) and Lz in Angstrom
-# Usage: python press2surfTens.py Lz Pxx Pyy Pzz 
+# Purpose: Calculates the surface tension using the standard formula:
+#          0.5*Lz*(Pzz-0.5(Pxx+Pyy))
+# Syntax: press2surfTens.py Lz Pxx Pyy Pzz 
+# Notes: Pxx, Pyy and Pzz are provided in units of atm (LAMMPS
+#        convention for 'units real' style) and Lz in Angstrom
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+
 
 import sys, string, linecache
 from math import sqrt
+
+if len(sys.argv) != 5:
+  print "Syntax: press2surfTens.py Lz Pxx Pyy Pzz"
+  sys.exit()
 
 atm_in_Pa = 101325 # note: 1 Pa = 1 N/m^2
 A_in_m = 1e-10 # Angstrom in meter

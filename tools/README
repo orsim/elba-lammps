@@ -2,5 +2,4 @@ This directory contains scripts that can be used to post-process LAMMPS
 output files (to extract properties of interest, convert formats, etc.). 
 See guidelines at the top of each script for usage information.
 
-Mario Orsi (orsimario@gmail.com) - September 2011
-http://www.personal.soton.ac.uk/orsi
+Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi) - Oct 2011
