@@ -1,10 +1,8 @@
-This is a repository of LAMMPS source code and documentation specifically
-developed for the ELBA model. This folder is mainly for my personal use,
-although some aspects of the elba-lammps toolkit might refer to material
-stored here.
+This is a repository of the LAMMPS source code and documentation that
+has been specifically developed for the ELBA model. 
 
 Some of the files in this folder are shipped with the official LAMMPS 
 distribution. Other files might be required when building LAMMPS for ELBA -
 the instructions in install/README should clarify if this is the case.
 
-Mario Orsi (orsimario@gmail.com) - September 2011
+Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Oct 2011
