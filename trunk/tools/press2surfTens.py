@@ -7,9 +7,9 @@
 # Notes: Pxx, Pyy and Pzz are provided in units of atm (LAMMPS
 #        convention for 'units real' style) and Lz in Angstrom
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Reference: Ismail et al, J Chem Phys 125, 014702 (2006) 
 
-
-import sys, string, linecache
+import sys, string
 from math import sqrt
 
 if len(sys.argv) != 5:
