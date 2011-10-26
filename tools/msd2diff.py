@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Script: msd2diff.py
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Reads a file containing timestep & mean-squared displacement,
 #          and converts to corresponding diffusion coefficient
 # Syntax: msd2diff.py inputFile timeStep nDimensions
@@ -12,7 +13,6 @@
 # Notes: - input msd data are in Angstrom^2
 # Examples: - msd2diff.py wat.msd 3 > wat.diff
 #           - msd2diff.py lip.msd 2 > lip.diff
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # References: - Orsi & Essex, PLoS ONE, submitted
 #             - Orsi et al, J Phys Condens Matter 22, 155106 (2010),
 #               section 5.5
@@ -28,7 +28,13 @@ if len(sys.argv) != 4:
 
 inFileName = sys.argv[1]
 dt = float(sys.argv[2])
-nDims = float(sys.argv[3])
+nDims = int(sys.argv[3])
+
+if (nDims!=1 and nDims!=2 and nDims!=3):
+  print "Error: nDimensions must be either 1 or 2 or 3"
+  print "Syntax: msd2diff.py inputFile timeStep nDimensions"
+  sys.exit()
+
 inFile = open(inFileName, "r")
 lines = inFile.readlines()
 inFile.close()
