@@ -10,8 +10,8 @@
 #                       water), 2 for 2-dimensional diff (e.g., lipid
 #                       'lateral' motion inside a bilayer)
 # Notes: - input msd data are in Angstrom^2
-# Examples: - msd2diff.py wat.msd 3 > diffWat.dat
-#           - msd2diff.py lip.msd 2 > diffLip.dat
+# Examples: - msd2diff.py wat.msd 3 > wat.diff
+#           - msd2diff.py lip.msd 2 > lip.diff
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # References: - Orsi & Essex, PLoS ONE, submitted
 #             - Orsi et al, J Phys Condens Matter 22, 155106 (2010),
@@ -46,6 +46,7 @@ for line in lines:
 fs_in_s = 1e-15 # 1 femtosecond = 10^(-15) second
 fs_in_mus = 1e-9 # 1 femtosecond = 10^(-6) microsecond
 fs_in_ns = 1e-6 # 1 femtosecond = 10^(-6) nanosecond
+A2_in_m2 = 1e-20 # 1 Angstrom^2 = 10^(-20) m^2
 A2_in_cm2 = 1e-16 # 1 Angstrom^2 = 10^(-16) cm^2
 A2_in_nm2 = 1e-2 # 1 Angstrom^2 = 10^(-2) nm^2
 
@@ -54,6 +55,7 @@ print '# Diffusion coefficient D as a function of measurement time'
 print '# Measurement time [ns] | D [cm^2/s] | D [nm^2/mus]'
 print '0.0 0.0 0.0' # set D=0 for t_measurement=0
 for i in range( 1, len(msd) ):
-  print ('%g %g %g' % (time[i]*fs_in_ns,
+  print ('%g %g %g %g' % (time[i]*fs_in_ns,
+                       msd[i]*A2_in_m2/(2*nDims*time[i]*fs_in_s),
                        msd[i]*A2_in_cm2/(2*nDims*time[i]*fs_in_s),
                        msd[i]*A2_in_nm2/(2*nDims*time[i]*fs_in_mus)))

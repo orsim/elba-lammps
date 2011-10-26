@@ -3,7 +3,8 @@
 # Script: press2surfTens.py
 # Purpose: Calculates the surface tension using the standard formula:
 #          0.5*Lz*(Pzz-0.5(Pxx+Pyy))
-# Syntax: press2surfTens.py Lz Pxx Pyy Pzz 
+# Syntax: press2surfTens.py Lz Pxx Pyy Pzz
+# Example: press2surfTens 117.552 -55.1354 -69.6728 34.7392
 # Notes: Pxx, Pyy and Pzz are provided in units of atm (LAMMPS
 #        convention for 'units real' style) and Lz in Angstrom
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
