@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 # Script: sumProfile.py
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Reads two or more profiles and calculates sum
 # Syntax: sumProfile.py fileName1 fileName2 ... fileNameN
 # Example: sumProfile.py eppHead.dat eppWat.dat > eppSum.dat
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 
-import os,sys,string
+import sys,string
 
 if len(sys.argv) <= 2:
   print "Syntax: sumProfile.py fileName1 fileName2 ... fileNameN"

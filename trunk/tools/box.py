@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 
+# IMPORTANT NOTE: this script is now deprecated, because its
+#                 job can be done better simply using standard
+#                 LAMMPS commands, e.g., 'variable', 'fix ave/time'
+#                 and 'thermo_style custom'.
+#                 Check out the LAMMPS official documentation and look
+#                 at the ELBA-LAMMPS examples/.
+
 # Script: box.py
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and 
 #          extracts information on the simulation box.
 # Syntax: box.py inputFile
@@ -11,7 +19,6 @@
 #         'xyArea.dat': area of xy plane [angstrom^2]
 #         'xzArea.dat': area of xz plane [angstrom^2]
 #         'yzArea.dat': area of yz plane [angstrom^2]
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 
 import sys, string, linecache
 from math import sqrt

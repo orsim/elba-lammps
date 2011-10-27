@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 # Script: rdf2dat.py
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Reads a LAMMPS output file containing radial distribution
 #          function g(r) data and sorts such data in |r|g| format
 # Syntax: rdf2dat.py inputFile 
 # Examples: - rdf2dat.py wat.rdf > rdf.dat
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 
-import sys,os,string
+import sys, string
 
 if len(sys.argv) != 2:
   print "Syntax: rdf2dat.py inputFile"

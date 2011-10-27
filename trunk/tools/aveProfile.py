@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 # Script: aveProfile.py
+# Author: Julien Michel (www.julienmichel.net)
 # Purpose: Reads two or more profiles and calculates average
 # Syntax: aveProfile.py fileName1 fileName2 ... fileNameN
 # Example: aveProfile.py edp1ns.dat edp2ns.dat edp3ns.dat > edpAve.dat
-# Author: Julien Michel (www.julienmichel.net)
 
-import os,sys
+import sys
 
 averages = []
 

@@ -2,8 +2,7 @@
 
 # Script: calcIsothermComp.py
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
-# Purpose: Calculates (molar) heat capacity at constant pressure
-#          from total energy per molecule E (as done, e.g., in [1])
+# Purpose: Calculates isothermal compressibility (kappa_T) [1]
 # Syntax: calcIsothermComp.py rho1 rho2 P1 P2
 #         rho1 = density at P1
 #         rho2 = density at P2
@@ -14,7 +13,7 @@
 # References: [1] Glattli et al, J Chem Phys 2002, 116, 9811
 #             [2] Kell, J Chem Eng Data 12, 66 (1967)
 
-import sys,os,math
+import sys, math
 
 if len(sys.argv) != 5:
   print "Syntax: calcIsothermComp.py rho1 rho2 P1 P2"
