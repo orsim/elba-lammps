@@ -15,52 +15,58 @@ read_data 	data.128lip4232wat
   8 = max # of special neighbors
 include 	forcefield.elba
 pair_style dipole/sf 12
-special_bonds lj/coul 1.0 1.0 1.0
+special_bonds lj/coul 0.0 1.0 1.0 
   3 = max # of 1-2 neighbors
   3 = max # of special neighbors
-bond_style harmonic
+bond_style harmonic 
 angle_style hybrid cosine/squared dipole
 
-mass    1   40.000
-mass    2   90.000
-mass    3   90.000
-mass    4   62.000
-mass    5   62.000
-mass    6   42.000
+#    type  mass [grams/mol]
+mass    1   40.000 # water
+mass    2   90.000 # choline
+mass    3   90.000 # phosphate
+mass    4   62.000 # glycerol
+mass    5   62.000 # ester
+mass    6   42.000 # tail
 
-pair_coeff    1    1	  0.449  3.000
-pair_coeff    1    2	  0.598  3.900
-pair_coeff    1    3	  0.642  3.800
-pair_coeff    1    4	  0.535  3.800
-pair_coeff    1    5	  0.589  3.800
-pair_coeff    1    6	  0.463  3.700
-pair_coeff    2    2	  1.195  4.800
-pair_coeff    2    3	  1.069  4.700
-pair_coeff    2    4	  1.069  4.700
-pair_coeff    2    5	  1.069  4.700
-pair_coeff    2    6	  0.926  4.600
-pair_coeff    3    3	  0.956  4.600
-pair_coeff    3    4	  0.956  4.600
-pair_coeff    3    5	  0.956  4.600
-pair_coeff    3    6	  0.828  4.500
-pair_coeff    4    4	  0.956  4.600
-pair_coeff    4    5	  0.956  4.600
-pair_coeff    4    6	  0.828  4.500
-pair_coeff    5    5	  0.956  4.600
-pair_coeff    5    6	  0.828  4.500
-pair_coeff    6    6	  0.717  4.400
+# LJ coeffs: iType jType epsilon_ij [kcal/mol] sigma_ij [angstrom]
+pair_coeff    1    1	  0.466  3.000 # water-water
+pair_coeff    1    2	  0.585  4.100 # water-choline
+pair_coeff    1    3	  1.054  4.100 # water-phosphate
+pair_coeff    1    4	  0.574  3.800 # water-glycerol
+pair_coeff    1    5	  0.765  3.800 # water-ester
+pair_coeff    1    6	  0.447  3.750 # water-tail
+pair_coeff    2    2	  1.434  5.200 # choline-choline
+pair_coeff    2    3	  1.434  5.200 # choline-phosphate
+pair_coeff    2    4	  1.171  4.900 # choline-glycerol
+pair_coeff    2    5	  1.171  4.900 # choline-ester
+pair_coeff    2    6	  1.095  4.850 # choline-tail
+pair_coeff    3    3	  1.434  5.200 # phosphate-phosphate
+pair_coeff    3    4	  1.171  4.900 # phosphate-glycerol
+pair_coeff    3    5	  1.171  4.900 # phosphate-ester
+pair_coeff    3    6	  1.095  4.850 # phosphate-tail
+pair_coeff    4    4	  0.956  4.600 # glycerol-glycerol
+pair_coeff    4    5	  0.956  4.600 # glycerol-ester
+pair_coeff    4    6	  0.894  4.550 # glycerol-tail
+pair_coeff    5    5	  0.956  4.600 # ester-ester 
+pair_coeff    5    6	  0.894  4.550 # ester-tail
+pair_coeff    6    6	  0.837  4.500 # tail-tail
 
-bond_coeff    1    5.975  2.350
-bond_coeff    2    5.975  2.300
-bond_coeff    3    5.975  2.300
-bond_coeff    4    5.975  2.250
-bond_coeff    5    5.975  2.200
+# harmonic bond coeffs:  K [kcal/(mol*angstrom^2)] r0 [angstrom] 
+bond_coeff    1   1.506  4.680 # choline--phosphate
+bond_coeff    2   1.506  4.410 # phosphate--glycerol
+bond_coeff    3   1.506  4.140 # glycerol--ester
+bond_coeff    4   1.506  4.095 # ester--tail
+bond_coeff    5   1.506  4.050 # tail--tail
 
-angle_coeff    1  cosine/squared   4.780  110.00
-angle_coeff    2  cosine/squared   4.780   90.00
-angle_coeff    3  cosine/squared   4.780  180.00
-angle_coeff    4  cosine/squared   4.780  120.00
-angle_coeff    5  dipole           1.195    0.00
+# angle coeffs: K [kcal/mol] theta0 [degrees]
+angle_coeff 1 cosine/squared 3.5851 115.00 # choline-phosphate-glycerol
+angle_coeff 2 cosine/squared 3.5851 160.00 # phosphate-glycerol-ester
+angle_coeff 3 cosine/squared 3.5851 180.00 # gly-est-tail, tail-tail-tail (sat)
+angle_coeff 4 cosine/squared 3.5851 120.00 # tail-tail-tail (unsat)
+# dipole angle coeffs:  K [kcal/mol] gamma0 [degrees] 
+angle_coeff 5  dipole    1.195  0.000 # glyDipole-phosphate, estDipole-tail
+
 
 velocity	all create 0.0 87287 
 
@@ -85,35 +91,35 @@ timestep	2
 run		100
 Memory usage per processor = 4.90638 Mbytes
 Step Temp E_pair E_mol TotEng Press 
-       0            0   -35628.056    36465.027    836.97115    136.71722 
-      10    122.43704   -36229.407    36408.325    2423.7957   -69.079934 
-      20    207.87542    -36958.83     36330.26    3182.8178   -415.00484 
-      30    242.39897   -37204.346    36290.039    3530.0689   -373.66988 
-      40     254.6965   -37163.508    36321.538    3827.8806   -157.97311 
-      50    261.31332   -37098.804    36427.477    4119.8434   -62.365788 
-      60    269.20468    -37002.06    36551.033    4484.8306   -34.509214 
-      70     274.2405   -36801.365    36605.059    4831.8835    69.312259 
-      80    280.11596    -36553.62    36589.517    5171.8121    241.39803 
-      90    284.52701   -36343.184    36568.459    5442.0676    383.39308 
-     100    287.61649   -36139.793    36537.539    5671.1834    527.08737 
-Loop time of 1.2706 on 8 procs for 100 steps with 6152 atoms
+       0            0   -41391.519    1066.7019   -40324.817    4494.1976 
+      10    147.34732   -42551.672    1062.9347   -38787.129     3696.466 
+      20    258.09545     -44079.9    1062.0817   -38285.647    2425.4511 
+      30    297.78882   -44844.984    1072.3695   -38312.667    1768.6918 
+      40    302.68137   -45080.502    1094.1311   -38436.719     1516.146 
+      50    302.58887   -45108.199     1126.724    -38433.52    1379.0689 
+      60    301.57534   -45018.509    1168.8325   -38320.304    1300.7371 
+      70    295.52626    -44863.49    1214.1725   -38230.855    1261.6853 
+      80    293.33002   -44757.065    1258.5282   -38120.342    1203.8891 
+      90    293.22832   -44684.291    1299.8821   -38008.079     1146.095 
+     100    295.62863   -44641.756    1334.1213   -37887.295     1085.315 
+Loop time of 1.27109 on 8 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 0.867594 (68.2822)
-Bond  time (%) = 0.00556716 (0.438152)
-Neigh time (%) = 0.014423 (1.13514)
-Comm  time (%) = 0.289815 (22.8093)
-Outpt time (%) = 0.0561672 (4.42052)
-Other time (%) = 0.0370337 (2.91467)
+Pair  time (%) = 0.870671 (68.4982)
+Bond  time (%) = 0.00558373 (0.439289)
+Neigh time (%) = 0.0143503 (1.12898)
+Comm  time (%) = 0.285745 (22.4804)
+Outpt time (%) = 0.0559965 (4.40541)
+Other time (%) = 0.0387393 (3.04774)
 
-Nlocal:    769 ave 877 max 696 min
-Histogram: 3 0 1 0 1 1 0 0 1 1
-Nghost:    3559.25 ave 3634 max 3479 min
-Histogram: 2 1 0 0 1 0 1 0 0 3
-Neighs:    77563.9 ave 94862 max 60895 min
+Nlocal:    769 ave 879 max 692 min
+Histogram: 2 1 1 1 0 0 1 0 1 1
+Nghost:    3562.62 ave 3644 max 3478 min
+Histogram: 1 2 0 0 1 1 0 0 2 1
+Neighs:    77254.6 ave 94217 max 60793 min
 Histogram: 2 0 2 0 0 1 0 0 1 2
 
-Total # of neighbors = 620511
-Ave neighs/atom = 100.863
+Total # of neighbors = 618037
+Ave neighs/atom = 100.461
 Ave special neighs/atom = 0.582575
 Neighbor list builds = 3
 Dangerous builds = 0
@@ -122,35 +128,35 @@ timestep	10
 run		100
 Memory usage per processor = 4.90638 Mbytes
 Step Temp E_pair E_mol TotEng Press 
-     100    287.61649   -36139.793    36537.539    5671.1834    527.08737 
-     110    290.46896   -35974.627    36629.144    5980.2543    528.45487 
-     120    301.72587   -35734.634     36616.25    6413.7487     776.3685 
-     130     301.5265    -35734.95    36677.893    6471.4201    568.45187 
-     140    298.93647   -35591.142    36630.432    6520.2782    662.51328 
-     150    297.76466   -35531.297    36622.018    6550.2252    710.55874 
-     160    303.69232   -35373.961    36544.209    6738.4355    851.05891 
-     170    301.00931   -35433.318    36657.832    6743.5084    706.91044 
-     180    303.18576    -35489.72    36661.971    6731.1506    660.73883 
-     190    302.52999   -35400.507    36544.335    6690.7049    914.12936 
-     200     305.8923   -35498.937    36666.814     6776.401    724.21551 
-Loop time of 1.37502 on 8 procs for 100 steps with 6152 atoms
+     100    295.62863   -44641.756    1334.1213   -37887.295     1085.315 
+     110    294.53554   -44603.803    1430.4491   -37773.056    920.85798 
+     120    301.32642    -44473.94    1497.9123   -37451.219     944.4568 
+     130    303.91799   -44460.402    1488.0088   -37400.068    1037.3645 
+     140    306.45108   -44412.759    1532.8793   -37261.111    936.77549 
+     150     302.1633   -44490.704    1570.2444   -37380.306    862.76574 
+     160    297.24357   -44398.834    1596.9404   -37351.943    814.23118 
+     170    300.67216   -44455.499    1607.7187   -37334.967     692.3378 
+     180    304.88334   -44455.877    1637.2044   -37228.648    739.61439 
+     190    302.71196   -44579.633    1637.4698   -37391.951    650.99358 
+     200    300.22036   -44516.054    1627.4349    -37384.09    746.21195 
+Loop time of 1.37156 on 8 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 0.877751 (63.8358)
-Bond  time (%) = 0.00552234 (0.40162)
-Neigh time (%) = 0.0880232 (6.40161)
-Comm  time (%) = 0.309108 (22.4803)
-Outpt time (%) = 0.0561246 (4.08175)
-Other time (%) = 0.0384859 (2.79894)
+Pair  time (%) = 0.875018 (63.7974)
+Bond  time (%) = 0.00549516 (0.400651)
+Neigh time (%) = 0.0865828 (6.31274)
+Comm  time (%) = 0.309167 (22.5413)
+Outpt time (%) = 0.0561634 (4.09486)
+Other time (%) = 0.0391305 (2.853)
 
-Nlocal:    769 ave 877 max 683 min
-Histogram: 1 2 0 1 1 0 1 0 1 1
-Nghost:    3556.25 ave 3641 max 3471 min
-Histogram: 2 1 0 0 1 1 0 0 1 2
-Neighs:    77487 ave 94282 max 60397 min
-Histogram: 2 0 1 1 0 1 0 0 1 2
+Nlocal:    769 ave 872 max 696 min
+Histogram: 3 0 0 1 1 1 0 0 0 2
+Nghost:    3554.5 ave 3638 max 3466 min
+Histogram: 2 0 1 0 1 1 0 0 1 2
+Neighs:    77027.4 ave 94820 max 61022 min
+Histogram: 2 0 2 0 0 1 0 0 2 1
 
-Total # of neighbors = 619896
-Ave neighs/atom = 100.763
+Total # of neighbors = 616219
+Ave neighs/atom = 100.166
 Ave special neighs/atom = 0.582575
 Neighbor list builds = 18
 Dangerous builds = 0
@@ -159,35 +165,35 @@ fix		baro all press/berendsen aniso 1 1 500 modulus 21740
 
 run 		100Memory usage per processor = 4.90638 Mbytes
 Step Temp E_pair E_mol TotEng Press Volume 
-     200     305.8923   -35498.937    36666.814     6776.401    724.21551    293440.52 
-     210    298.10101   -35579.076    36646.868    6533.4625    488.69513    294762.11 
-     220    301.47058   -35416.146    36667.938    6779.2442    437.54922    295910.71 
-     230    304.44989   -35331.438    36676.322    6926.9617    294.42301    296933.16 
-     240    303.65345   -35245.413    36578.344    6900.4053    257.43898    297558.19 
-     250    301.55341   -35381.059    36799.755    6947.6673    49.442871    297975.12 
-     260    309.57764    -35341.61     36696.09     7030.575    123.74947    298122.34 
-     270    301.43781   -35298.459    36682.593    6910.9855     115.7752    298405.12 
-     280    303.38962   -35298.721      36688.8    6952.7161    57.842686    298698.74 
-     290    299.99714   -35205.439    36672.032    6967.0289    109.18183    298920.92 
-     300    305.33867   -35241.067    36668.185     7025.491      42.0493    299099.13 
-Loop time of 1.38646 on 8 procs for 100 steps with 6152 atoms
+     200    300.22036   -44516.054    1627.4349    -37384.09    746.21195    293440.52 
+     210    297.09789   -44741.696    1628.5179     -37665.9    273.88464    294632.37 
+     220    294.63473   -44625.268    1645.9325   -37577.219    279.29339    295274.97 
+     230    300.03884   -44648.019    1633.4653   -37513.353     148.7693    295798.99 
+     240    295.60273   -44464.689    1638.2636    -37406.56    222.49419     296331.1 
+     250    302.62733   -44526.832    1645.4474   -37332.723    157.04811     296788.8 
+     260    306.27566   -44428.026    1664.2466   -37148.227    160.58898     297256.5 
+     270    300.10125   -44395.535    1682.7067   -37210.483     90.34185    297500.82 
+     280    299.66324   -44329.919    1677.2571   -37158.348    63.440403    297673.56 
+     290    303.28946   -44447.006    1699.8853    -37186.32    9.0691369     297667.2 
+     300     306.9835    -44338.95    1717.6878   -36992.731    81.714055    297814.97 
+Loop time of 1.3715 on 8 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 0.870711 (62.8009)
-Bond  time (%) = 0.00622651 (0.449093)
-Neigh time (%) = 0.0976549 (7.04346)
-Comm  time (%) = 0.313265 (22.5946)
-Outpt time (%) = 0.055656 (4.01425)
-Other time (%) = 0.0429482 (3.09768)
+Pair  time (%) = 0.867226 (63.2321)
+Bond  time (%) = 0.00632918 (0.46148)
+Neigh time (%) = 0.0908417 (6.62354)
+Comm  time (%) = 0.307517 (22.422)
+Outpt time (%) = 0.0560066 (4.08361)
+Other time (%) = 0.0435757 (3.17724)
 
-Nlocal:    769 ave 886 max 674 min
-Histogram: 1 2 0 1 1 1 0 0 1 1
-Nghost:    3519.75 ave 3620 max 3426 min
-Histogram: 2 1 0 1 0 0 1 0 2 1
-Neighs:    76097.4 ave 93352 max 58991 min
-Histogram: 2 0 2 0 0 0 1 0 1 2
+Nlocal:    769 ave 865 max 688 min
+Histogram: 2 1 0 1 0 1 1 0 0 2
+Nghost:    3534.25 ave 3616 max 3437 min
+Histogram: 2 0 0 1 0 1 1 0 1 2
+Neighs:    75759.8 ave 94466 max 59544 min
+Histogram: 2 0 2 0 0 0 1 1 1 1
 
-Total # of neighbors = 608779
-Ave neighs/atom = 98.9563
+Total # of neighbors = 606078
+Ave neighs/atom = 98.5172
 Ave special neighs/atom = 0.582575
-Neighbor list builds = 20
+Neighbor list builds = 19
 Dangerous builds = 0
