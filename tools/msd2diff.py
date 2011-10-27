@@ -20,7 +20,7 @@
 #               (2004), 2nd ed, p.122
 #             - Xiang, J Phys Chem B 103, 385 (1999)
 
-import sys,os,string
+import sys, string
 
 if len(sys.argv) != 4:
   print "Syntax: msd2diff.py inputFile timeStep nDimensions"

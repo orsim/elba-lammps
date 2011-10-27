@@ -16,7 +16,7 @@
 #             [3] Weast, Handbook of chemistry and physics, 61st ed, CRC
 #                 Boca Raton, FL, 1980
 
-import sys,os
+import sys
 
 if len(sys.argv) != 5:
   print "Syntax: calcHeatCap.py E1 E2 T1 T2"
@@ -27,6 +27,6 @@ E2 = float(sys.argv[2])
 T1 = float(sys.argv[3])
 T2 = float(sys.argv[4])
 
-Q = -2.22 # [kcal/mol] quantum contribution (see ref [1] above)
+Q = -2.22 # [kcal/mol] quantum contribution @298 K (see ref [1] above)
 
-print "%f kcal/mol" % ( (E1-E2)/(T1-T2) + Q )
+print "%f kcal/mol" % ( (E2-E1)/(T2-T1) + Q )

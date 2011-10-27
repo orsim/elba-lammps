@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Script: lpp2surfTens.py
+# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Integrates a lateral pressure profile to get the corresponding
 #          surface tension per monolayer
 # Syntax: lpp2surfTens.py inputFile
@@ -10,7 +11,6 @@
 #        - Lateral pressure Pt-Pn (second col of input file) in Atm 
 #        - Coordinates' origin = bilayer center
 #        - Units: mN/m = dyn/cm
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Reference: Alejandre et al, J Chem Phys 102, 4574 (1995)
 
 import sys,os,string
