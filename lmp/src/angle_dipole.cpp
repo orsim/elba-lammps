@@ -23,10 +23,12 @@
 #include "domain.h"
 #include "comm.h"
 #include "force.h"
+#include "math_const.h"
 #include "memory.h"
 #include "error.h"
 
 using namespace LAMMPS_NS;
+using namespace MathConst;
 
 /* ---------------------------------------------------------------------- */
 
@@ -135,7 +137,7 @@ void AngleDipole::coeff(int narg, char **arg)
   int count = 0;
   for (int i = ilo; i <= ihi; i++) {
     k[i] = k_one;
-    gamma0[i] = gamma0_one/180.0 * PI;
+    gamma0[i] = gamma0_one/180.0 * MY_PI;
     setflag[i] = 1;
     count++;
   }
