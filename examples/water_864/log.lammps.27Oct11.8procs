@@ -1,0 +1,117 @@
+LAMMPS (27 Oct 2011)
+units		real
+atom_style	hybrid sphere dipole
+
+lattice		fcc 4.934
+Lattice spacing in x,y,z = 4.934 4.934 4.934
+region		box block -3 3 -3 3 -3 3
+create_box	1 box
+Created orthogonal box = (-14.802 -14.802 -14.802) to (14.802 14.802 14.802)
+  2 by 2 by 2 processor grid
+create_atoms	1 box
+Created 864 atoms
+
+mass 		1 40.0
+set		group all mass 40.0
+  864 settings made for mass
+set		group all dipole/random 98934 0.479 # moment/(e*angstrom)
+  864 settings made for dipole/random
+velocity	all create 303.15 87287 
+pair_style	dipole/sf 12. # rCut/angstrom
+pair_coeff	* * 0.466 3.0 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+neighbor	1 bin
+neigh_modify	delay 0
+
+fix		integrate all nve/sphere update dipole
+fix 		thermostat all langevin 303.15 303.15 100.0 48279 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
+
+compute		msd all msd com yes
+fix 		msd all ave/time 1 1 100 c_msd[4] file wat.msd
+variable	potEn equal pe/atoms
+
+fix		potEn all ave/time 5 100 500 v_potEn file wat.potEn
+variable	totEn equal etotal/atoms
+
+fix		totEn all ave/time 5 100 500 v_totEn file wat.totEn
+variable	watVol equal vol/atoms
+
+variable	dens equal 2.99e-23*atoms*1e24/vol
+fix		dens all ave/time 5 100 500 v_dens file wat.dens
+
+variable	P equal press
+fix 		P all ave/time 5 100 500 v_P file wat.press
+
+thermo_style	custom step pe temp press v_watVol v_dens v_potEn c_msd[4] 
+thermo		100
+
+dump		trj all custom 100 dump.trj id type x y z mux muy muz
+dump_modify	trj sort id
+
+timestep	10
+run		500
+Memory usage per processor = 3.76229 Mbytes
+Step PotEng Temp Press watVol dens potEn msd[4] 
+       0   -3048.2118       303.15   -6504.9796    30.028763   0.99571201    -3.528023 3.2869204e-31 
+     100    -6202.456    305.47347   -1526.9306    30.028763   0.99571201   -7.1787685   0.83980532 
+     200   -6212.3321    307.71353   -163.03267    30.028763   0.99571201   -7.1901992     1.371054 
+     300   -6213.3272    317.61256    417.43284    30.028763   0.99571201    -7.191351    1.9959733 
+     400    -6217.996    303.94002    211.61683    30.028763   0.99571201   -7.1967546    2.8134568 
+     500   -6228.1217    306.63539     368.9081    30.028763   0.99571201   -7.2084742    3.6449558 
+Loop time of 1.54067 on 8 procs for 500 steps with 864 atoms
+
+Pair  time (%) = 1.11619 (72.4487)
+Neigh time (%) = 0.0848225 (5.50556)
+Comm  time (%) = 0.272516 (17.6882)
+Outpt time (%) = 0.0186691 (1.21175)
+Other time (%) = 0.0484654 (3.14574)
+
+Nlocal:    108 ave 114 max 103 min
+Histogram: 3 0 0 1 0 0 1 2 0 1
+Nghost:    2174.12 ave 2184 max 2161 min
+Histogram: 1 0 1 1 1 0 1 0 1 2
+Neighs:    16495 ave 17609 max 15549 min
+Histogram: 1 1 1 1 0 1 2 0 0 1
+
+Total # of neighbors = 131960
+Ave neighs/atom = 152.731
+Neighbor list builds = 84
+Dangerous builds = 0
+
+fix		baro all press/berendsen iso 1 1 500 modulus 21740
+compute         rdf all rdf 50
+fix             rdf all ave/time 1000 1 1000 c_rdf file wat.rdf mode vector
+
+run		1000Memory usage per processor = 3.76229 Mbytes
+Step PotEng Temp Press watVol dens potEn msd[4] 
+     500   -6228.1217    306.63539     368.9081    30.028763   0.99571201   -7.2084742    3.6449558 
+     600   -6190.1887    301.64585    7.1813731    30.303121   0.98669703   -7.1645703    4.2594272 
+     700   -6234.4848    294.97966   -106.42657    30.425172    0.9827389   -7.2158389    4.9581259 
+     800   -6237.1456    291.87411   -159.87932    30.067339   0.99443451   -7.2189185     5.776677 
+     900   -6193.8824    291.43015    156.32317    30.310838   0.98644584   -7.1688453    6.6711649 
+    1000    -6239.682    301.38366   -326.62596    30.182761   0.99063172   -7.2218541    7.4348686 
+    1100   -6249.3155    300.29803    -130.5683    30.405682   0.98336882    -7.233004    8.2460359 
+    1200   -6210.4081    316.47223    116.43939     30.45592   0.98174673   -7.1879723    9.0902365 
+    1300   -6262.9624    310.24191   -259.45866     30.30068   0.98677654    -7.248799    9.6498684 
+    1400    -6222.018    312.58676    295.92217    30.209437   0.98975695   -7.2014097    10.514545 
+    1500   -6243.6287    292.08861   -218.52217    30.220501   0.98939459   -7.2264221    11.239935 
+Loop time of 3.05972 on 8 procs for 1000 steps with 864 atoms
+
+Pair  time (%) = 2.20966 (72.2178)
+Neigh time (%) = 0.166665 (5.44707)
+Comm  time (%) = 0.540688 (17.6712)
+Outpt time (%) = 0.0371193 (1.21316)
+Other time (%) = 0.105585 (3.45081)
+
+Nlocal:    108 ave 118 max 98 min
+Histogram: 1 0 0 0 2 3 1 0 0 1
+Nghost:    2155.62 ave 2182 max 2119 min
+Histogram: 1 0 0 2 0 1 1 1 0 2
+Neighs:    16360.6 ave 18137 max 14897 min
+Histogram: 1 0 1 2 1 1 1 0 0 1
+
+Total # of neighbors = 130885
+Ave neighs/atom = 151.487
+Neighbor list builds = 171
+Dangerous builds = 0

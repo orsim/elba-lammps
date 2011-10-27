@@ -1,7 +1,7 @@
 units		real
 atom_style	hybrid sphere dipole
 
-lattice		fcc 4.93
+lattice		fcc 4.934
 region		box block -3 3 -3 3 -3 3
 create_box	1 box
 create_atoms	1 box
@@ -20,15 +20,33 @@ fix		integrate all nve/sphere update dipole
 fix 		thermostat all langevin 303.15 303.15 100.0 48279 omega yes
 fix             removeMomentum all momentum 1 linear 1 1 1
 
-compute		erot all erotate/sphere
-thermo_style	custom step etotal pe epair c_erot press temp
+compute		msd all msd com yes
+fix 		msd all ave/time 1 1 100 c_msd[4] file wat.msd
+variable	potEn equal pe/atoms
+
+fix		potEn all ave/time 5 100 500 v_potEn file wat.potEn
+variable	totEn equal etotal/atoms
+
+fix		totEn all ave/time 5 100 500 v_totEn file wat.totEn
+variable	watVol equal vol/atoms
+
+variable	dens equal 2.99e-23*atoms*1e24/vol
+fix		dens all ave/time 5 100 500 v_dens file wat.dens
+
+variable	P equal press
+fix 		P all ave/time 5 100 500 v_P file wat.press
+
+thermo_style	custom step pe temp press v_watVol v_dens v_potEn c_msd[4] 
 thermo		100
 
 dump		trj all custom 100 dump.trj id type x y z mux muy muz
 dump_modify	trj sort id
 
 timestep	10
-run		1000
+run		500
 
-fix		baro all press/berendsen aniso 1 1 500 modulus 22222
+fix		baro all press/berendsen iso 1 1 500 modulus 21740
+compute         rdf all rdf 50
+fix             rdf all ave/time 1000 1 1000 c_rdf file wat.rdf mode vector
+
 run		1000

@@ -35,6 +35,10 @@ dump_modify	trj sort id
 
 run		1000 # equilibration
 
+# average area & vol over time:
+fix 		lipArea all ave/time 5 200 1000 v_lipArea file lip.area
+fix 		lipVol all ave/time 5 200 1000 v_lipVol file lip.vol
+
 # calc number density profiles:
 fix 		numDensWat wat ave/spatial 5 2000 10000 z center 0.1 & 
 		density/number units box file numDensWat.zProfile

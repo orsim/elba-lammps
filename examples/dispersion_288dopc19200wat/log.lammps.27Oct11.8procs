@@ -1,4 +1,4 @@
-LAMMPS (25 Sep 2011)
+LAMMPS (27 Oct 2011)
 units		real
 atom_style	hybrid angle dipole sphere 
 read_data 	data.288lip19200wat
@@ -102,14 +102,14 @@ Step Temp E_pair E_mol TotEng Press
       80    282.80322   -176833.55    4737.4686   -152269.97   -186.80446 
       90    287.24413   -176320.73    4764.5184   -151418.77   -133.38134 
      100    291.98526   -175886.22    4796.4672   -150619.94   -86.981416 
-Loop time of 4.75249 on 8 procs for 100 steps with 23520 atoms
+Loop time of 4.70805 on 8 procs for 100 steps with 23520 atoms
 
-Pair  time (%) = 3.90519 (82.1714)
-Bond  time (%) = 0.0171699 (0.361283)
-Neigh time (%) = 0.0794316 (1.67137)
-Comm  time (%) = 0.396159 (8.33582)
-Outpt time (%) = 0.217867 (4.58428)
-Other time (%) = 0.136674 (2.87584)
+Pair  time (%) = 3.88008 (82.4138)
+Bond  time (%) = 0.0168134 (0.357121)
+Neigh time (%) = 0.079226 (1.68278)
+Comm  time (%) = 0.380646 (8.085)
+Outpt time (%) = 0.21685 (4.60594)
+Other time (%) = 0.134434 (2.8554)
 
 Nlocal:    2940 ave 2997 max 2828 min
 Histogram: 1 0 0 2 0 0 0 1 1 3
@@ -139,14 +139,14 @@ Step Temp E_pair E_mol TotEng Press
      180    305.96118   -172410.14    5057.9357   -145902.59     152.9716 
      190    301.09785   -172360.63     5083.189   -146168.77    74.938198 
      200    303.93301   -172481.91    5038.9465   -146135.53    57.353614 
-Loop time of 5.14677 on 8 procs for 100 steps with 23520 atoms
+Loop time of 5.10649 on 8 procs for 100 steps with 23520 atoms
 
-Pair  time (%) = 3.97041 (77.1438)
-Bond  time (%) = 0.0154301 (0.299801)
-Neigh time (%) = 0.406999 (7.90785)
-Comm  time (%) = 0.40154 (7.80178)
-Outpt time (%) = 0.218128 (4.23815)
-Other time (%) = 0.134261 (2.60864)
+Pair  time (%) = 3.96272 (77.6017)
+Bond  time (%) = 0.0151755 (0.297181)
+Neigh time (%) = 0.402791 (7.88782)
+Comm  time (%) = 0.374903 (7.34171)
+Outpt time (%) = 0.217611 (4.26146)
+Other time (%) = 0.133285 (2.61012)
 
 Nlocal:    2940 ave 2995 max 2829 min
 Histogram: 1 0 0 1 0 1 0 1 1 3
@@ -176,14 +176,14 @@ Step Temp E_pair E_mol TotEng Press Volume
      280    303.20239   -172594.73    5017.3706   -146321.15    22.843494    952624.22 
      290    301.80585    -172459.8    5032.6727   -146268.82    23.439288    952856.36 
      300    300.74955   -172469.96    5096.4026   -146289.31   -6.9185055    952770.58 
-Loop time of 5.11624 on 8 procs for 100 steps with 23520 atoms
+Loop time of 5.12755 on 8 procs for 100 steps with 23520 atoms
 
-Pair  time (%) = 3.96816 (77.5601)
-Bond  time (%) = 0.0157011 (0.306888)
-Neigh time (%) = 0.403621 (7.88901)
-Comm  time (%) = 0.366548 (7.1644)
-Outpt time (%) = 0.217925 (4.25948)
-Other time (%) = 0.144286 (2.82016)
+Pair  time (%) = 3.97895 (77.5995)
+Bond  time (%) = 0.0159874 (0.311794)
+Neigh time (%) = 0.402954 (7.8586)
+Comm  time (%) = 0.366989 (7.1572)
+Outpt time (%) = 0.217089 (4.23377)
+Other time (%) = 0.14558 (2.83917)
 
 Nlocal:    2940 ave 2993 max 2823 min
 Histogram: 1 0 0 0 1 1 0 1 1 3
