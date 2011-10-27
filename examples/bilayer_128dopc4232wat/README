@@ -2,7 +2,11 @@ Simulation of preassembled lipid bilayer.
 
 Various profiles are evaluated and averaged 'on the fly' - see
 'profiles/*.zProfile'. These files can be further processed (using
-the scripts in 'tools/') to obtain the 'profiles/*.dat' data.
+the scripts in 'tools/') to obtain the *.dat curves.
+
+The folder 'diffusion/' contains MSD data calculated on the fly by
+LAMMPS and corresponding diffusion curves obtained with the 
+'msd2diff.py' tool.
 
 References:
 - Orsi & Essex, PLoS ONE, submitted
