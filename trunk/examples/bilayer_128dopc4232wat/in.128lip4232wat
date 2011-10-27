@@ -1,8 +1,7 @@
 units		real
 atom_style	hybrid angle dipole sphere 
-read_data 	data.128dopc4232wat
-include 	forcefield.dopc
-special_bonds	lj/coul 0.0 1.0 1.0 
+read_data 	data.128lip4232wat
+include 	forcefield.elba
 velocity	all create 0.0 87287 
 
 group		lip type 2 3 4 5 6
@@ -16,15 +15,19 @@ group		tail type 6
 
 neighbor	2 bin
 neigh_modify	delay 0
+
 fix		integrate all nve/sphere update dipole
-fix 		tempLip lip langevin 303.15 303.15 100.0 48279 omega yes
-fix 		tempWat wat langevin 303.15 303.15 100.0 48279 omega yes
-fix		baro all press/berendsen aniso 1 1 500 couple xy modulus 22222
-fix             removeMomentum all momentum 1 linear 1 1 1
+fix             removeMom all momentum 1 linear 1 1 1
+fix 		thermoLip lip langevin 303.15 303.15 100.0 48279 omega yes
+fix 		thermoWat wat langevin 303.15 303.15 100.0 48279 omega yes
+fix		baro all press/berendsen aniso 1 1 500 couple xy modulus 21740
 
 timestep	15	
 
-thermo_style	custom step etotal pe press temp
+variable	surfTens equal 0.5*lz*(pzz-0.5*(pxx+pyy))/3
+variable	lipArea equal lx*ly/64
+variable	lipVol equal (vol-(4232*30))/128
+thermo_style    custom step temp press v_surfTens v_lipArea v_lipVol
 thermo		100
 
 dump		trj all custom 1000 dump.trj id type mol x y z mux muy muz
@@ -32,9 +35,11 @@ dump_modify	trj sort id
 
 run		1000 # equilibration
 
-# calc number density profile:
+# calc number density profiles:
 fix 		numDensWat wat ave/spatial 5 2000 10000 z center 0.1 & 
 		density/number units box file numDensWat.zProfile
+fix 		numDensLip lip ave/spatial 5 2000 10000 z center 0.1 & 
+		density/number units box file numDensLip.zProfile 
 fix 		numDensChol chol ave/spatial 5 2000 10000 z center 0.1 & 
 		density/number units box file numDensChol.zProfile
 fix 		numDensPhos phos ave/spatial 5 2000 10000 z center 0.1 & 
@@ -46,7 +51,7 @@ fix 		numDensEst est ave/spatial 5 2000 10000 z center 0.1 &
 fix 		numDensTail tail ave/spatial 5 2000 10000 z center 0.1 & 
 		density/number units box file numDensTail.zProfile 
 
-# calc stress profile:
+# calc stress profiles:
 compute		stpa all stress/atom
 fix		stress all ave/spatial 5 2000 10000 z center 0.1 &
 		c_stpa[1] c_stpa[2] c_stpa[3] units box file stress.zProfile
@@ -56,7 +61,7 @@ compute		chgHead head property/atom q
 fix 		qDensHead head ave/spatial 5 2000 10000 z center 0.1 & 
 		c_chgHead units box file qDensHead.zProfile 
 
-# calc dipole projection profile:
+# calc dipole projection profiles:
 compute		dipGly gly property/atom muz
 fix 		muzGly gly ave/spatial 5 2000 10000 z center 0.1 & 
 		c_dipGly units box file muzGly.zProfile 
@@ -66,6 +71,14 @@ fix 		muzEst est ave/spatial 5 2000 10000 z center 0.1 &
 compute		dipWat wat property/atom muz
 fix 		muzWat wat ave/spatial 5 2000 10000 z center 0.1 & 
 		c_dipWat units box file muzWat.zProfile 
+
+# calc mean squared displacement of representative lipid atom (gly):
+compute		msd gly msd com yes
+fix 		msd gly ave/time 1 1 200 c_msd[4] file gly.msd
+
+# calc mean squared displacement of lipid molecules:
+compute		msdm lip msd/molecule
+fix 		msdm lip ave/time 1 1 10000 c_msdm[4] mode vector file lip.msd
 
 run		20000 # production
 
