@@ -8,6 +8,11 @@ The folder 'diffusion/' contains MSD data calculated on the fly by
 LAMMPS and corresponding diffusion curves obtained with the 
 'msd2diff.py' tool.
 
+The folder 'area_volume/' contains area and volume per lipid data
+averaged over time windows as defined in the input script. These
+data can also be used to calculate compressibility moduli - tools
+for this are not yet available, but will be...
+
 References:
 - Orsi & Essex, PLoS ONE, submitted
 - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)

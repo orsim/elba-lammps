@@ -1,4 +1,4 @@
-LAMMPS (25 Sep 2011)
+LAMMPS (27 Oct 2011)
 units		real
 atom_style	hybrid angle dipole sphere 
 read_data 	data.128lip4232wat
@@ -121,14 +121,14 @@ Step Temp Press surfTens lipArea lipVol
      800    305.27468    25.660962    1499.8451    72.335404    1316.4714 
      900    302.54782    37.145741   -1555.4262    72.132885    1313.4268 
     1000    302.28601    27.790564    8.3057583    72.022857     1310.097 
-Loop time of 16.2408 on 8 procs for 1000 steps with 6152 atoms
+Loop time of 15.8433 on 8 procs for 1000 steps with 6152 atoms
 
-Pair  time (%) = 10.5947 (65.2349)
-Bond  time (%) = 0.0624624 (0.384601)
-Neigh time (%) = 0.830481 (5.11354)
-Comm  time (%) = 4.29065 (26.4189)
-Outpt time (%) = 0.0286177 (0.176208)
-Other time (%) = 0.433922 (2.67179)
+Pair  time (%) = 10.487 (66.1919)
+Bond  time (%) = 0.0625406 (0.394745)
+Neigh time (%) = 0.820493 (5.1788)
+Comm  time (%) = 4.02757 (25.4213)
+Outpt time (%) = 0.0290217 (0.18318)
+Other time (%) = 0.416691 (2.63008)
 
 Nlocal:    769 ave 807 max 744 min
 Histogram: 1 2 0 1 1 1 1 0 0 1
@@ -142,6 +142,10 @@ Ave neighs/atom = 134.499
 Ave special neighs/atom = 0.582575
 Neighbor list builds = 129
 Dangerous builds = 0
+
+# average area & vol over time:
+fix 		lipArea all ave/time 5 200 1000 v_lipArea file lip.area
+fix 		lipVol all ave/time 5 200 1000 v_lipVol file lip.vol
 
 # calc number density profiles:
 fix 		numDensWat wat ave/spatial 5 2000 10000 z center 0.1 		density/number units box file numDensWat.zProfile
@@ -380,14 +384,14 @@ Step Temp Press surfTens lipArea lipVol
    20800    300.61267   -51.033467    1719.1689    72.798681     1321.568 
    20900    306.12579    56.753452    -2468.606    72.779373    1320.6661 
    21000    302.57915    7.0033126   -1553.1091    72.641701    1315.1499 
-Loop time of 340.669 on 8 procs for 20000 steps with 6152 atoms
+Loop time of 321.566 on 8 procs for 20000 steps with 6152 atoms
 
-Pair  time (%) = 208.678 (61.2552)
-Bond  time (%) = 1.98722 (0.583329)
-Neigh time (%) = 15.7994 (4.63775)
-Comm  time (%) = 102.239 (30.0111)
-Outpt time (%) = 0.580109 (0.170285)
-Other time (%) = 11.3864 (3.34237)
+Pair  time (%) = 208.654 (64.8869)
+Bond  time (%) = 2.08613 (0.648742)
+Neigh time (%) = 15.9113 (4.94808)
+Comm  time (%) = 82.1773 (25.5553)
+Outpt time (%) = 0.579641 (0.180256)
+Other time (%) = 12.1575 (3.78071)
 
 Nlocal:    769 ave 818 max 750 min
 Histogram: 3 2 1 0 0 0 1 0 0 1

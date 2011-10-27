@@ -1,4 +1,4 @@
-LAMMPS (25 Sep 2011)
+LAMMPS (27 Oct 2011)
 units		real
 atom_style	hybrid angle dipole sphere 
 read_data 	data.singleLipid
@@ -90,14 +90,14 @@ Step Temp E_pair E_mol TotEng Press
      800     4602.977    36.467281    585.63904    814.19472    72.583068 
      900    2025.7842    48.050242    418.19834    550.78727    49.733602 
     1000     1241.338    40.267801    348.46774    440.53825    44.317423 
-Loop time of 0.0507401 on 4 procs for 1000 steps with 15 atoms
+Loop time of 0.0480511 on 4 procs for 1000 steps with 15 atoms
 
-Pair  time (%) = 0.00124192 (2.44762)
-Bond  time (%) = 0.00110435 (2.17649)
-Neigh time (%) = 0.0002563 (0.505123)
-Comm  time (%) = 0.0241238 (47.5439)
-Outpt time (%) = 0.011348 (22.365)
-Other time (%) = 0.0126657 (24.9619)
+Pair  time (%) = 0.00126743 (2.63768)
+Bond  time (%) = 0.00108463 (2.25723)
+Neigh time (%) = 0.000253975 (0.528553)
+Comm  time (%) = 0.0223111 (46.432)
+Outpt time (%) = 0.0110155 (22.9246)
+Other time (%) = 0.0121185 (25.2199)
 
 Nlocal:    3.75 ave 14 max 0 min
 Histogram: 3 0 0 0 0 0 0 0 0 1
