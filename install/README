@@ -4,12 +4,12 @@ Detailed information on how to build LAMMPS can be found on the official
 website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
 read the official LAMMPS compilation instructions. 
 
-The following guidelines are guaranteed to work with the 12Oct11 version 
+The following guidelines are guaranteed to work with the 27Oct11 version 
 of LAMMPS, whereas they may or may not work with other versions. 
 I will try to maintain compatibility with the latest version; if you are
-having problems with compiling any version more recent than 12Oct11, let me
+having problems with compiling any version more recent than 27Oct11, let me
 know (see last line). No support will be provided for versions older
-than 12Oct11 (sorry).  
+than 27Oct11 (sorry).  
 
 i) Pre-compilation
 
@@ -17,7 +17,7 @@ The following protocol assembles the ELBA-required source code and discards
 many non-necessary components:
 
 - Download and extract LAMMPS tarball from official website
-- cd lammps-12Oct11/src/
+- cd lammps-27Oct11/src/
 - make no-all 
 - make yes-dipole yes-molecule 
 - cp USER-MISC/pair_dipole_sf.* .
@@ -35,14 +35,14 @@ As examples, these are compilation protocols that work for me on computers
 running GNU/Linux operating systems:
  
 *) HPC example: compiling LAMMPS on the Iridis HPC machine (U Southampton):
-- cp elba-lammps/install/Makefile.iridis-icc-fast lammps-12Oct11/src/MAKE
-- cd lammps-12Oct11/src
+- cp elba-lammps/install/Makefile.iridis-icc-fast lammps-27Oct11/src/MAKE
+- cd lammps-27Oct11/src
 - module load openmpi
 - make iridis-icc-fast
 
 *) Desktop example: compiling LAMMPS on my UOS desktop
-- cp elba-lammps/install/Makefile.uos-icc lammps-12Oct11/src/MAKE 
-- cd lammps-12Oct11/src
+- cp elba-lammps/install/Makefile.uos-icc lammps-27Oct11/src/MAKE 
+- cd lammps-27Oct11/src
 - module load icc openmpi
 - make uos-icc
 
