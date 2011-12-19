@@ -9,12 +9,9 @@ usage information in the form of README files.
 - examples: various test runs, which can be used to check the build, and
 	as starting points for new simulations 
 
-- bench: benchmark simulations, useful to check performances on large 
-	numbers of processors
-
 - tools: scripts performing various operations - check comments at the top 
 	of each file to get usage information
 
-- viz: VMD status files for optimal visualization of ELBA systems
+- viz: status files for visualization of ELBA systems with VMD
 
-Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Oct 2011
+Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Dec 2011

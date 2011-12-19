@@ -1,11 +1,11 @@
-LAMMPS (27 Oct 2011)
+LAMMPS (16 Dec 2011)
 units		real
 atom_style	hybrid angle dipole sphere 
 read_data 	data.singleLipid
   2 = max bonds/atom
   2 = max angles/atom
   orthogonal box = (-20 -20 -20) to (40 40 40)
-  1 by 2 by 2 processor grid
+  1 by 2 by 2 MPI processor grid
   15 atoms
   14 bonds
   16 angles
@@ -186,14 +186,14 @@ Step Temp E_pair E_mol TotEng Press
     9800    296.35301   -17.460541    13.828286    8.7349528    1.8496962 
     9900    215.97148   -20.388775    12.657332    1.2813372   -4.3896277 
    10000    352.95138   -21.746958    17.322072    10.304249  -0.71132801 
-Loop time of 0.335977 on 4 procs for 10000 steps with 15 atoms
+Loop time of 0.40932 on 4 procs for 10000 steps with 15 atoms
 
-Pair  time (%) = 0.0157088 (4.67556)
-Bond  time (%) = 0.0108706 (3.23551)
-Neigh time (%) = 0.00219584 (0.653567)
-Comm  time (%) = 0.211028 (62.8103)
-Outpt time (%) = 0.0164984 (4.91059)
-Other time (%) = 0.0796751 (23.7145)
+Pair  time (%) = 0.0151715 (3.70652)
+Bond  time (%) = 0.00971448 (2.37332)
+Neigh time (%) = 0.00217384 (0.531086)
+Comm  time (%) = 0.267298 (65.3031)
+Outpt time (%) = 0.0200033 (4.88695)
+Other time (%) = 0.0949584 (23.1991)
 
 Nlocal:    3.75 ave 14 max 0 min
 Histogram: 3 0 0 0 0 0 0 0 0 1
