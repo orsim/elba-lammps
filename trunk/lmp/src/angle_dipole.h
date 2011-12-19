@@ -28,15 +28,15 @@ namespace LAMMPS_NS {
 class AngleDipole : public Angle {
  public:
   AngleDipole(class LAMMPS *);
-  ~AngleDipole();
-  void compute(int, int);
+  virtual ~AngleDipole();
+  virtual void compute(int, int);
   void coeff(int, char **);
   double equilibrium_angle(int);
   void write_restart(FILE *);
   void read_restart(FILE *);
   double single(int, int, int, int);
 
- private:
+ protected:
   double *k,*gamma0;
 
   void allocate();
@@ -46,3 +46,11 @@ class AngleDipole : public Angle {
 
 #endif
 #endif
+
+/* ERROR/WARNING messages:
+
+E: Incorrect args for angle coefficients
+
+Self-explanatory.  Check the input script or data file.
+
+*/

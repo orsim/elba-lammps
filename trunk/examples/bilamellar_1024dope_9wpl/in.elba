@@ -2,19 +2,24 @@ units		real
 atom_style	hybrid angle dipole sphere 
 read_data 	data.1024lip9216wat
 include 	forcefield.elba
+special_bonds	lj/coul 0.0 1.0 1.0 
 velocity	all create 0.0 87287 
 
 neighbor	1 bin
 neigh_modify	delay 0
 
-group		lip type 2 3 4 5 6
-group		wat type 1
+group		lipids type 2 3 4 5 6
+group		water type 1
 
 fix		integrate all nve/sphere update dipole
-fix 		thermoLip lip langevin 323.15 323.15 100.0 48279 omega yes
-fix 		thermoWat wat langevin 323.15 323.15 100.0 48279 omega yes
-fix             removeMom all momentum 1 linear 1 1 1
+fix 		thermoLip lipids langevin 323.15 323.15 100.0 48279 omega yes
+fix 		thermoWat water langevin 323.15 323.15 100.0 48279 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
 
+compute 	totT all temp/sphere dof all
+compute 	rotT all temp/sphere dof rotate
+
+thermo_style    custom step pe press temp c_totT c_rotT
 thermo		10
 dump		trj all custom 50 dump.trj id type mol x y z mux muy muz
 dump_modify	trj sort id

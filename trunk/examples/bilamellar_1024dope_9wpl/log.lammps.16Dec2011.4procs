@@ -1,0 +1,190 @@
+LAMMPS (16 Dec 2011)
+units		real
+atom_style	hybrid angle dipole sphere 
+read_data 	data.1024lip9216wat
+  2 = max bonds/atom
+  2 = max angles/atom
+  orthogonal box = (-62 -62 -25) to (62 62 75)
+  2 by 2 by 1 MPI processor grid
+  24576 atoms
+  14336 bonds
+  16384 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.elba
+pair_style dipole/sf 12
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+mass    1   40.000
+mass    2   42.000
+mass    3   90.000
+mass    4   62.000
+mass    5   62.000
+mass    6   42.000
+
+pair_coeff    1    1	  0.466  3.000
+pair_coeff    1    2	  0.671  3.750
+pair_coeff    1    3	  1.054  4.100
+pair_coeff    1    4	  0.574  3.800
+pair_coeff    1    5	  0.765  3.800
+pair_coeff    1    6	  0.447  3.750
+pair_coeff    2    2	  0.837  4.500
+pair_coeff    2    3	  2.738  4.850
+pair_coeff    2    4	  1.341  4.550
+pair_coeff    2    5	  2.236  4.550
+pair_coeff    2    6	  0.837  4.500
+pair_coeff    3    3	  1.434  5.200
+pair_coeff    3    4	  1.171  4.900
+pair_coeff    3    5	  1.171  4.900
+pair_coeff    3    6	  1.095  4.850
+pair_coeff    4    4	  0.956  4.600
+pair_coeff    4    5	  0.956  4.600
+pair_coeff    4    6	  0.894  4.550
+pair_coeff    5    5	  0.956  4.600
+pair_coeff    5    6	  0.894  4.550
+pair_coeff    6    6	  0.837  4.500
+
+bond_coeff    1    1.506  4.365
+bond_coeff    2    1.506  4.410
+bond_coeff    3    1.506  4.140
+bond_coeff    4    1.506  4.095
+bond_coeff    5    1.506  4.050
+
+angle_coeff    1  cosine/squared  3.5851  115.00
+angle_coeff    2  cosine/squared  3.5851  160.00
+angle_coeff    3  cosine/squared  3.5851  180.00
+angle_coeff    4  cosine/squared  3.5851  120.00
+angle_coeff    5  dipole          1.1950    0.00
+
+special_bonds	lj/coul 0.0 1.0 1.0 
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+velocity	all create 0.0 87287 
+
+neighbor	1 bin
+neigh_modify	delay 0
+
+group		lipids type 2 3 4 5 6
+15360 atoms in group lipids
+group		water type 1
+9216 atoms in group water
+
+fix		integrate all nve/sphere update dipole
+fix 		thermoLip lipids langevin 323.15 323.15 100.0 48279 omega yes
+fix 		thermoWat water langevin 323.15 323.15 100.0 48279 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
+
+compute 	totT all temp/sphere dof all
+compute 	rotT all temp/sphere dof rotate
+
+thermo_style    custom step pe press temp c_totT c_rotT
+thermo		10
+dump		trj all custom 50 dump.trj id type mol x y z mux muy muz
+dump_modify	trj sort id
+
+timestep	2
+run		50
+Memory usage per processor = 9.45609 Mbytes
+Step PotEng Press Temp totT rotT 
+       0   -143055.57    498.51727            0            0            0 
+      10   -144466.76    493.51746    118.57671    112.32835    106.08456 
+      20   -146357.04    346.57446     203.0872    192.83514    182.59093 
+      30   -146978.52    375.09398     244.1925    238.73617    233.28956 
+      40   -146533.12    560.70955    265.93401     265.0691    264.21498 
+      50   -145621.09    783.34272    276.86012    279.09476    281.34077 
+Loop time of 3.10216 on 4 procs for 50 steps with 24576 atoms
+
+Pair  time (%) = 2.57135 (82.8891)
+Bond  time (%) = 0.0415964 (1.34088)
+Neigh time (%) = 0.0268328 (0.864972)
+Comm  time (%) = 0.230408 (7.42733)
+Outpt time (%) = 0.114302 (3.68459)
+Other time (%) = 0.11767 (3.79316)
+
+Nlocal:    6144 ave 6170 max 6116 min
+Histogram: 1 0 1 0 0 0 0 0 1 1
+Nghost:    10045.5 ave 10065 max 10034 min
+Histogram: 1 0 2 0 0 0 0 0 0 1
+Neighs:    478645 ave 483478 max 473947 min
+Histogram: 1 0 0 0 1 1 0 0 0 1
+
+Total # of neighbors = 1914581
+Ave neighs/atom = 77.9045
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 1
+Dangerous builds = 0
+
+timestep	10
+run		50
+Memory usage per processor = 9.45609 Mbytes
+Step PotEng Press Temp totT rotT 
+      50   -145621.09    783.34272    276.86012    279.09476    281.34077 
+      60   -141958.26    1406.3407    297.46905    303.56699    309.67729 
+      70   -140290.43    1614.3437     314.8104    316.65909    318.52066 
+      80   -139762.27    1640.4119    319.52413    321.17505    322.83903 
+      90   -139651.34    1537.3826    320.41967    321.70611    323.00565 
+     100   -139787.65    1477.6139    322.39139    322.76614    323.15404 
+Loop time of 3.30701 on 4 procs for 50 steps with 24576 atoms
+
+Pair  time (%) = 2.5921 (78.3819)
+Bond  time (%) = 0.0407202 (1.23133)
+Neigh time (%) = 0.272045 (8.22632)
+Comm  time (%) = 0.168928 (5.10817)
+Outpt time (%) = 0.116156 (3.51243)
+Other time (%) = 0.117063 (3.53983)
+
+Nlocal:    6144 ave 6153 max 6139 min
+Histogram: 2 0 0 1 0 0 0 0 0 1
+Nghost:    10038 ave 10084 max 9991 min
+Histogram: 1 0 0 1 0 0 1 0 0 1
+Neighs:    477931 ave 482770 max 475100 min
+Histogram: 1 1 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 1911725
+Ave neighs/atom = 77.7883
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 10
+Dangerous builds = 0
+
+fix		baro all press/berendsen aniso 1 1 500 modulus 21740
+
+run		100
+Memory usage per processor = 9.45609 Mbytes
+Step PotEng Press Temp totT rotT 
+     100   -139787.65    1477.6139    322.39139    322.76614    323.15404 
+     110   -140529.07    960.96094    319.07426    319.05582    319.05036 
+     120   -139904.17     789.6143    320.20063    321.79981    323.41208 
+     130   -139804.16    659.05917    323.81768    324.85639    325.90832 
+     140   -139496.58    569.58812    321.19647    320.99879    320.81416 
+     150    -139588.6    417.32536    325.01846    323.32623    321.64715 
+     160    -139653.4    364.89196    324.64281    324.16658    323.70354 
+     170   -139702.66    282.27515    322.38589    322.81317    323.25359 
+     180   -139869.99    226.70066    324.62546    324.92506    325.23789 
+     190   -139864.65    188.93236    323.36995    324.04433    324.73189 
+     200   -140132.18    140.73922    320.37529    323.13714    325.91214 
+Loop time of 6.68682 on 4 procs for 100 steps with 24576 atoms
+
+Pair  time (%) = 5.12535 (76.6486)
+Bond  time (%) = 0.086297 (1.29055)
+Neigh time (%) = 0.653515 (9.77318)
+Comm  time (%) = 0.329604 (4.92916)
+Outpt time (%) = 0.228008 (3.40982)
+Other time (%) = 0.26404 (3.94867)
+
+Nlocal:    6144 ave 6153 max 6133 min
+Histogram: 1 0 0 0 0 1 1 0 0 1
+Nghost:    9890.75 ave 9907 max 9870 min
+Histogram: 1 0 0 0 0 1 1 0 0 1
+Neighs:    457562 ave 460926 max 454428 min
+Histogram: 1 0 0 1 0 0 1 0 0 1
+
+Total # of neighbors = 1830249
+Ave neighs/atom = 74.473
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 24
+Dangerous builds = 0
+
+

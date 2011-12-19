@@ -13,76 +13,106 @@ group		gly type 4
 group		est type 5
 group		tail type 6
 
-neighbor	2 bin
+neighbor	1 bin
 neigh_modify	delay 0
-
 fix		integrate all nve/sphere update dipole
-fix             removeMom all momentum 1 linear 1 1 1
-fix 		thermoLip lip langevin 303.15 303.15 100.0 48279 omega yes
-fix 		thermoWat wat langevin 303.15 303.15 100.0 48279 omega yes
-fix		baro all press/berendsen aniso 1 1 500 couple xy modulus 21740
-
-timestep	15	
+fix 		tempLip lip langevin 303.15 303.15 200 48279 omega yes
+fix 		tempWat wat langevin 303.15 303.15 200 48279 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
 
 variable	surfTens equal 0.5*lz*(pzz-0.5*(pxx+pyy))/3
 variable	lipArea equal lx*ly/64
 variable	lipVol equal (vol-(4232*30))/128
-thermo_style    custom step temp press v_surfTens v_lipArea v_lipVol
-thermo		100
 
-dump		trj all custom 1000 dump.trj id type mol x y z mux muy muz
+compute 	totT all temp/sphere dof all
+fix 		totT all ave/time 5 10 50 c_totT file temp.tot
+
+compute 	rotT all temp/sphere dof rotate
+fix 		rotT all ave/time 5 10 50 c_rotT file temp.rot
+
+
+thermo_style custom step press temp c_totT c_rotT v_surfTens v_lipArea v_lipVol
+thermo		10
+
+dump		trj all custom 50 dump.trj id type mol x y z mux muy muz
 dump_modify	trj sort id
 
-run		1000 # equilibration
+# equilibrate:
+timestep	15
+run		50
 
-# average area & vol over time:
-fix 		lipArea all ave/time 5 200 1000 v_lipArea file lip.area
-fix 		lipVol all ave/time 5 200 1000 v_lipVol file lip.vol
+fix		baro all press/berendsen aniso 1 1 500 couple xy modulus 21740
 
-# calc number density profiles:
-fix 		numDensWat wat ave/spatial 5 2000 10000 z center 0.1 & 
+run 		50
+
+fix		lipArea lip ave/time 2 50 100 v_lipArea file lip.area
+fix		lipVol lip ave/time 2 50 100 v_lipVol file lip.vol
+
+fix 		numDensLip lip ave/spatial 2 50 100 z center 1.0 & 
+		density/number units box file numDensLip.zProfile
+
+fix 		numDensWat wat ave/spatial 2 50 100 z center 1.0 & 
 		density/number units box file numDensWat.zProfile
-fix 		numDensLip lip ave/spatial 5 2000 10000 z center 0.1 & 
-		density/number units box file numDensLip.zProfile 
-fix 		numDensChol chol ave/spatial 5 2000 10000 z center 0.1 & 
+
+fix 		numDensChol chol ave/spatial 2 50 100 z center 1.0 & 
 		density/number units box file numDensChol.zProfile
-fix 		numDensPhos phos ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		numDensPhos phos ave/spatial 2 50 100 z center 1.0 & 
 		density/number units box file numDensPhos.zProfile
-fix 		numDensGly gly ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		numDensGly gly ave/spatial 2 50 100 z center 1.0 & 
 		density/number units box file numDensGly.zProfile
-fix 		numDensEst est ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		numDensEst est ave/spatial 2 50 100 z center 1.0 & 
 		density/number units box file numDensEst.zProfile
-fix 		numDensTail tail ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		numDensTail tail ave/spatial 2 50 100 z center 1.0 & 
 		density/number units box file numDensTail.zProfile 
 
-# calc stress profiles:
 compute		stpa all stress/atom
-fix		stress all ave/spatial 5 2000 10000 z center 0.1 &
-		c_stpa[1] c_stpa[2] c_stpa[3] units box file stress.zProfile
+fix		stress all ave/spatial 2 50 100 z center 1.0 &
+		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] &
+		units box file stress.zProfile
 
-# calc charge density profile:
+compute		stke all stress/atom ke
+fix		stressKinEn all ave/spatial 2 50 100 z center 1.0 &
+		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] &
+		units box file stressKinEn.zProfile
+
+compute		stnb all stress/atom pair
+fix		stressNonBond all ave/spatial 2 50 100 z center 1.0 &
+		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] &
+		units box file stressNonBond.zProfile
+
+compute		stb all stress/atom bond
+fix		stressBond all ave/spatial 2 50 100 z center 1.0 &
+		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] &
+		units box file stressBond.zProfile
+
+compute		sta all stress/atom angle
+fix		stressAngle all ave/spatial 2 50 100 z center 1.0 &
+		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] &
+		units box file stressAngle.zProfile
+
+compute		stv all stress/atom virial # check this is redundant
+fix		stressVir all ave/spatial 2 50 100 z center 1.0 &
+		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] &
+		units box file stressVir.zProfile
+
 compute		chgHead head property/atom q
-fix 		qDensHead head ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		qDensHead head ave/spatial 2 50 100 z center 1.0 & 
 		c_chgHead units box file qDensHead.zProfile 
 
-# calc dipole projection profiles:
 compute		dipGly gly property/atom muz
-fix 		muzGly gly ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		muzGly gly ave/spatial 2 50 100 z center 1.0 & 
 		c_dipGly units box file muzGly.zProfile 
+
 compute		dipEst est property/atom muz
-fix 		muzEst est ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		muzEst est ave/spatial 2 50 100 z center 1.0 & 
 		c_dipEst units box file muzEst.zProfile 
+
 compute		dipWat wat property/atom muz
-fix 		muzWat wat ave/spatial 5 2000 10000 z center 0.1 & 
+fix 		muzWat wat ave/spatial 2 50 100 z center 1.0 & 
 		c_dipWat units box file muzWat.zProfile 
 
-# calc mean squared displacement of representative lipid atom (gly):
 compute		msd gly msd com yes
-fix 		msd gly ave/time 1 1 200 c_msd[4] file gly.msd
+fix 		msd gly ave/time 1 1 10 c_msd[4] file gly.msd
 
-# calc mean squared displacement of lipid molecules:
-compute		msdm lip msd/molecule
-fix 		msdm lip ave/time 1 1 10000 c_msdm[4] mode vector file lip.msd
-
-run		20000 # production
+run		100
 

@@ -90,8 +90,9 @@ This angle style should not be used with SHAKE.
 :line
 
 :link(Orsi)
-[(Orsi)] Orsi and Essex, PLoS ONE, submitted.
+[(Orsi)] Orsi & Essex, The ELBA force field for coarse-grain modeling of 
+lipid membranes, PloS ONE 6(12): e28637, 2011.
 
 :link(Allen)
-[(Allen)] Allen and Tildesley, Computer Simulation of Liquids,
+[(Allen)] Allen & Tildesley, Computer Simulation of Liquids,
 Clarendon Press, Oxford, 1987.

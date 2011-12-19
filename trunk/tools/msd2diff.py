@@ -13,9 +13,8 @@
 # Notes: - input msd data are in Angstrom^2
 # Examples: - msd2diff.py wat.msd 3 > wat.diff
 #           - msd2diff.py lip.msd 2 > lip.diff
-# References: - Orsi & Essex, PLoS ONE, submitted
-#             - Orsi et al, J Phys Condens Matter 22, 155106 (2010),
-#               section 5.5
+# References: - Orsi & Essex, PLoS ONE 6, e28637 (2011), p. 15
+#             - Orsi et al, J Phys Condens Matter 22, 155106 (2010)
 #             - Rapaport, The Art of Molecular Dynamics Simulation
 #               (2004), 2nd ed, p.122
 #             - Xiang, J Phys Chem B 103, 385 (1999)
@@ -57,9 +56,9 @@ A2_in_cm2 = 1e-16 # 1 Angstrom^2 = 10^(-16) cm^2
 A2_in_nm2 = 1e-2 # 1 Angstrom^2 = 10^(-2) nm^2
 
 # output diff coeff:
-print '# Diffusion coefficient D as a function of measurement time'
-print '# Measurement time [ns] | D [cm^2/s] | D [nm^2/mus]'
-print '0.0 0.0 0.0' # set D=0 for t_measurement=0
+print '# Diffusion coeff D as a function of measurement time t'
+print '# t [ns] | D [m^2/s] | D [cm^2/s] | D [nm^2/mus]'
+print '0.0 0.0 0.0 0.0' # set D=0 for t_measurement=0
 for i in range( 1, len(msd) ):
   print ('%g %g %g %g' % (time[i]*fs_in_ns,
                        msd[i]*A2_in_m2/(2*nDims*time[i]*fs_in_s),

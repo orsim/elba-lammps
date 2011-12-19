@@ -21,32 +21,35 @@ fix 		thermostat all langevin 303.15 303.15 100.0 48279 omega yes
 fix             removeMomentum all momentum 1 linear 1 1 1
 
 compute		msd all msd com yes
-fix 		msd all ave/time 1 1 100 c_msd[4] file wat.msd
+fix 		msd all ave/time 1 1 10 c_msd[4] file wat.msd
 variable	potEn equal pe/atoms
 
-fix		potEn all ave/time 5 100 500 v_potEn file wat.potEn
+compute 	totT all temp/sphere dof all
+
+compute 	rotT all temp/sphere dof rotate
+
+fix		potEn all ave/time 5 10 50 v_potEn file wat.potEn
 variable	totEn equal etotal/atoms
 
-fix		totEn all ave/time 5 100 500 v_totEn file wat.totEn
-variable	watVol equal vol/atoms
+fix		totEn all ave/time 5 10 50 v_totEn file wat.totEn
 
 variable	dens equal 2.99e-23*atoms*1e24/vol
-fix		dens all ave/time 5 100 500 v_dens file wat.dens
+fix		dens all ave/time 5 10 50 v_dens file wat.dens
 
 variable	P equal press
-fix 		P all ave/time 5 100 500 v_P file wat.press
+fix 		P all ave/time 5 10 50 v_P file wat.press
 
-thermo_style	custom step pe temp press v_watVol v_dens v_potEn c_msd[4] 
-thermo		100
+thermo_style	custom step pe temp c_totT c_rotT  press v_dens v_potEn c_msd[4] 
+thermo		10
 
-dump		trj all custom 100 dump.trj id type x y z mux muy muz
+dump		trj all custom 50 dump.trj id type x y z mux muy muz
 dump_modify	trj sort id
 
 timestep	10
-run		500
+run		100
 
 fix		baro all press/berendsen iso 1 1 500 modulus 21740
-compute         rdf all rdf 50
-fix             rdf all ave/time 1000 1 1000 c_rdf file wat.rdf mode vector
+compute         rdf all rdf 10
+fix             rdf all ave/time 100 1 100 c_rdf file wat.rdf mode vector
 
-run		1000
+run		100

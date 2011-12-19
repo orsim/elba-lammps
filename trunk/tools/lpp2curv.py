@@ -10,7 +10,7 @@
 #        - Coordinates (first col of input file) in Angstrom
 #        - Lateral pressure Pt-Pn (second col of input file) in Atm
 #        - Coordinates' origin = bilayer center
-# References: - Orsi & Essex, PLoS ONE, submitted
+# References: - Orsi & Essex, PLoS ONE 6, e28637 (2011)
 #             - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
 #             - Cantor, Biophys J 80, 2284 (2001)
 #             - Ben-Shaul, in 'Structure and dynamics of membranes',
