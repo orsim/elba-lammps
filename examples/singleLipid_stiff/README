@@ -4,5 +4,3 @@ interactions. Though unrealistic, this enables checking of the reference
 
 To visualize, convert the .trj file using the 'trj2pdb.py' tool, and then
 load the 'lipid1.vmd' state file in 'viz/'.
-
-Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Dec 2011
