@@ -1,0 +1,22 @@
+*** Protocol to obtain membrane profiles ***
+
+For the followig guidelines to work, you must have the ELBA-LAMMPS
+tools available in your working directory. You can simply copy all the 
+tools in the working directory, or you can add elba-lammps/tools to 
+your path (recommended).
+
+- Run the 'bilayer_128dopc4232wat' example. This will generate various
+  	'.zProfile' files which can be postprocessed as described in the
+	following steps. 
+- Run edp.sh tool to obtain electron density profiles (edp*.dat). You
+	can then visualize the curves with, e.g., Grace: xmgrace edp*
+- Run epp.sh tool to obtain electron potential profiles (epp*.dat). Ditto
+	re visualization. 
+- Run stress2press.py tool to obtain lateral pressure profile (lpp.dat).
+	As explained in the comments at the top of 'stress2press.py', 
+	you need to supply an input file (in this case 'stress.zProfile')
+	and a value for the interfacial area (typically this can be 
+	obtained as lipidArea * numberOfLipidsPerLeaflet)
+
+
+
