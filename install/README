@@ -4,12 +4,12 @@ Detailed information on how to build LAMMPS can be found on the official
 website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
 read the official LAMMPS compilation instructions. 
 
-The following guidelines are guaranteed to work with the 27Oct11 version 
+The following guidelines are guaranteed to work with the 16Dec11 version 
 of LAMMPS, whereas they may or may not work with other versions. 
 I will try to maintain compatibility with the latest version; if you are
-having problems with compiling any version more recent than 27Oct11, let me
+having problems with compiling any version more recent than 16Dec11, let me
 know (see last line). No support will be provided for versions older
-than 27Oct11 (sorry).  
+than 16Dec11 (sorry).  
 
 i) Pre-compilation
 
@@ -45,5 +45,3 @@ running GNU/Linux operating systems:
 - cd lammps-16Dec11/src
 - module load icc openmpi
 - make uos-icc
-
-Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi) - Oct 2011
