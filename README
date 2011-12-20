@@ -1,19 +1,21 @@
 The ELBA-LAMMPS toolkit is a collection of tools aimed at facilitating the
-simulation of the ELBA model in LAMMPS. The toolkit can be considered as an 
-add-on package that offers users various functionalities to setup, run and
-analyze LAMMPS simulations of ELBA molecular models.
+simulation of the ELBA model in LAMMPS. More concretely, ELBA-LAMMPS can be 
+described as a LAMMPS add-on package providing users with various 
+functionalities to setup, run and analyze molecular dynamics simulations 
+of systems modeled with the ELBA force field.
 
 The ELBA force field is described in Orsi & Essex, PLoS ONE 6: e28637 (2011).
 
 The various folders in the ELBA-LAMMPS toolkit contain usage information 
 in the form of README files. 
 
-- install: probably the place to start, this directory contains 
+- install: this is the place to start, as this directory contains 
 	instructions on how to build LAMMPS with all (and only) the 
 	features necessary to simulate the ELBA model
 
-- examples: various test runs, which can be used to check the LAMMPS build 
-	and as starting points for new simulations 
+- examples: various test runs, which can be used to check the LAMMPS build,
+	to understand how to run and analyze ELBA systems, and as starting 
+	points for new simulations 
 
 - tools: scripts performing various operations, such as analysis of LAMMPS 
 	output files to extract properties of interest and file manipulation

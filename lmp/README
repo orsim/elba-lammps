@@ -5,4 +5,8 @@ Some of the files in this folder are shipped with the official LAMMPS
 distribution. Other files might be required when building LAMMPS for ELBA -
 the instructions in install/README should clarify if this is the case.
 
-Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Oct 2011
+In general, most of the material archived here is not relevant for most 
+users, but it can be useful to current and perspective ELBA-LAMMPS 
+authors.
+
+Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Dec 2011
