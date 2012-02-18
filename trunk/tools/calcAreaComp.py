@@ -3,7 +3,7 @@
 # Script: calcAreaComp.py
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Reads a file containing the time evolution of the interfacial
-#          area of a lipid bilayer (usually the xy area )and calculates
+#          area of a lipid bilayer (usually the xy area) and calculates
 #          the corresponding area compressibility (stretch) modulus
 # Syntax: calcAreaComp.py inputFile temperature
 # Note: input area data are in Angstrom^2
@@ -26,12 +26,12 @@ if len(sys.argv) != 3:
 
 inFileName = sys.argv[1]
 T = float(sys.argv[2])
+print "\nT = %.2f K\n" % T
 inFile = open(inFileName, "r")
 lines = inFile.readlines()
 inFile.close()
 
-nLines = 0 # total number of lines in the file
-lineCounter = 0
+dataCounter = 0
 
 areaSum = squareAreaSum = 0
 areaSum1 = squareAreaSum1 = 0
@@ -45,16 +45,16 @@ for line in lines:
 
 for line in lines: 
     if line[0] != '#': # ignore comments
-        lineCounter = lineCounter + 1
+        dataCounter = dataCounter + 1
         words = string.split( line )
         area = string.atof(words[1]);
         areaSum += area
         squareAreaSum += area**2
-        if lineCounter <= nData/2 : # first half of lines
+        if dataCounter <= nData/2 : # first half of data
             nData1 += 1
             areaSum1 += area
             squareAreaSum1 += area**2
-        else: # second half of lines
+        else: # second half of data
             nData2 += 1
             areaSum2 += area
             squareAreaSum2 += area**2
