@@ -65,9 +65,9 @@ if nData != nData1+nData2:
 
 # Calc modulus considering all data:
 meanArea = areaSum / nData;
-print "meanArea = %4.2f A^2" % meanArea
+print "Mean interface area = %.2f A^2" % meanArea
 meanSquaredAreaFluct = squareAreaSum / nData - meanArea**2
-print "meanSquaredAreaFluct = %6.3f A^4" % meanSquaredAreaFluct
+#print "meanSquaredAreaFluct = %6.3f A^4" % meanSquaredAreaFluct
 # convert A -> nm:
 meanArea *= A2_in_nm2 
 meanSquaredAreaFluct *= A4_in_nm4
@@ -75,15 +75,15 @@ meanSquaredAreaFluct *= A4_in_nm4
 KA = kB*T * meanArea / meanSquaredAreaFluct # [ J / nm^2 ]
 # convert J/nm^2 -> 10^21 dyn/cm:
 KA *= J_nm2__in__dyn_cm
-print "KA_total = %6.1f dyn/cm\n" % KA
+print "KA_total = %.2f dyn/cm\n" % KA
 
 # Calc modulus considering only first half of data:
 meanArea1 = areaSum1 / nData1;
-print "meanArea1 = %4.2f A^2" % meanArea1
-print "squareAreaSum1 / nData1= %4.2f A^2" % (squareAreaSum1/ nData1)
-print "meanArea1**2 = %4.2f A^2" % (meanArea1**2)
+#print "meanArea1 = %4.2f A^2" % meanArea1
+#print "squareAreaSum1 / nData1= %4.2f A^2" % (squareAreaSum1/ nData1)
+#print "meanArea1**2 = %4.2f A^2" % (meanArea1**2)
 meanSquaredAreaFluct1 = squareAreaSum1 / nData1 - meanArea1**2
-print "meanSquaredAreaFluct1 = %6.3f A^4" % meanSquaredAreaFluct1
+#print "meanSquaredAreaFluct1 = %6.3f A^4" % meanSquaredAreaFluct1
 # convert A -> nm:
 meanArea1 *= A2_in_nm2 
 meanSquaredAreaFluct1 *= A4_in_nm4
@@ -91,15 +91,15 @@ meanSquaredAreaFluct1 *= A4_in_nm4
 KA1 = kB*T * meanArea1 / meanSquaredAreaFluct1 # [ J / nm^2 ]
 # conversion considering that J/nm^2 = 10^21 dyn/cm
 KA1 *= J_nm2__in__dyn_cm
-print "KA_1 = %6.1f dyn/cm\n" % ( KA1 )
+print "KA_1 = %.2f dyn/cm" % ( KA1 )
 
 # Calc modulus considering only second half of data:
 meanArea2 = areaSum2 / nData2;
-print "meanAreaSecond2 = %4.2f A^2" % meanArea2
-print "squareAreaSum2/ nData2 = %4.2f A^2" % (squareAreaSum2/ nData2)
-print "meanArea2**2 = %4.2f A^2" % (meanArea2**2)
+#print "meanArea2 = %4.2f A^2" % meanArea2
+#print "squareAreaSum2/ nData2 = %4.2f A^2" % (squareAreaSum2/ nData2)
+#print "meanArea2**2 = %4.2f A^2" % (meanArea2**2)
 meanSquaredAreaFluct2 = squareAreaSum2 / nData2 - meanArea2**2
-print "meanSquaredAreaFluct2 = %6.3f A^4" % meanSquaredAreaFluct2
+#print "meanSquaredAreaFluct2 = %6.3f A^4" % meanSquaredAreaFluct2
 # convert A -> nm:
 meanArea2 *= A2_in_nm2 
 meanSquaredAreaFluct2 *= A4_in_nm4
@@ -107,11 +107,11 @@ meanSquaredAreaFluct2 *= A4_in_nm4
 KA2 = kB*T * meanArea2 / meanSquaredAreaFluct2 # [ J / nm^2 ]
 # conversion considering that J/nm^2 = 10^21 dyn/cm
 KA2 *= J_nm2__in__dyn_cm
-print "KA_2 = %6.1f dyn/cm\n" % ( KA2 )
+print "KA_2 = %.2f dyn/cm" % ( KA2 )
 
 # Calc average:
 KA_avg12 = 0.5 * ( KA1 + KA2 )
-print "KA_avg12 = %6.1f dyn/cm" % KA_avg12
+print "KA_avg12 = %.2f dyn/cm" % KA_avg12
 standardDeviation = sqrt( ( KA1 - KA_avg12 )**2 + ( KA2 - KA_avg12 )**2 )
 standardError = standardDeviation / sqrt(2)
-print "Standard error = %6.1f dyn/cm\n" % standardError
+print "Standard error = %.2f dyn/cm\n" % standardError
