@@ -21,6 +21,11 @@ atm_in_Pa = 101325 # note: 1 Pa = 1 N/m^2
 A_in_m = 1e-10 # Angstrom in meter
 N_in_mN = 1e3 # Newton in milliNewton
 
+## Reduced units:
+## atm_in_Pa = 1
+## A_in_m = 1
+## N_in_mN = 1
+
 Lz = float(sys.argv[1]) * A_in_m
 Pxx = float(sys.argv[2]) * atm_in_Pa 
 Pyy = float(sys.argv[3]) * atm_in_Pa 

@@ -3,7 +3,7 @@ output files (to extract properties of interest, convert formats, etc.).
 See guidelines at the top of each script for usage information.
 
 Most of the tools as quite general, in the sense that they can be used
-to analyse data not necessarily generated with LAMMPS.
+to analyze data not necessarily generated with LAMMPS.
 
 Note for the Python tools: to use the syntax defined in the comment at 
 the top of each Python tool, the file might need to be made executable,
