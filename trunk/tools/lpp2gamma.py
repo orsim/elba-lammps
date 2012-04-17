@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-# Script: lpp2surfTens.py
+# Script: lpp2gamma.py
 # Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
 # Purpose: Integrates a lateral pressure profile to get the corresponding
-#          surface tension per monolayer
-# Syntax: lpp2surfTens.py inputFile
-# Example: lpp2surfTens.py lpp.dat 
+#          surface tension (gamma) per monolayer
+# Syntax: lpp2gamma.py inputFile
+# Example: lpp2gamma.py lpp.dat 
 # Notes: - inputFile format = coordinate | lpp(z)
 #        - Coordinates (first col of input file) in Angstrom
 #        - Lateral pressure Pt-Pn (second col of input file) in Atm 
@@ -16,7 +16,7 @@
 import sys,os,string
 
 if len(sys.argv) != 2:
-  print "Syntax: lpp2surfTens.py inputFile"
+  print "Syntax: lpp2gamma.py inputFile"
   sys.exit()
 
 def Integral( iStart, iEnd, f, delta ):
@@ -25,7 +25,7 @@ def Integral( iStart, iEnd, f, delta ):
     fInt += f[i]
   return fInt*delta
 
-atmA__in__mN_m = 1.01325e-2 # conversion factor: atm*A = 1.01325e-5 mN/m
+atmA__in__mN_m = 0.01013 # conversion factor: atm*A = 0.01013 mN/m
 
 inFileName = sys.argv[1]
 inFile = open(inFileName, "r")

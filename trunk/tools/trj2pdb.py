@@ -40,7 +40,7 @@ nLine=0; # line counter
 nCount=0; # counter
 nExtra=0; # extra atoms used to represent dipoles
 
-print "Start scanning coordinates and orientations..."
+print "Scanning coordinates and orientations..."
 for line in lines:
     nLine=nLine+1
     words = string.split(line)
@@ -85,7 +85,7 @@ for line in lines:
     if len(words) == 9: # lipids+water system
         n=int(words[0]) + nExtra # atom identifier
         t=int(words[1]) # type identifier
-        m=float(words[2]) # molecule identifier
+        m=int(words[2]) # molecule identifier
         x=float(words[3])
         y=float(words[4])
         z=float(words[5])
@@ -130,4 +130,7 @@ for line in lines:
         elif t == 6: # tail type
             outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
                           %(n,"CH2 LIP",m,x,y,z ))
-print "Done scanning - end of script."
+        elif t == 7: # amine type
+            outFile.write('ATOM%7d%9s%6d%12.3f%8.3f%8.3f\n'
+                          %(n,"AMI LIP",m,x,y,z ))
+print "File \'trajectory.pdb\' successfully generated."
