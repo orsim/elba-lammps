@@ -105,7 +105,7 @@ for i in range( 0, nAtoms ):
         t4n[i] = t3n[i] # update type
         d3i = d2i # new 3rd neigh dist is old 2nd neigh dist
         t3n[i] = t2n[i] # update type
-        d2i = dij # new 1st neigh dist
+        d2i = dij # new 2nd neigh dist
         t2n[i] = t[j] # update type
       elif dij < d3i: # if j is a new nearest 3rd neighbor to i
         d4i = d3i # new 4th neigh dist is old 3rd neigh dist
@@ -113,28 +113,29 @@ for i in range( 0, nAtoms ):
         d3i = dij # new 3rd neigh dist
         t3n[i] = t[j] # update type
       elif dij < d4i: # if j is a new nearest 4th neighbor to i
-        d4i = dij # new 4th neigh dist is old 3rd neigh dist
+        d4i = dij # new 4th neigh dist 
         t4n[i] = t[j] # update type
 
-sameTypeNeighs = 0
-differentNeighs = 0
+nSameNeighs = 0. # number of same-type neighbors (with respect to "i")
+nDiffNeighs = 0. # number of different-type neighbors (with respect to "i")
 for i in range( 0, nAtoms ):
   if t1n[i] == type:
-    sameTypeNeighs += 1
+    nSameNeighs += 1
   else:
-    differentNeighs += 1 
+    nDiffNeighs += 1 
   if t2n[i] == type:
-    sameTypeNeighs += 1
+    nSameNeighs += 1
   else:
-    differentNeighs += 1 
+    nDiffNeighs += 1 
   if t3n[i] == type:
-    sameTypeNeighs += 1
+    nSameNeighs += 1
   else:
-    differentNeighs += 1 
+    nDiffNeighs += 1 
   if t4n[i] == type:
-    sameTypeNeighs += 1
+    nSameNeighs += 1
   else:
-    differentNeighs += 1
-#print sameTypeNeighs,differentNeighs
-fraction = (float(sameTypeNeighs) / (sameTypeNeighs+differentNeighs))
+    nDiffNeighs += 1
+#print nSameNeighs,nDiffNeighs
+fraction = nSameNeighs / (nSameNeighs+nDiffNeighs)
+#fraction = nSameNeighs / (4.*nAtoms)
 print "Fraction of %d-%d neighbors = %f" % (type, type, fraction)
