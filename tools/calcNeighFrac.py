@@ -5,15 +5,26 @@
 # Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and, for a
 #          user-defined type "i", calculates the fraction of nearest
 #          neighbors of the same type "i" in the xy-plane
-# Note: this script works for lipid bilayers arranged parallel to the
-#       xy-plane, and it would need modifications to handle different
-#       systems
+# Notes: - this script works for lipid bilayers arranged parallel to
+#          the xy-plane, and it might need modifications to handle
+#          different systems
+#        - all and only the nearest 4 neighbors are considered (but
+#          it should be easy to modify/generalize the script)
 # Syntax: calcNeighFrac.py trjFile type typeNeigh
-# Example: calcNeighFrac.py dump.trj 2 4
+# Examples: - calcNeighFrac.py dump1000.trj 2 4
+#           - calcNeighFrac.py dump89.trj   2 2
 # Reference: de Vries et al, J Phys Chem B 2004, 108, 2454
 
 import sys, string, linecache
 from math import sqrt
+
+# Wrap function: wrap a (distance) vector around periodic boundaries
+def Wrap( distance, edge ):
+  if distance > 0.5*edge:
+    distance -= edge
+  elif distance < -0.5*edge:
+    distance += edge
+  return distance
 
 if len(sys.argv) != 4:
   print "Syntax: calcNeighFrac.py trjFile type typeNeigh"
@@ -42,12 +53,10 @@ yBox = abs(float(words[0])-float(words[1]))
 print "y dimension: %f A" % yBox
 
 lines = inFile.readlines()
-
 nAtoms=0; # atom counter
-
-x = [] # x coord of atom
-y = [] # y coord of atom
-t = [] # atom type
+x = [] # x coord 
+y = [] # y coord 
+t = [] # type
 t1n = [] # type of 1st neighbor
 t2n = [] # type of 2nd neighbor
 t3n = [] # type of 4th neighbor
@@ -56,86 +65,85 @@ t4n = [] # type of 5th neighbor
 print "Scanning atoms..."
 for line in lines:
   words = string.split(line)
-  if len(words) == 9: # lipids+water system
-    n=int(words[0]) # atom identifier
+  if len(words) == 9: # (relies on assumption on input file format)
     tAtom=int(words[1]) # type identifier
-    m=int(words[2]) # molecule identifier
     xCoord=float(words[3])
     yCoord=float(words[4])
+    # store properties of atoms of the desired type(s)
     if ((tAtom == type) or (tAtom == typeNeigh)):
-      nAtoms = nAtoms + 1
+      nAtoms += 1
       x.append(xCoord)
       y.append(yCoord)
       t.append(tAtom)
-for i in range( 0, nAtoms ):
-  d1i = d2i = d3i = d4i = 999999999.9 # initialize distances
-  t1n.append(999999999) # initialize neigh type
-  t2n.append(999999999) # initialize neigh type
-  t3n.append(999999999) # initialize neigh type
-  t4n.append(999999999) # initialize neigh type
-  for j in range( 0, nAtoms ):
-    if i!=j:
-      xij = x[i]-x[j]
-      yij = y[i]-y[j]
-      # wrap distances over periodic boundaries:
-      if xij > 0.5*xBox:
-        xij = xij - xBox
-      elif xij < -0.5*xBox:
-        xij = xij + xBox
-      if yij > 0.5*yBox:
-        yij = yij - yBox
-      elif yij < -0.5*yBox:
-        yij = yij + yBox
       
+for i in range( 0, nAtoms ): # loop over stored atoms
+  d1i = 999999999.9 # initialize 1st neigh distance
+  d2i = 999999999.9 # initialize 2nd neigh distance
+  d3i = 999999999.9 # initialize 3rd neigh distance
+  d4i = 999999999.9 # initialize 4th neigh distance
+  t1n.append(999999999) # initialize 1st neigh type
+  t2n.append(999999999) # initialize 2nd neigh type
+  t3n.append(999999999) # initialize 3rd neigh type
+  t4n.append(999999999) # initialize 4th neigh type
+  for j in range( 0, nAtoms ): # loop over pairs
+    if i!=j: # exclude same-atom pair
+      xij = x[i]-x[j] # compute pair x-distance
+      yij = y[i]-y[j] # compute pair y-distance
+      # perform periodic wraparound if needed:
+      xij = Wrap( xij, xBox )
+      yij = Wrap( yij, yBox )     
       # compute xy distance:
       dij = sqrt( xij**2 + yij**2 )
 
-      # test distance
+      # test distance and (re)rank neighbors:
       if dij < d1i: # if j is a new nearest 1st neighbor to i
         d4i = d3i # new 4th neigh dist is old 3rd neigh dist
-        t4n[i] = t3n[i] # update type
+        t4n[i] = t3n[i] # new 4th neigh is old 3rd neigh
         d3i = d2i # new 3rd neigh dist is old 2nd neigh dist
-        t3n[i] = t2n[i] # update type
+        t3n[i] = t2n[i] # new 3rd neigh is old 2nd neigh
         d2i = d1i # new 2nd neigh dist is old 1st neigh dist
-        t2n[i] = t1n[i] # update type
+        t2n[i] = t1n[i] # new 2nd neigh is old 1st neigh
         d1i = dij # new 1st neigh dist
-        t1n[i] = t[j] # store type
+        t1n[i] = t[j] # new 1st neighbor
       elif dij < d2i: # if j is a new nearest 2nd neighbor to i
         d4i = d3i # new 4th neigh dist is old 3rd neigh dist
-        t4n[i] = t3n[i] # update type
+        t4n[i] = t3n[i] # new 4th neigh is old 3rd neigh
         d3i = d2i # new 3rd neigh dist is old 2nd neigh dist
-        t3n[i] = t2n[i] # update type
+        t3n[i] = t2n[i] # new 3rd neigh is old 2nd neigh
         d2i = dij # new 2nd neigh dist
-        t2n[i] = t[j] # update type
+        t2n[i] = t[j] # new 2nd neigh
       elif dij < d3i: # if j is a new nearest 3rd neighbor to i
         d4i = d3i # new 4th neigh dist is old 3rd neigh dist
-        t4n[i] = t3n[i] # update type
+        t4n[i] = t3n[i] # new 4th neigh dist is old 3rd neigh dist
         d3i = dij # new 3rd neigh dist
-        t3n[i] = t[j] # update type
+        t3n[i] = t[j] # new 3rd neigh
       elif dij < d4i: # if j is a new nearest 4th neighbor to i
         d4i = dij # new 4th neigh dist 
-        t4n[i] = t[j] # update type
+        t4n[i] = t[j] # new 4th neigh
 
-nSameNeighs = 0. # number of same-type neighbors (with respect to "i")
-nDiffNeighs = 0. # number of different-type neighbors (with respect to "i")
-for i in range( 0, nAtoms ):
+nSameNeighs = 0. # init counter for same-type (as "i") neighs 
+nDiffNeighs = 0. # init counter for different-type (than "i") neighs 
+for i in range( 0, nAtoms ): # loop over stored atoms and sort neighs
+  # 1st (nearest) neigh:
   if t1n[i] == type:
     nSameNeighs += 1
   else:
     nDiffNeighs += 1 
+  # 2nd neigh:
   if t2n[i] == type:
     nSameNeighs += 1
   else:
     nDiffNeighs += 1 
+  # 3rd neigh:  
   if t3n[i] == type:
     nSameNeighs += 1
   else:
     nDiffNeighs += 1 
+  # 4th neigh:
   if t4n[i] == type:
     nSameNeighs += 1
   else:
     nDiffNeighs += 1
-#print nSameNeighs,nDiffNeighs
+
 fraction = nSameNeighs / (nSameNeighs+nDiffNeighs)
-#fraction = nSameNeighs / (4.*nAtoms)
 print "Fraction of %d-%d neighbors = %f" % (type, type, fraction)
