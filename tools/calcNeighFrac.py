@@ -16,7 +16,7 @@
 #          monolayers can be identify from their positive vs negative
 #          coordinates)
 # Syntax: calcNeighFrac.py trjFile [upper|lower] type typeNeigh
-# Examples: - calcNeighFrac.py dump1000.trj 2 7
+# Example: calcNeighFrac.py dump1000.trj 2 7
 # Reference: de Vries et al, J Phys Chem B 2004, 108, 2454
 
 import sys, string, linecache
@@ -164,5 +164,5 @@ for i in range( 0, nAtoms ): # loop over stored atoms and sort neighs
     else:
       nDiffNeighs += 1
 
-fraction = nSameNeighs / (nSameNeighs+nDiffNeighs)
+fraction = nSameNeighs / ( nSameNeighs + nDiffNeighs )
 print "Fraction of %d-%d neighbors = %f" % (type, type, fraction)
