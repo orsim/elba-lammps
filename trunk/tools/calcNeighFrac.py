@@ -3,8 +3,9 @@
 # Script: calcNeighFrac.py
 # Author: Mario Orsi (orsimario at gmail.com)
 # Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and, for a
-#          user-defined type "i", calculates the fraction of nearest
-#          neighbors of the same type "i" in the xy-plane
+#          "main" type "i", calculates the fraction of nearest
+#          neighbors of type "i" over the total number of neighbors
+#          of types "main" and "other"
 # Notes: - this script works for lipid bilayers arranged parallel to
 #          the xy-plane, and it might need modifications to handle
 #          different systems
@@ -15,7 +16,7 @@
 #          contains z coordinates that centered at 0 (so that the two
 #          monolayers can be identify from their positive vs negative
 #          coordinates)
-# Syntax: calcNeighFrac.py trjFile [upper|lower] type typeNeigh
+# Syntax: calcNeighFrac.py trjFile [upper|lower] typeMain typeOther
 # Example: calcNeighFrac.py dump1000.trj 2 7
 # Reference: de Vries et al, J Phys Chem B 2004, 108, 2454
 
@@ -31,13 +32,17 @@ def Wrap( distance, edge ):
   return distance
 
 if len(sys.argv) != 5:
-  print "Syntax: calcNeighFrac.py trjFile [upper|lower] type typeNeigh"
+  print "Syntax: calcNeighFrac.py trjFile [upper|lower] typeMain typeOther"
   sys.exit()
 
 inFileName = sys.argv[1]
 monolayer = sys.argv[2]
-type = int(sys.argv[3])
-typeNeigh = int(sys.argv[4])
+typeMain = int(sys.argv[3])
+typeOther = int(sys.argv[4])
+
+if typeMain == typeOther:
+  print "Warning: typeMain = typeOther"
+
 inFile = open(inFileName, "r")
 
 if monolayer != "upper" and monolayer != "lower":
@@ -81,7 +86,7 @@ for line in lines:
     yCoord=float(words[4])
     zCoord=float(words[5])
     # store properties of atoms of the desired type(s)
-    if ((tAtom == type) or (tAtom == typeNeigh)):
+    if ((tAtom == typeMain) or (tAtom == typeOther)):
       nAtoms += 1
       x.append(xCoord)
       y.append(yCoord)
@@ -144,25 +149,27 @@ nDiffNeighs = 0. # init counter for different-type (than "i") neighs
 for i in range( 0, nAtoms ): # loop over stored atoms and sort neighs
   if z[i]*switch > 0: # consider only upper or lower layer
     # 1st (nearest) neigh:
-    if t1n[i] == type:
+    if t1n[i] == typeMain:
       nSameNeighs += 1
     else:
       nDiffNeighs += 1 
     # 2nd neigh:
-    if t2n[i] == type:
+    if t2n[i] == typeMain:
       nSameNeighs += 1
     else:
       nDiffNeighs += 1 
     # 3rd neigh:  
-    if t3n[i] == type:
+    if t3n[i] == typeMain:
       nSameNeighs += 1
     else:
       nDiffNeighs += 1 
     # 4th neigh:
-    if t4n[i] == type:
+    if t4n[i] == typeMain:
       nSameNeighs += 1
     else:
       nDiffNeighs += 1
 
 fraction = nSameNeighs / ( nSameNeighs + nDiffNeighs )
-print "Fraction of %d-%d neighbors = %f" % (type, type, fraction)
+print "Average fraction 'f' of %d-%d neighbors" % (typeMain, typeMain),
+print "over the 4 nearest neighbors of type %d or %d:" % (typeMain, typeOther)
+print "f = %f" % (fraction)
