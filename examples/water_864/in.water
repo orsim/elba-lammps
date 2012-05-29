@@ -7,49 +7,78 @@ create_box	1 box
 create_atoms	1 box
 
 mass 		1 40.0
-set		group all mass 40.0
-set		group all dipole/random 98934 0.479 # moment/(e*angstrom)
+set		group all mass 40.0 # g/mol
+set		group all diameter 5.0 # => moment of inertia 
+set		group all dipole/random 98934 0.541 # moment/(e*angstrom)
 velocity	all create 303.15 87287 
 pair_style	dipole/sf 12. # rCut/angstrom
-pair_coeff	* * 0.466 3.0 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+pair_coeff	* * 0.550 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+variable	Nnvt equal 1000 
+variable	Nnpt equal 1000
+variable	Ntot equal ${Nnvt}+${Nnpt}
+variable	Nthe equal 100
+variable	Ndump equal 500
+variable	Ne equal 10
+variable	Nthe_e equal ${Nthe}/${Ne}
+variable	Nf equal 100
+
+variable	watMoleMass equal 18.0 # /(g/mol)
+variable	nAvog equal 6.0221415e23 # Avogadro's number
+variable	watMoleculeMass equal (${watMoleMass}/${nAvog}) # /(g/molecule)
+variable	A3_in_cm3 equal 1e-24 # Angstrom^3 in cm^3
 
 neighbor	1 bin
 neigh_modify	delay 0
 
 fix		integrate all nve/sphere update dipole
-fix 		thermostat all langevin 303.15 303.15 100.0 48279 omega yes
-fix             removeMomentum all momentum 1 linear 1 1 1
+fix 		thermostat all langevin 303 303 500 9 omega yes zero yes
+fix             removeMomentum all momentum 100 linear 1 1 1
 
 compute		msd all msd com yes
-fix 		msd all ave/time 1 1 10 c_msd[4] file wat.msd
+fix 		msd all ave/time 1 1 100 c_msd[4] file wat.msd
 variable	potEn equal pe/atoms
 
 compute 	totT all temp/sphere dof all
+fix		totT all ave/time ${Ne} ${Nthe_e} ${Nf} c_totT 
+
+#fix_modify	thermostat temp totT #redundant
+#compute	totP all pressure totT #redundant
 
 compute 	rotT all temp/sphere dof rotate
+fix		rotT all ave/time ${Ne} ${Nthe_e} ${Nf} c_rotT 
 
-fix		potEn all ave/time 5 10 50 v_potEn file wat.potEn
+fix		potEn all ave/time ${Ne} ${Nthe_e} ${Nf} v_potEn file wat.potEn
 variable	totEn equal etotal/atoms
 
-fix		totEn all ave/time 5 10 50 v_totEn file wat.totEn
+fix		totEn all ave/time ${Ne} ${Nthe_e} ${Nf} v_totEn file wat.totEn
 
-variable	dens equal 2.99e-23*atoms*1e24/vol
-fix		dens all ave/time 5 10 50 v_dens file wat.dens
+# Compute density in g/cm^3:
+variable	dens equal atoms*${watMoleculeMass}/(vol*${A3_in_cm3})
+fix		dens all ave/time ${Ne} ${Nthe_e} ${Nf} v_dens file wat.dens
 
 variable	P equal press
-fix 		P all ave/time 5 10 50 v_P file wat.press
+fix 		P all ave/time ${Ne} ${Nthe_e} ${Nf} v_P file wat.press
 
-thermo_style	custom step pe temp c_totT c_rotT  press v_dens v_potEn c_msd[4] 
-thermo		10
+thermo_style    custom step temp f_totT f_rotT press f_P pe v_potEn &
+		v_dens c_msd[4]
+#thermo_modify	temp totT #norm yes # do not use: this command causes the 
+                                    # pressure computation to include a
+                                    # contribution from the rotational temp
+                                    # (instead of using the translational 
+                                    # temp only)
+thermo		${Nthe}
 
-dump		trj all custom 50 dump.trj id type x y z mux muy muz
-dump_modify	trj sort id
+dump		trj all custom ${Ndump} dump.*.trj id type x y z mux muy muz
+dump_modify	trj sort id pad 6
 
 timestep	10
-run		100
+run		${Nnvt}
 
-fix		baro all press/berendsen iso 1 1 500 modulus 21740
+fix		barostat all press/berendsen iso 1 1 500 modulus 21740
+
 compute         rdf all rdf 10
-fix             rdf all ave/time 100 1 100 c_rdf file wat.rdf mode vector
+fix         	rdf all ave/time ${Ntot} 1 ${Ntot} c_rdf &
+		file wat.rdf mode vector
 
-run		100
+run		${Nnpt}
