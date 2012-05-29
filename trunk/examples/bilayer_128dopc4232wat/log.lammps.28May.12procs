@@ -1,0 +1,423 @@
+LAMMPS (28 May 2012)
+units		real
+atom_style	hybrid angle dipole sphere 
+read_data 	data.128lip4232wat
+  2 = max bonds/atom
+  2 = max angles/atom
+  orthogonal box = (-34.0234 -34.0234 -31.763) to (34.0234 34.0234 31.763)
+  3 by 2 by 2 MPI processor grid
+  6152 atoms
+  1792 bonds
+  2048 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.elba
+pair_style dipole/sf 12.0
+special_bonds lj/coul 0.0 1.0 1.0
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+#   atomType  mass 
+mass    1   40.000  # wat
+mass    2   90.000  # chol
+mass    3   90.000  # phos
+mass    4   62.000  # glyc
+mass    5   62.000  # est
+mass    6   42.000  # tail
+
+# Set diameters. These values are in turn used to obtain the moment of 
+# inertia, used in the rotational integration. 
+set type 1 diameter 5.0 # wat dipole
+  4232 settings made for diameter
+#set type 2 diameter
+#set type 3 diameter
+set type 4 diameter 6.35 # gly dipole
+  128 settings made for diameter
+set type 5 diameter 6.35 # est dipole
+  256 settings made for diameter
+#set type 6 diameter
+
+# Lennard-Jones coefficients:
+#           iType jType	  eps_ij sig_ij 
+pair_coeff    1    1	  0.550  3.050 # wat-wat
+pair_coeff    1    2	  0.725  4.225 # wat-chol
+pair_coeff    1    3	  0.943  4.125 # wat-phos
+pair_coeff    1    4	  0.651  3.825 # wat-gly
+pair_coeff    1    5	  0.710  3.825 # wat-est
+pair_coeff    1    6	  0.554  3.775 # wat-tail
+pair_coeff    2    2	  1.434  5.400 # chol-chol
+pair_coeff    2    3	  1.434  5.300 # chol-phos
+pair_coeff    2    4	  1.171  5.000 # chol-gly
+pair_coeff    2    5	  1.171  5.000 # chol-est
+pair_coeff    2    6	  1.095  4.950 # chol-tail
+pair_coeff    3    3	  1.434  5.200 # phos-phos
+pair_coeff    3    4	  1.171  4.900 # phos-gly
+pair_coeff    3    5	  1.171  4.900 # phos-est
+pair_coeff    3    6	  1.095  4.850 # phos-tail
+pair_coeff    4    4	  0.956  4.600 # gly-gly
+pair_coeff    4    5	  0.956  4.600 # gly-est
+pair_coeff    4    6	  0.894  4.550 # gly-tail
+pair_coeff    5    5	  0.956  4.600 # est-est
+pair_coeff    5    6	  0.894  4.550 # est-tail
+pair_coeff    6    6	  0.837  4.500 # tail-tail
+
+# harmonic bond coefficients:  
+#         bondType   K     r0  
+bond_coeff    1    1.506  4.770 # chol--phos
+bond_coeff    2    1.506  4.410 # phos--gly
+bond_coeff    3    1.506  4.140 # gly--est
+bond_coeff    4    1.506  4.095 # est--tail
+bond_coeff    5    1.506  4.050 # tail--tail
+
+# angle coefficients:
+#	  angleType	             K    theta0 
+angle_coeff    1  cosine/squared   3.585  115.00 # chol-phos-gly
+angle_coeff    2  cosine/squared   3.585   90.00 # phos-gly-est
+angle_coeff    3  cosine/squared   3.585  180.00 # gly-est-tail, tail-tail
+angle_coeff    4  cosine/squared   3.585  120.00 # tail-tail-tail (unsat)
+# dipole angle coefficients:
+#	  angleType	   K   gamma0  
+angle_coeff    5  dipole 1.195  0.00 # glyDip-phos, estDip-tail
+
+velocity	all create 0.0 87287 
+
+variable	nLips equal 128 # total number of lipids
+variable	nWats equal 4232 # total number of waters 
+variable	watVol equal 30.0 # water molecular volume (~30 A^3)
+variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m 
+
+variable	Neqnvt equal 5000
+variable	Neqnpt equal 50000 
+variable	Nprod equal 100000 
+variable	Nthe equal 5000
+variable	Ndump equal 10000
+variable	Ne equal 2
+variable	Nr equal 50000
+variable	Nf equal ${Nprod}+${Neqnvt}+${Neqnpt}
+variable	Nf equal 100000+${Neqnvt}+${Neqnpt}
+variable	Nf equal 100000+5000+${Neqnpt}
+variable	Nf equal 100000+5000+50000
+variable	Nthe_e equal ${Nthe}/${Ne}
+variable	Nthe_e equal 5000/${Ne}
+variable	Nthe_e equal 5000/2
+variable	Dz equal 1.0
+
+group		lip type 2 3 4 5 6 
+1920 atoms in group lip
+group		head type 2 3 
+256 atoms in group head
+group		wat type 1
+4232 atoms in group wat
+group		chol type 2
+128 atoms in group chol
+group		phos type 3
+128 atoms in group phos
+group		gly type 4
+128 atoms in group gly
+group		est type 5
+256 atoms in group est
+group		tail type 6
+1280 atoms in group tail
+
+timestep	10
+neighbor	1 bin
+neigh_modify	delay 0
+
+fix		integrate all nve/sphere update dipole
+fix 		thermo all langevin 303 303 1000 9 omega yes zero yes
+fix             removeMomentum all momentum 100 linear 1 1 1 # angular
+
+dump	trj all custom ${Ndump} dump.*.trj id type mol x y z mux muy muz
+dump	trj all custom 10000 dump.*.trj id type mol x y z mux muy muz
+dump_modify	trj sort id pad 6
+
+# compute and average area and volume per lipid:
+variable	lipArea equal lx*ly/(${nLips}/2)
+variable	lipArea equal lx*ly/(128/2)
+fix		lipArea lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipArea 
+fix		lipArea lip ave/time 2 ${Nthe_e} ${Nthe} v_lipArea 
+fix		lipArea lip ave/time 2 2500 ${Nthe} v_lipArea 
+fix		lipArea lip ave/time 2 2500 5000 v_lipArea 
+variable	lipVol equal (vol-(${nWats}*${watVol}))/${nLips}
+variable	lipVol equal (vol-(4232*${watVol}))/${nLips}
+variable	lipVol equal (vol-(4232*30))/${nLips}
+variable	lipVol equal (vol-(4232*30))/128
+fix		lipVol lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipVol 
+fix		lipVol lip ave/time 2 ${Nthe_e} ${Nthe} v_lipVol 
+fix		lipVol lip ave/time 2 2500 ${Nthe} v_lipVol 
+fix		lipVol lip ave/time 2 2500 5000 v_lipVol 
+
+# compute and average pressure:
+variable	P equal press
+fix 		P all ave/time ${Ne} ${Nthe_e} ${Nthe} v_P
+fix 		P all ave/time 2 ${Nthe_e} ${Nthe} v_P
+fix 		P all ave/time 2 2500 ${Nthe} v_P
+fix 		P all ave/time 2 2500 5000 v_P
+
+# compute and average total (translational + rotational) temperature:
+compute 	tempTot all temp/sphere dof all
+fix 		tempTot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempTot 
+fix 		tempTot all ave/time 2 ${Nthe_e} ${Nthe} c_tempTot 
+fix 		tempTot all ave/time 2 2500 ${Nthe} c_tempTot 
+fix 		tempTot all ave/time 2 2500 5000 c_tempTot 
+#compute_modify  tempTot extra 3 # default -> no effect
+
+# compute and average rotational temperature:
+compute 	tempRot all temp/sphere dof rotate
+fix 		tempRot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempRot 
+fix 		tempRot all ave/time 2 ${Nthe_e} ${Nthe} c_tempRot 
+fix 		tempRot all ave/time 2 2500 ${Nthe} c_tempRot 
+fix 		tempRot all ave/time 2 2500 5000 c_tempRot 
+
+thermo_style custom step press f_P temp f_tempTot f_tempRot f_lipArea f_lipVol
+#thermo_modify   temp tempTot
+thermo		${Nthe}
+thermo		5000
+
+# compute and average surface tension (gamma) per monolayer:
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*${atmA__in__mN_m}
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*0.010130000000000000115
+fix	gamma all ave/time ${Ne} ${Nthe_e} ${Nthe} v_gamma file gamma.dat
+fix	gamma all ave/time 2 ${Nthe_e} ${Nthe} v_gamma file gamma.dat
+fix	gamma all ave/time 2 2500 ${Nthe} v_gamma file gamma.dat
+fix	gamma all ave/time 2 2500 5000 v_gamma file gamma.dat
+
+# compute and average interface area (bilayer assumed parallel to xy plane):
+variable	xyArea equal lx*ly
+fix 		xyArea all ave/time 1 1 ${Ne} v_xyArea file xyArea.dat
+fix 		xyArea all ave/time 1 1 2 v_xyArea file xyArea.dat
+
+# compute and average box volume:
+variable	boxVol equal vol
+fix 		boxVol all ave/time 1 1 ${Ne} v_boxVol file boxVol.dat
+fix 		boxVol all ave/time 1 1 2 v_boxVol file boxVol.dat
+
+run		${Neqnvt}
+run		5000
+Memory usage per processor = 4.85426 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+       0    8307.8375            0            0            0            0            0            0 
+    5000    83.410498    333.82478    298.74296    301.52778    300.69355    72.349569    1306.1622 
+Loop time of 33.5826 on 12 procs for 5000 steps with 6152 atoms
+
+Pair  time (%) = 21.6411 (64.4414)
+Bond  time (%) = 0.109476 (0.32599)
+Neigh time (%) = 2.2724 (6.76661)
+Comm  time (%) = 8.47541 (25.2375)
+Outpt time (%) = 7.51416e-05 (0.000223752)
+Other time (%) = 1.08412 (3.22822)
+
+Nlocal:    512.667 ave 542 max 484 min
+Histogram: 1 0 2 3 1 0 1 2 1 1
+Nghost:    3107 ave 3148 max 3080 min
+Histogram: 1 2 1 3 1 2 1 0 0 1
+Neighs:    56075.2 ave 71017 max 44913 min
+Histogram: 4 1 1 0 0 1 1 2 1 1
+
+Total # of neighbors = 672902
+Ave neighs/atom = 109.379
+Ave special neighs/atom = 0.582575
+Neighbor list builds = 1014
+Dangerous builds = 0
+
+fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
+
+run		${Neqnpt}
+run		50000
+Memory usage per processor = 4.85426 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+    5000    83.410498    333.82478    298.74296    301.52778    300.69355    72.349569    1306.1622 
+   10000   -113.16407    3.4318598    300.42035    302.98112      303.303    72.855428     1326.813 
+   15000  -0.22073276    2.8417977    309.80891    303.51981    303.11139    73.427181    1326.5166 
+   20000   -20.964608    1.8927809    306.57247     303.4223    303.07805    73.375577    1327.2293 
+   25000    26.353493  -0.67572468    301.45091    302.96967    302.74657    73.546133    1326.5384 
+   30000    27.066936    1.0791832    300.80002    303.15788     302.5071    73.840937    1323.5099 
+   35000    43.031481    2.1873131    304.42488    303.51002    303.81805    73.630791    1325.5955 
+   40000     2.502725   0.23287082    302.08228    303.28752    303.33892    73.619805    1325.7781 
+   45000    160.31863    1.7921884    303.21317    303.90809    303.55226    74.043917    1325.8653 
+   50000   -1.4535923    1.1930232    304.37774    302.96391    302.63107    74.009326    1324.6491 
+   55000   -77.632751  -0.71457473    307.68816    303.65203    303.35671    74.042855    1326.8243 
+Loop time of 345.393 on 12 procs for 50000 steps with 6152 atoms
+
+Pair  time (%) = 216.505 (62.6837)
+Bond  time (%) = 1.20353 (0.348453)
+Neigh time (%) = 22.7681 (6.59196)
+Comm  time (%) = 92.4877 (26.7775)
+Outpt time (%) = 0.0829027 (0.0240025)
+Other time (%) = 12.3455 (3.57435)
+
+Nlocal:    512.667 ave 549 max 477 min
+Histogram: 1 2 0 2 2 0 0 4 0 1
+Nghost:    3092.33 ave 3142 max 3052 min
+Histogram: 1 1 2 3 2 0 0 0 1 2
+Neighs:    56072.2 ave 71873 max 42364 min
+Histogram: 2 1 2 1 0 1 2 1 1 1
+
+Total # of neighbors = 672866
+Ave neighs/atom = 109.374
+Ave special neighs/atom = 0.582575
+Neighbor list builds = 10166
+Dangerous builds = 0
+
+fix 	numDensLip lip ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensLip.zProfile
+fix 	numDensLip lip ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensLip.zProfile
+fix 	numDensLip lip ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensLip.zProfile
+fix 	numDensLip lip ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensLip.zProfile
+fix 	numDensLip lip ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensLip.zProfile
+fix 	numDensWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensWat.zProfile
+fix 	numDensWat wat ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensWat.zProfile
+fix 	numDensWat wat ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensWat.zProfile
+fix 	numDensWat wat ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensWat.zProfile
+fix 	numDensWat wat ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensWat.zProfile
+fix 	numDensChol chol ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensChol.zProfile
+fix 	numDensChol chol ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensChol.zProfile
+fix 	numDensChol chol ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensChol.zProfile
+fix 	numDensChol chol ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensChol.zProfile
+fix 	numDensChol chol ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensChol.zProfile
+fix 	numDensPhos phos ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensPhos.zProfile
+fix 	numDensPhos phos ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensPhos.zProfile
+fix 	numDensPhos phos ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensPhos.zProfile
+fix 	numDensPhos phos ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensPhos.zProfile
+fix 	numDensPhos phos ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensPhos.zProfile
+fix 	numDensGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensGly.zProfile
+fix 	numDensGly gly ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensGly.zProfile
+fix 	numDensGly gly ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensGly.zProfile
+fix 	numDensGly gly ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensGly.zProfile
+fix 	numDensGly gly ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensGly.zProfile
+fix 	numDensEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensEst.zProfile
+fix 	numDensEst est ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensEst.zProfile
+fix 	numDensEst est ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensEst.zProfile
+fix 	numDensEst est ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensEst.zProfile
+fix 	numDensEst est ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensEst.zProfile
+fix 	numDensTail tail ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile 
+fix 	numDensTail tail ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile 
+fix 	numDensTail tail ave/spatial 2 50000 ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile 
+fix 	numDensTail tail ave/spatial 2 50000 155000 z center ${Dz} 		density/number units box file numDensTail.zProfile 
+fix 	numDensTail tail ave/spatial 2 50000 155000 z center 1 		density/number units box file numDensTail.zProfile 
+
+compute		stpa all stress/atom
+fix	stress all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] 		units box file stress.zProfile
+fix	stress all ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] 		units box file stress.zProfile
+fix	stress all ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] 		units box file stress.zProfile
+fix	stress all ave/spatial 2 50000 155000 z center ${Dz} 		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] 		units box file stress.zProfile
+fix	stress all ave/spatial 2 50000 155000 z center 1 		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] 		units box file stress.zProfile
+
+compute		stke all stress/atom ke
+fix	stressKinEn all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] 		units box file stressKinEn.zProfile
+fix	stressKinEn all ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] 		units box file stressKinEn.zProfile
+fix	stressKinEn all ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] 		units box file stressKinEn.zProfile
+fix	stressKinEn all ave/spatial 2 50000 155000 z center ${Dz} 		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] 		units box file stressKinEn.zProfile
+fix	stressKinEn all ave/spatial 2 50000 155000 z center 1 		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] 		units box file stressKinEn.zProfile
+
+compute		stnb all stress/atom pair
+fix	stressNonBond all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] 		units box file stressNonBond.zProfile
+fix	stressNonBond all ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] 		units box file stressNonBond.zProfile
+fix	stressNonBond all ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] 		units box file stressNonBond.zProfile
+fix	stressNonBond all ave/spatial 2 50000 155000 z center ${Dz} 		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] 		units box file stressNonBond.zProfile
+fix	stressNonBond all ave/spatial 2 50000 155000 z center 1 		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] 		units box file stressNonBond.zProfile
+
+compute		stb all stress/atom bond
+fix	stressBond all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] 		units box file stressBond.zProfile
+fix	stressBond all ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] 		units box file stressBond.zProfile
+fix	stressBond all ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] 		units box file stressBond.zProfile
+fix	stressBond all ave/spatial 2 50000 155000 z center ${Dz} 		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] 		units box file stressBond.zProfile
+fix	stressBond all ave/spatial 2 50000 155000 z center 1 		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] 		units box file stressBond.zProfile
+
+compute		sta all stress/atom angle
+fix	stressAngle all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] 		units box file stressAngle.zProfile
+fix	stressAngle all ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] 		units box file stressAngle.zProfile
+fix	stressAngle all ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] 		units box file stressAngle.zProfile
+fix	stressAngle all ave/spatial 2 50000 155000 z center ${Dz} 		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] 		units box file stressAngle.zProfile
+fix	stressAngle all ave/spatial 2 50000 155000 z center 1 		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] 		units box file stressAngle.zProfile
+
+compute		stv all stress/atom virial # check this is redundant
+fix	stressVir all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] 		units box file stressVir.zProfile
+fix	stressVir all ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] 		units box file stressVir.zProfile
+fix	stressVir all ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] 		units box file stressVir.zProfile
+fix	stressVir all ave/spatial 2 50000 155000 z center ${Dz} 		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] 		units box file stressVir.zProfile
+fix	stressVir all ave/spatial 2 50000 155000 z center 1 		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] 		units box file stressVir.zProfile
+
+compute		chgHead head property/atom q
+fix 	qDensHead head ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
+fix 	qDensHead head ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
+fix 	qDensHead head ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
+fix 	qDensHead head ave/spatial 2 50000 155000 z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
+fix 	qDensHead head ave/spatial 2 50000 155000 z center 1 		c_chgHead units box file qDensHead.zProfile 
+
+compute		dipGly gly property/atom muz
+fix 	muzGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
+fix 	muzGly gly ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
+fix 	muzGly gly ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
+fix 	muzGly gly ave/spatial 2 50000 155000 z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
+fix 	muzGly gly ave/spatial 2 50000 155000 z center 1 		c_dipGly units box file muzGly.zProfile 
+
+compute		dipEst est property/atom muz
+fix 	muzEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
+fix 	muzEst est ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
+fix 	muzEst est ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
+fix 	muzEst est ave/spatial 2 50000 155000 z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
+fix 	muzEst est ave/spatial 2 50000 155000 z center 1 		c_dipEst units box file muzEst.zProfile 
+
+compute		dipWat wat property/atom muz
+fix 	muzWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
+fix 	muzWat wat ave/spatial 2 ${Nr} ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
+fix 	muzWat wat ave/spatial 2 50000 ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
+fix 	muzWat wat ave/spatial 2 50000 155000 z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
+fix 	muzWat wat ave/spatial 2 50000 155000 z center 1 		c_dipWat units box file muzWat.zProfile 
+
+compute		msd gly msd com yes
+fix 		msd gly ave/time 1 1 ${Ne} c_msd[4] file gly.msd
+fix 		msd gly ave/time 1 1 2 c_msd[4] file gly.msd
+
+run		${Nprod}
+run		100000
+Memory usage per processor = 7.57816 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+   55000   -75.090079  -0.71457473    307.68816    303.65203    303.35671    74.042855    1326.8243 
+   60000   -45.741876    2.0890542    306.73866    303.42927    303.21457     73.50347    1324.6838 
+   65000    14.838798  -0.76400071     300.9668     303.5018    303.44604    73.665459    1325.2527 
+   70000   -152.41716    1.7718489    301.73756    303.17572    303.21507    73.321927    1322.0166 
+   75000   -22.842906   0.82179859    305.72845    303.19441    302.98533    73.076665    1322.3389 
+   80000   -59.722992    2.8183752    305.80474    302.87647    302.47055    72.599025    1325.2756 
+   85000    188.18565   0.77337195    298.89685    303.59002    303.44253    72.824372    1327.8751 
+   90000    34.749357  -0.80087705    303.57794     303.1493     302.9729    72.675995    1324.6162 
+   95000   -23.625578   0.85136243    302.36594     303.1438    302.92324    72.749104     1326.159 
+  100000    121.53987     1.261704    306.39242     303.1805    302.92778    72.252049    1325.4117 
+  105000    133.77437    1.7881662    299.57247    303.77668    303.95029    72.425162    1325.3048 
+  110000    28.341669    1.7821214    302.06375    303.15029    302.85053    72.473373    1329.4667 
+  115000     99.88148  0.040303304    303.23107    303.11372    303.10443    72.479547    1325.7968 
+  120000   -53.883687  -0.52839902    303.54543    303.14451    302.91551    73.055668    1325.3691 
+  125000    18.363232    1.6234994    303.09405    303.17772    303.07388    72.957438    1320.9151 
+  130000    36.790147    2.5130552     304.8537    303.48569    303.59251    73.266467    1324.1726 
+  135000   -20.956663   0.63969165    307.99966     303.1403    302.58632    73.320978    1326.7239 
+  140000   -27.962269    2.1403212    301.78235    303.41129     302.8636    73.086233    1326.2034 
+  145000   -28.705711  -0.67952719    304.90923    303.27854    303.18818    72.837654    1327.6738 
+  150000    29.885832   0.93852505    304.99049      303.242    303.06781    72.529121      1323.91 
+  155000    -58.73268    1.1945144    307.10765     303.0595    302.87934     72.53694    1324.1101 
+Loop time of 939.751 on 12 procs for 100000 steps with 6152 atoms
+
+Pair  time (%) = 497.827 (52.9743)
+Bond  time (%) = 13.4328 (1.4294)
+Neigh time (%) = 46.1314 (4.9089)
+Comm  time (%) = 194.474 (20.6942)
+Outpt time (%) = 0.166898 (0.0177598)
+Other time (%) = 187.719 (19.9754)
+
+Nlocal:    512.667 ave 571 max 484 min
+Histogram: 3 0 2 3 2 1 0 0 0 1
+Nghost:    3086.17 ave 3124 max 3066 min
+Histogram: 2 4 0 2 0 2 0 1 0 1
+Neighs:    56351.8 ave 67488 max 42566 min
+Histogram: 2 1 1 1 0 0 1 1 2 3
+
+Total # of neighbors = 676221
+Ave neighs/atom = 109.919
+Ave special neighs/atom = 0.582575
+Neighbor list builds = 20354
+Dangerous builds = 0
+
+
