@@ -1,8 +1,14 @@
 This directory contains all versions of the ELBA force field. The general
 features of the ELBA model are described in this paper:
 
-Orsi M, Essex JW (2011) The ELBA force field for coarse-grain modeling of 
+- Orsi M, Essex JW (2011) The ELBA force field for coarse-grain modeling of 
 lipid membranes, PloS ONE 6(12): e28637. DOI:10.1371/journal.pone.0028637
 
-The ELBA force field is being constantly updated, extended and improved,
-so using the most recent version is recommended. 
+In general, the ELBA force field is being constantly updated, extended 
+and improved, so using the most recent version is recommended. 
+
+The most recent version is elba-1.1, which is presented in this paper:
+
+- Orsi M, Essex JW (2012) [submitted to Faraday Discuss]
+
+Mario Orsi (orsimario@gmail.com), May 2012

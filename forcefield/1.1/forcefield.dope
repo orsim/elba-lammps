@@ -1,0 +1,61 @@
+pair_style dipole/sf 12.0
+special_bonds lj/coul 0.0 1.0 1.0
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+#   atomType  mass 
+mass    1   40.000  # wat
+mass    2   42.000  # ami
+mass    3   90.000  # phos
+mass    4   62.000  # glyc
+mass    5   62.000  # est
+mass    6   42.000  # tail
+
+# Set diameters. These values are in turn used to obtain the moment of 
+# inertia, used in the rotational integration. 
+set type 1 diameter 5.0 # wat dipole
+set type 4 diameter 12.7 # gly dipole
+set type 5 diameter 12.7 # est dipole
+
+# Lennard-Jones coefficients:
+#           iType jType	  eps_ij sig_ij 
+pair_coeff    1    1	  0.550  3.050 # wat-wat
+pair_coeff    1    2	  0.609  3.775 # wat-ami
+pair_coeff    1    3	  0.943  4.125 # wat-phos
+pair_coeff    1    4	  0.651  3.825 # wat-gly
+pair_coeff    1    5	  0.710  3.825 # wat-est
+pair_coeff    1    6	  0.554  3.775 # wat-tail
+pair_coeff    2    2	  0.837  4.500 # ami-ami
+pair_coeff    2    3	  1.424  4.850 # ami-phos
+pair_coeff    2    4	  0.984  4.550 # ami-gly
+pair_coeff    2    5	  1.163  4.550 # ami-est
+pair_coeff    2    6	  0.837  4.500 # ami-tail
+pair_coeff    3    3	  1.434  5.200 # phos-phos
+pair_coeff    3    4	  1.171  4.900 # phos-gly
+pair_coeff    3    5	  1.171  4.900 # phos-est
+pair_coeff    3    6	  1.095  4.850 # phos-tail
+pair_coeff    4    4	  0.956  4.600 # gly-gly
+pair_coeff    4    5	  0.956  4.600 # gly-est
+pair_coeff    4    6	  0.894  4.550 # gly-tail
+pair_coeff    5    5	  0.956  4.600 # est-est
+pair_coeff    5    6	  0.894  4.550 # est-tail
+pair_coeff    6    6	  0.837  4.500 # tail-tail
+
+# harmonic bond coefficients:  
+#         bondType   K     r0  
+bond_coeff    1    1.506  4.365 # ami--phos
+bond_coeff    2    1.506  4.410 # phos--gly
+bond_coeff    3    1.506  4.140 # gly--est
+bond_coeff    4    1.506  4.095 # est--tail
+bond_coeff    5    1.506  4.050 # tail--tail
+
+# angle coefficients:
+#	  angleType	       K    theta0 
+angle_coeff 1 cosine/squared  3.585 115.00 # ami-phos-gly
+angle_coeff 2 cosine/squared  3.585  90.00 # phos-gly-est
+angle_coeff 3 cosine/squared  3.585 180.00 # gly-est-tail, tail-tail
+angle_coeff 4 cosine/squared  3.585 120.00 # tail-tail-tail (unsat)
+# dipole angle coefficients:
+#	  angleType	K   gamma0  
+angle_coeff 5  dipole 1.195  0.00 # glyDip-phos, estDip-tail
+
