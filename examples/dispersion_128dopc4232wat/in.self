@@ -7,17 +7,13 @@ velocity	all create 0.0 87287
 neighbor	1 bin
 neigh_modify	delay 0
 
-group		lip type 2 3 4 5 6
-group		wat type 1
-
 fix		integrate all nve/sphere update dipole
-fix 		thermoLip lip langevin 303.15 303.15 100.0 48279 omega yes
-fix 		thermoWat wat langevin 303.15 303.15 100.0 48279 omega yes
-fix             removeMom all momentum 1 linear 1 1 1
+fix 		thermo all langevin 303.15 303.15 1000 9 omega yes zero yes
+fix             removeMomentum all momentum 100 linear 1 1 1
 
 thermo		10
-dump		trj all custom 50 dump.trj id type mol x y z mux muy muz
-dump_modify	trj sort id
+dump		trj all custom 50 dump.*.trj id type mol x y z mux muy muz
+dump_modify	trj sort id pad 6
 
 timestep	2
 run		100
