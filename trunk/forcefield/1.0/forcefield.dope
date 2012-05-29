@@ -34,7 +34,7 @@ pair_coeff    5    6	  0.894  4.550 # ester-tail
 pair_coeff    6    6	  0.837  4.500 # tail-tail
 
 # harmonic bond coeffs:  K [kcal/(mol*angstrom^2)] r0 [angstrom] 
-bond_coeff    1   1.505  4.680 # choline--phosphate
+bond_coeff    1   1.505  4.680 # amine--phosphate
 bond_coeff    2   1.505  4.410 # phosphate--glycerol
 bond_coeff    3   1.505  4.140 # glycerol--ester
 bond_coeff    4   1.505  4.095 # ester--tail
