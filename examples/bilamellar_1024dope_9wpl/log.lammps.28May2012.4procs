@@ -1,0 +1,206 @@
+LAMMPS (28 May 2012)
+units		real
+atom_style	hybrid angle dipole sphere 
+read_data 	data.1024lip9216wat
+  2 = max bonds/atom
+  2 = max angles/atom
+  orthogonal box = (-62 -62 -25) to (62 62 75)
+  2 by 2 by 1 MPI processor grid
+  24576 atoms
+  14336 bonds
+  16384 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.elba
+pair_style dipole/sf 12.0
+special_bonds lj/coul 0.0 1.0 1.0
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+#   atomType  mass 
+mass    1   40.000  # wat
+mass    2   42.000  # ami
+mass    3   90.000  # phos
+mass    4   62.000  # glyc
+mass    5   62.000  # est
+mass    6   42.000  # tail
+
+# Set diameters. These values are in turn used to obtain the moment of 
+# inertia, used in the rotational integration. 
+set type 1 diameter 5.0 # wat dipole
+  9216 settings made for diameter
+#set type 2 diameter
+#set type 3 diameter
+set type 4 diameter 6.35 # gly dipole
+  1024 settings made for diameter
+set type 5 diameter 6.35 # est dipole
+  2048 settings made for diameter
+#set type 6 diameter
+
+
+# Lennard-Jones coefficients:
+#           iType jType	  eps_ij sig_ij 
+pair_coeff    1    1	  0.550  3.050 # wat-wat
+pair_coeff    1    2	  0.609  3.775 # wat-ami
+pair_coeff    1    3	  0.943  4.125 # wat-phos
+pair_coeff    1    4	  0.651  3.825 # wat-gly
+pair_coeff    1    5	  0.710  3.825 # wat-est
+pair_coeff    1    6	  0.554  3.775 # wat-tail
+pair_coeff    2    2	  0.837  4.500 # ami-ami
+pair_coeff    2    3	  1.424  4.850 # ami-phos
+pair_coeff    2    4	  0.984  4.550 # ami-gly
+pair_coeff    2    5	  1.163  4.550 # ami-est
+pair_coeff    2    6	  0.837  4.500 # ami-tail
+pair_coeff    3    3	  1.434  5.200 # phos-phos
+pair_coeff    3    4	  1.171  4.900 # phos-gly
+pair_coeff    3    5	  1.171  4.900 # phos-est
+pair_coeff    3    6	  1.095  4.850 # phos-tail
+pair_coeff    4    4	  0.956  4.600 # gly-gly
+pair_coeff    4    5	  0.956  4.600 # gly-est
+pair_coeff    4    6	  0.894  4.550 # gly-tail
+pair_coeff    5    5	  0.956  4.600 # est-est
+pair_coeff    5    6	  0.894  4.550 # est-tail
+pair_coeff    6    6	  0.837  4.500 # tail-tail
+
+# harmonic bond coefficients:  
+#         bondType   K     r0  
+bond_coeff    1    1.506  4.365 # ami--phos
+bond_coeff    2    1.506  4.410 # phos--gly
+bond_coeff    3    1.506  4.140 # gly--est
+bond_coeff    4    1.506  4.095 # est--tail
+bond_coeff    5    1.506  4.050 # tail--tail
+
+# angle coefficients:
+#	  angleType	       K    theta0 
+angle_coeff 1 cosine/squared  3.585 115.00 # ami-phos-gly
+angle_coeff 2 cosine/squared  3.585  90.00 # phos-gly-est
+angle_coeff 3 cosine/squared  3.585 180.00 # gly-est-tail, tail-tail
+angle_coeff 4 cosine/squared  3.585 120.00 # tail-tail-tail (unsat)
+# dipole angle coefficients:
+#	  angleType	K   gamma0  
+angle_coeff 5  dipole 1.195  0.00 # glyDip-phos, estDip-tail
+
+velocity	all create 0.0 87287 
+
+neighbor	1 bin
+neigh_modify	delay 0
+
+fix		integrate all nve/sphere update dipole
+fix 		thermostat all langevin 323.15 323.15 1000.0 9 omega yes
+fix             removeMomentum all momentum 1 linear 1 1 1
+
+compute 	totT all temp/sphere dof all
+compute 	rotT all temp/sphere dof rotate
+
+thermo_style    custom step pe press temp c_totT c_rotT
+thermo		10
+dump		trj all custom 50 dump.trj id type mol x y z mux muy muz
+dump_modify	trj sort id
+
+timestep	2
+run		50
+Memory usage per processor = 9.45029 Mbytes
+Step PotEng Press Temp totT rotT 
+       0   -139785.95   -667.99399            0            0            0 
+      10   -142237.86   -1036.4354    43.011633    28.471546    13.932618 
+      20   -146123.42    -1546.792    100.86883     65.88919    30.912231 
+      30   -149004.58   -1727.4943    141.06299    95.158586    49.258056 
+      40   -151184.64   -1653.1417    170.06734    118.95296    67.843418 
+      50   -153195.88   -1478.1853    195.64477    140.62631    85.613576 
+Loop time of 2.95092 on 4 procs for 50 steps with 24576 atoms
+
+Pair  time (%) = 2.49576 (84.5755)
+Bond  time (%) = 0.0430603 (1.45922)
+Neigh time (%) = 0.0581419 (1.9703)
+Comm  time (%) = 0.124527 (4.21994)
+Outpt time (%) = 0.114171 (3.869)
+Other time (%) = 0.115264 (3.90603)
+
+Nlocal:    6144 ave 6198 max 6091 min
+Histogram: 1 0 0 0 2 0 0 0 0 1
+Nghost:    10046.8 ave 10089 max 9997 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+Neighs:    475687 ave 483466 max 468048 min
+Histogram: 1 0 0 1 0 0 1 0 0 1
+
+Total # of neighbors = 1902747
+Ave neighs/atom = 77.423
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 2
+Dangerous builds = 0
+
+timestep	10
+run		50
+Memory usage per processor = 9.45029 Mbytes
+Step PotEng Press Temp totT rotT 
+      50   -153195.88   -1478.1853    195.64477    140.62631    85.613576 
+      60   -158183.14    81.298397    260.08512    201.04682     142.0167 
+      70   -158674.01    917.74818    281.14386    227.55849    173.98238 
+      80   -159074.83    861.00593    292.60773      247.021    201.44432 
+      90   -159140.02    757.95903    298.76984    260.83576    222.91228 
+     100   -159085.71      741.526    303.43606    272.76245    242.09994 
+Loop time of 3.3606 on 4 procs for 50 steps with 24576 atoms
+
+Pair  time (%) = 2.61574 (77.8355)
+Bond  time (%) = 0.047098 (1.40148)
+Neigh time (%) = 0.309386 (9.20628)
+Comm  time (%) = 0.149466 (4.4476)
+Outpt time (%) = 0.114716 (3.41357)
+Other time (%) = 0.124193 (3.69556)
+
+Nlocal:    6144 ave 6172 max 6113 min
+Histogram: 1 0 0 0 0 2 0 0 0 1
+Nghost:    10047.2 ave 10110 max 9993 min
+Histogram: 1 0 0 1 1 0 0 0 0 1
+Neighs:    476938 ave 481462 max 470892 min
+Histogram: 1 0 0 0 0 1 0 1 0 1
+
+Total # of neighbors = 1907754
+Ave neighs/atom = 77.6267
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 10
+Dangerous builds = 0
+
+fix		barostat all press/berendsen aniso 1 1 1000 modulus 21740
+
+run		100
+Memory usage per processor = 9.45029 Mbytes
+Step PotEng Press Temp totT rotT 
+     100   -159085.71      741.526    303.43606    272.76245    242.09994 
+     110   -159394.33    526.46041    307.53168    280.63204    253.74383 
+     120   -159131.94    489.93692    306.88093    287.09421    267.31918 
+     130   -159004.07    520.77264    307.46322    292.01608    276.58083 
+     140    -158998.3    484.96918    312.39947    298.41409    284.44085 
+     150   -158851.93    471.69839    315.56069    302.82683    290.10529 
+     160   -158740.62    445.72033    312.44825    304.16433    295.89279 
+     170   -158819.57    394.88429    315.77691    308.10709    300.44981 
+     180   -158969.93    347.07046    318.29515    311.65257    305.02267 
+     190   -158783.35    316.07118    317.16284    313.48979     309.8295 
+     200   -158680.85    275.75039    316.56965    314.49982    312.44279 
+Loop time of 7.01825 on 4 procs for 100 steps with 24576 atoms
+
+Pair  time (%) = 5.32828 (75.9204)
+Bond  time (%) = 0.107069 (1.52558)
+Neigh time (%) = 0.728476 (10.3797)
+Comm  time (%) = 0.344966 (4.91527)
+Outpt time (%) = 0.228888 (3.26133)
+Other time (%) = 0.280566 (3.99767)
+
+Nlocal:    6144 ave 6158 max 6131 min
+Histogram: 1 0 0 1 0 1 0 0 0 1
+Nghost:    10000.8 ave 10030 max 9982 min
+Histogram: 2 0 0 0 0 1 0 0 0 1
+Neighs:    468238 ave 470953 max 465656 min
+Histogram: 1 0 0 1 0 1 0 0 0 1
+
+Total # of neighbors = 1872954
+Ave neighs/atom = 76.2107
+Ave special neighs/atom = 1.16667
+Neighbor list builds = 23
+Dangerous builds = 0
+
+
