@@ -1,0 +1,111 @@
+units		real
+atom_style	hybrid angle dipole sphere 
+read_data 	data.4dopc4dope256wat
+include 	forcefield.elba
+
+replicate	4 4 1
+
+velocity	all create 0.0 87287 
+
+variable	nLips equal 128 # total number of lipids
+variable	nWats equal 4096 # total number of waters 
+variable	watVol equal 30.0 # water molecular volume (~30 A^3)
+variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m 
+
+variable	Nnvt equal 1000 
+variable	Nnpt equal 100000
+variable	Nthe equal 10000 
+variable	Ndum equal 1000
+variable	Ne equal 10
+variable	Nthe_e equal ${Nthe}/${Ne}
+variable	Nres equal 110000
+
+group		lip type 2 3 4 5 6 7
+group		head type 2 3 7
+group		wat type 1
+group		chol type 2
+group		phos type 3
+group		gly type 4
+group		est type 5
+group		tail type 6
+group		ami type 7
+
+neighbor	1 bin
+neigh_modify	delay 0
+fix		integrate all nve/sphere update dipole
+
+fix 		thermo all langevin 303 303 100 9 omega yes zero yes
+
+fix             removeMomentum all momentum 100 linear 1 1 1 # angular
+
+dump		trj all custom ${Ndum} dump.trj id type mol x y z mux muy muz
+dump_modify	trj sort id
+
+timestep	0.01
+run		${Nnvt}
+
+timestep	0.1
+run		${Nnvt}
+
+timestep	1
+run		${Nnvt}
+
+timestep	2
+run		${Nnvt}
+
+timestep	5
+run		${Nnvt}
+
+unfix 		thermo 
+fix 		thermo all langevin 303 303 1000 9 omega yes zero yes
+
+# compute and average area and volume per lipid:
+variable	lipArea equal lx*ly/(${nLips}/2)
+fix		lipArea lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipArea 
+variable	lipVol equal (vol-(${nWats}*${watVol}))/${nLips}
+fix		lipVol lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipVol 
+
+# compute and average pressure:
+variable	P equal press
+fix 		P all ave/time ${Ne} ${Nthe_e} ${Nthe} v_P
+
+# compute and average total (translational + rotational) temperature:
+compute 	tempTot all temp/sphere dof all
+fix 		tempTot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempTot 
+#compute_modify  tempTot extra 3 # default -> no effect
+
+# compute and average rotational temperature:
+compute 	tempRot all temp/sphere dof rotate
+fix 		tempRot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempRot 
+
+thermo_style custom step press f_P temp f_tempTot f_tempRot f_lipArea f_lipVol
+#thermo_modify   temp tempTot
+thermo		${Nthe}
+
+# equilibrate:
+timestep	10
+run		${Nnvt}
+run		${Nnvt}
+run		${Nnvt}
+run		${Nnvt}
+run		${Nnvt}
+
+fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
+
+# compute and average surface tension (gamma) per monolayer:
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*${atmA__in__mN_m}
+fix	gamma all ave/time ${Ne} ${Nthe_e} ${Nthe} v_gamma file gamma.dat
+
+# compute and average interface area (bilayer assumed parallel to xy plane):
+variable	xyArea equal lx*ly
+fix 		xyArea all ave/time 1 1 ${Ne} v_xyArea file xyArea.dat
+
+# compute and average box volume:
+variable	boxVol equal vol
+fix 		boxVol all ave/time 1 1 ${Ne} v_boxVol file boxVol.dat
+
+restart		${Nres} restart
+
+run 		${Nnpt}
+
+
