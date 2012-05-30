@@ -4,7 +4,9 @@ described as a LAMMPS add-on package providing users with various
 functionalities to setup, run and analyze molecular dynamics simulations 
 of systems modeled with the ELBA force field.
 
-The ELBA force field is described in Orsi & Essex, PLoS ONE 6: e28637 (2011).
+The ELBA model is described in the following paper:
+- Orsi & Essex, The ELBA force field for coarse-grain modeling of lipid 
+  membranes, PLoS ONE 6: e28637 (2011).
 
 The various folders in the ELBA-LAMMPS toolkit contain usage information 
 in the form of README files. 
@@ -24,4 +26,4 @@ in the form of README files.
 
 - viz: status files for visualization of ELBA systems with VMD
 
-Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Dec 2011
+Mario Orsi (orsimario@gmail.com)

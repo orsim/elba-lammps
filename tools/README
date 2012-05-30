@@ -9,4 +9,4 @@ Note for the Python tools: to use the syntax defined in the comment at
 the top of each Python tool, the file might need to be made executable,
 with "chmod +x tool.py" 
 
-Mario Orsi (orsimario@gmail.com, www.soton.ac.uk/~orsi), Feb 2012
+Mario Orsi (orsimario@gmail.com)
