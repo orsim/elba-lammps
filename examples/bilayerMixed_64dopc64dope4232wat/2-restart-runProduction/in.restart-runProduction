@@ -1,0 +1,146 @@
+read_restart    restart.*
+include 	forcefield.elba
+
+reset_timestep  0
+
+variable	nLips equal 128 # total number of lipids
+variable	nWats equal 4096 # total number of waters 
+variable	watVol equal 30.0 # water molecular volume (~30 A^3)
+variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m 
+
+variable	Nprd equal 1000000 # production
+variable	Nthe equal 100000 
+variable	Ndum equal 100000
+variable	Ne equal 10
+variable	Nr equal 100000
+variable	Nf equal ${Nprd}
+variable	Nthe_e equal ${Nthe}/${Ne}
+variable	Dz equal 1.0
+
+group		lip type 2 3 4 5 6 7
+group		head type 2 3 7
+group		wat type 1
+group		chol type 2
+group		phos type 3
+group		gly type 4
+group		est type 5
+group		tail type 6
+group		ami type 7
+
+timestep	10
+neighbor	1 bin
+neigh_modify	delay 0
+
+fix		integrate all nve/sphere update dipole
+fix 		thermo all langevin 303 303 1000 9 omega yes zero yes
+fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
+fix             removeMomentum all momentum 100 linear 1 1 1 # angular
+
+dump		trj all custom ${Ndum} dump.*.trj id type mol x y z mux muy muz
+dump_modify	trj sort id pad 9
+
+# compute and average area and volume per lipid:
+variable	lipArea equal lx*ly/(${nLips}/2)
+fix		lipArea lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipArea 
+variable	lipVol equal (vol-(${nWats}*${watVol}))/${nLips}
+fix		lipVol lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipVol 
+
+# compute and average pressure:
+variable	P equal press
+fix 		P all ave/time ${Ne} ${Nthe_e} ${Nthe} v_P
+
+# compute and average total (translational + rotational) temperature:
+compute 	tempTot all temp/sphere dof all
+fix 		tempTot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempTot 
+#compute_modify  tempTot extra 3 # default -> no effect
+
+# compute and average rotational temperature:
+compute 	tempRot all temp/sphere dof rotate
+fix 		tempRot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempRot 
+
+thermo_style custom step press f_P temp f_tempTot f_tempRot f_lipArea f_lipVol
+#thermo_modify   temp tempTot
+thermo		${Nthe}
+
+# compute and average surface tension (gamma) per monolayer:
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*${atmA__in__mN_m}
+fix	gamma all ave/time ${Ne} ${Nthe_e} ${Nthe} v_gamma file gamma.dat
+
+# compute and average interface area (bilayer assumed parallel to xy plane):
+variable	xyArea equal lx*ly
+fix 		xyArea all ave/time 1 1 ${Ne} v_xyArea file xyArea.dat
+
+# compute and average box volume:
+variable	boxVol equal vol
+fix 		boxVol all ave/time 1 1 ${Ne} v_boxVol file boxVol.dat
+
+fix 	numDensLip lip ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensLip.zProfile
+fix 	numDensWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensWat.zProfile
+fix 	numDensChol chol ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensChol.zProfile
+fix 	numDensPhos phos ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensPhos.zProfile
+fix 	numDensGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensGly.zProfile
+fix 	numDensEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensEst.zProfile
+fix 	numDensTail tail ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensTail.zProfile 
+fix 	numDensAmi ami ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		density/number units box file numDensAmi.zProfile 
+
+compute		stpa all stress/atom
+fix	stress all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
+		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] &
+		units box file stress.zProfile
+
+compute		stke all stress/atom ke
+fix	stressKinEn all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
+		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] &
+		units box file stressKinEn.zProfile
+
+compute		stnb all stress/atom pair
+fix	stressNonBond all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
+		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] &
+		units box file stressNonBond.zProfile
+
+compute		stb all stress/atom bond
+fix	stressBond all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
+		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] &
+		units box file stressBond.zProfile
+
+compute		sta all stress/atom angle
+fix	stressAngle all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
+		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] &
+		units box file stressAngle.zProfile
+
+compute		stv all stress/atom virial # check this is redundant
+fix	stressVir all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
+		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] &
+		units box file stressVir.zProfile
+
+compute		chgHead head property/atom q
+fix 	qDensHead head ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		c_chgHead units box file qDensHead.zProfile 
+
+compute		dipGly gly property/atom muz
+fix 	muzGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		c_dipGly units box file muzGly.zProfile 
+
+compute		dipEst est property/atom muz
+fix 	muzEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		c_dipEst units box file muzEst.zProfile 
+
+compute		dipWat wat property/atom muz
+fix 	muzWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+		c_dipWat units box file muzWat.zProfile 
+
+compute		msd gly msd com yes
+fix 		msd gly ave/time 1 1 ${Ne} c_msd[4] file gly.msd
+
+restart		${Nprd} restart
+run		${Nprd}
+
+
