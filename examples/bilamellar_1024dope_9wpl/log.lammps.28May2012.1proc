@@ -5,7 +5,7 @@ read_data 	data.1024lip9216wat
   2 = max bonds/atom
   2 = max angles/atom
   orthogonal box = (-62 -62 -25) to (62 62 75)
-  2 by 2 by 1 MPI processor grid
+  1 by 1 by 1 MPI processor grid
   24576 atoms
   14336 bonds
   16384 angles
@@ -99,64 +99,64 @@ dump_modify	trj sort id pad 6
 
 timestep	2
 run		50
-Memory usage per processor = 9.45029 Mbytes
+Memory usage per processor = 32.2923 Mbytes
 Step PotEng Press Temp totT rotT 
        0   -139785.95   -667.99399            0            0            0 
-      10    -142236.9   -1036.3841    43.011665    28.464896    13.919286 
-      20   -146119.71   -1546.5825    100.86925    65.864993    30.863416 
-      30   -148996.68   -1727.0347    141.06495    95.107045    49.153006 
-      40   -151171.13   -1652.3323    170.07254    118.86547    67.663224 
-      50    -153175.7   -1476.9314    195.65464    140.50078     85.35264 
-Loop time of 1.76533 on 4 procs for 50 steps with 24576 atoms
+      10   -142231.69   -1035.9805    43.065549    28.469717    13.875044 
+      20   -146105.07   -1545.0067    101.11895    66.036404    30.956543 
+      30   -148986.03     -1720.34    142.22778    95.806067    49.388256 
+      40   -151163.95    -1640.288    170.90593     119.4416    67.982132 
+      50   -153173.94   -1457.7537    196.48403    140.88013    85.281953 
+Loop time of 7.0122 on 1 procs for 50 steps with 24576 atoms
 
-Pair  time (%) = 1.56176 (88.4686)
-Bond  time (%) = 0.0222601 (1.26096)
-Neigh time (%) = 0.0370926 (2.10117)
-Comm  time (%) = 0.0722582 (4.09319)
-Outpt time (%) = 0.00063926 (0.0362119)
-Other time (%) = 0.0713169 (4.03987)
+Pair  time (%) = 6.45009 (91.9839)
+Bond  time (%) = 0.107381 (1.53134)
+Neigh time (%) = 0.074456 (1.06181)
+Comm  time (%) = 0.0709767 (1.01219)
+Outpt time (%) = 0.0020597 (0.0293731)
+Other time (%) = 0.307232 (4.38139)
 
-Nlocal:    6144 ave 6198 max 6091 min
-Histogram: 1 0 0 0 2 0 0 0 0 1
-Nghost:    10046.2 ave 10089 max 9995 min
-Histogram: 1 1 0 0 0 0 0 0 0 2
-Neighs:    475686 ave 483468 max 468046 min
-Histogram: 1 0 0 1 0 0 1 0 0 1
+Nlocal:    24576 ave 24576 max 24576 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    22368 ave 22368 max 22368 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.9027e+06 ave 1.9027e+06 max 1.9027e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1902746
-Ave neighs/atom = 77.4229
+Total # of neighbors = 1902695
+Ave neighs/atom = 77.4209
 Ave special neighs/atom = 1.16667
-Neighbor list builds = 2
+Neighbor list builds = 1
 Dangerous builds = 0
 
 timestep	10
 run		50
-Memory usage per processor = 9.45029 Mbytes
+Memory usage per processor = 32.2923 Mbytes
 Step PotEng Press Temp totT rotT 
-      50    -153175.7   -1476.9314    195.65464    140.50078     85.35264 
-      60    -158116.2    86.003436    260.13004    200.66548    141.20909 
-      70   -158549.28    927.75614      281.269    226.87003    172.48029 
-      80   -158875.24    879.03134    292.60227    246.53098    200.46972 
-      90   -158906.82    772.20952    298.47114    260.33205    222.20356 
-     100   -159021.23    744.27567    306.45474    272.81649    239.18933 
-Loop time of 2.00487 on 4 procs for 50 steps with 24576 atoms
+      50   -153173.94   -1457.7537    196.48403    140.88013    85.281953 
+      60   -158125.07    65.574996    261.58017    201.35431    141.13665 
+      70   -158491.13    879.66094    280.44068    226.08051    171.72955 
+      80    -158849.7    847.03413    291.58165    246.45377    201.33592 
+      90    -158853.3    741.65371    298.17998    260.74132    223.31326 
+     100   -158950.63    731.70564    304.87535    272.81305    240.76184 
+Loop time of 7.79047 on 1 procs for 50 steps with 24576 atoms
 
-Pair  time (%) = 1.58068 (78.842)
-Bond  time (%) = 0.0230918 (1.15178)
-Neigh time (%) = 0.189124 (9.4332)
-Comm  time (%) = 0.0730874 (3.64548)
-Outpt time (%) = 0.0646584 (3.22506)
-Other time (%) = 0.0742308 (3.70252)
+Pair  time (%) = 6.46059 (82.9294)
+Bond  time (%) = 0.104252 (1.3382)
+Neigh time (%) = 0.76071 (9.76462)
+Comm  time (%) = 0.0817995 (1.04999)
+Outpt time (%) = 0.0689018 (0.884437)
+Other time (%) = 0.314214 (4.03331)
 
-Nlocal:    6144 ave 6174 max 6110 min
-Histogram: 1 0 0 0 0 1 1 0 0 1
-Nghost:    10047.2 ave 10093 max 9990 min
-Histogram: 1 0 0 0 1 0 0 1 0 1
-Neighs:    477050 ave 482223 max 470944 min
-Histogram: 1 0 0 0 1 0 1 0 0 1
+Nlocal:    24576 ave 24576 max 24576 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    22449 ave 22449 max 22449 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.90704e+06 ave 1.90704e+06 max 1.90704e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1908198
-Ave neighs/atom = 77.6448
+Total # of neighbors = 1907040
+Ave neighs/atom = 77.5977
 Ave special neighs/atom = 1.16667
 Neighbor list builds = 10
 Dangerous builds = 0
@@ -164,39 +164,39 @@ Dangerous builds = 0
 fix		barostat all press/berendsen aniso 1 1 1000 modulus 21740
 
 run		100
-Memory usage per processor = 9.45029 Mbytes
+Memory usage per processor = 32.2923 Mbytes
 Step PotEng Press Temp totT rotT 
-     100   -159021.23    744.27567    306.45474    272.81649    239.18933 
-     110    -159114.3    587.83291    306.76727     280.1749    253.59393 
-     120   -159122.35    505.39808    309.46924     288.0702    266.68288 
-     130   -159017.05     503.5259    309.12855    294.24274     279.3689 
-     140   -158867.82     477.2919    309.83627    297.39249     284.9608 
-     150   -159047.45    433.95384    314.18493    303.26935    292.36612 
-     160    -158996.2    432.70108    316.29831    307.30281    298.31982 
-     170   -158799.82    448.34344    317.39089    309.66248    301.94668 
-     180   -158520.24    395.57505    315.27922    310.57039    305.87419 
-     190   -158508.34    366.05282     316.2831    312.40373    308.53707 
-     200   -158624.35    316.20205    318.59601    315.73833    312.89349 
-Loop time of 4.02233 on 4 procs for 100 steps with 24576 atoms
+     100   -158950.63    731.70564    304.87535    272.81305    240.76184 
+     110      -159240     581.8756    309.02414    280.80757    252.60243 
+     120   -159084.86    511.16969    309.45484    288.04027    266.63741 
+     130   -158886.83    526.15635    310.93182    294.86003    278.80024 
+     140   -158741.91    528.93894    311.73046     299.2277    286.73711 
+     150   -158722.74    493.75965    313.42618    303.94154    294.46926 
+     160   -158767.08    438.13373    316.09372    307.92823    299.77526 
+     170   -158611.06    429.16292    316.12011    310.01779    303.92809 
+     180   -158617.14    308.61558    318.78779    313.15486    307.53467 
+     190   -158466.48    284.04888    318.30494    313.65245    309.01273 
+     200   -158576.86    293.33674    321.12556    315.90404    310.69538 
+Loop time of 15.7434 on 1 procs for 100 steps with 24576 atoms
 
-Pair  time (%) = 3.15941 (78.5468)
-Bond  time (%) = 0.0551664 (1.3715)
-Neigh time (%) = 0.458186 (11.3911)
-Comm  time (%) = 0.12337 (3.06713)
-Outpt time (%) = 0.0653495 (1.62467)
-Other time (%) = 0.160849 (3.9989)
+Pair  time (%) = 12.8737 (81.7721)
+Bond  time (%) = 0.228323 (1.45028)
+Neigh time (%) = 1.75439 (11.1437)
+Comm  time (%) = 0.152065 (0.965897)
+Outpt time (%) = 0.0694458 (0.441112)
+Other time (%) = 0.665456 (4.2269)
 
-Nlocal:    6144 ave 6149 max 6138 min
-Histogram: 1 0 1 0 0 0 0 0 0 2
-Nghost:    9976 ave 10002 max 9949 min
-Histogram: 1 1 0 0 0 0 0 0 0 2
-Neighs:    467765 ave 469583 max 464862 min
-Histogram: 1 0 0 0 0 0 1 0 1 1
+Nlocal:    24576 ave 24576 max 24576 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    22334 ave 22334 max 22334 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.87174e+06 ave 1.87174e+06 max 1.87174e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1871061
-Ave neighs/atom = 76.1337
+Total # of neighbors = 1871741
+Ave neighs/atom = 76.1613
 Ave special neighs/atom = 1.16667
-Neighbor list builds = 24
+Neighbor list builds = 23
 Dangerous builds = 0
 
 

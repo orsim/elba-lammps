@@ -14,12 +14,8 @@ mass    6   42.000  # tail
 # Set diameters. These values are in turn used to obtain the moment of 
 # inertia, used in the rotational integration. 
 set type 1 diameter 5.0 # wat dipole
-#set type 2 diameter
-#set type 3 diameter
-set type 4 diameter 6.35 # gly dipole
-set type 5 diameter 6.35 # est dipole
-#set type 6 diameter
-
+set type 4 diameter 12.7 # gly dipole
+set type 5 diameter 12.7 # est dipole
 
 # Lennard-Jones coefficients:
 #           iType jType	  eps_ij sig_ij 
