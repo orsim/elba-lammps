@@ -42,6 +42,12 @@ running GNU/Linux operating systems:
 - module load intel openmpi
 - make iridis-icc-fast
 
+*) Protocol to compile LAMMPS on a Ubuntu laptop:
+** NOTE: the following packages must be pre-installed: g++, mpich2 **
+- cp elba-lammps/install/Makefile.ubuntu lammps-28May12/src/MAKE
+- cd lammps-28May12/src
+- make ubuntu
+
 *) Protocol to compile LAMMPS on a UOS desktop (U Southampton):
 - cp elba-lammps/install/Makefile.uos-icc lammps-28May12/src/MAKE 
 - cd lammps-28May12/src
