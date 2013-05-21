@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: trj2pdb.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and converts it
 #          into a VMD-compatible file "trajectory.pdb". Dedicated 'state'
 #          files can be found in 'elba-lammps/viz/'.
@@ -14,6 +14,8 @@
 #        every dipolar atom into two atoms representing the "+" and "-"
 #        ends of the original dipole. Such two atoms are spaced 1 Angstrom
 #        apart. 
+# Preprocessing: sometimes it may be useful to concatenate individual 
+#                LAMMPS trajectory "snapshots": cat dump.*.trj > dump.trj 
 # Reference: http://www.ks.uiuc.edu/Research/vmd
 
 import sys, string, linecache

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: calcIsothermComp.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Calculates isothermal compressibility (kappa_T) [1]
 # Syntax: calcIsothermComp.py rho1 rho2 P1 P2
 #         rho1 = density at P1

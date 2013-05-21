@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: msd2diff.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a file containing timestep & mean-squared displacement,
 #          and converts to corresponding diffusion coefficient
 # Syntax: msd2diff.py inputFile timeStep nDimensions
@@ -13,7 +13,8 @@
 # Notes: - input msd data are in Angstrom^2
 # Examples: - msd2diff.py wat.msd 3 > wat.diff
 #           - msd2diff.py lip.msd 2 > lip.diff
-# References: - Orsi & Essex, PLoS ONE 6, e28637 (2011), p. 15
+# References: - Orsi & Essex, Faraday Discuss 161, 249 (2013)
+#             - Orsi & Essex, PLoS ONE 6, e28637 (2011)
 #             - Orsi et al, J Phys Condens Matter 22, 155106 (2010)
 #             - Rapaport, The Art of Molecular Dynamics Simulation
 #               (2004), 2nd ed, p.122
@@ -60,7 +61,8 @@ print '# Diffusion coeff D as a function of measurement time t'
 print '# t [ns] | D [m^2/s] | D [cm^2/s] | D [nm^2/mus]'
 print '0.0 0.0 0.0 0.0' # set D=0 for t_measurement=0
 for i in range( 1, len(msd) ):
-  print ('%g %g %g %g' % (time[i]*fs_in_ns,
-                       msd[i]*A2_in_m2/(2*nDims*time[i]*fs_in_s),
-                       msd[i]*A2_in_cm2/(2*nDims*time[i]*fs_in_s),
-                       msd[i]*A2_in_nm2/(2*nDims*time[i]*fs_in_mus)))
+  tm = time[i] - time[0] # measurement time
+  print ('%g %g %g %g' % (tm*fs_in_ns,
+                       msd[i]*A2_in_m2/(2*nDims*tm*fs_in_s),
+                       msd[i]*A2_in_cm2/(2*nDims*tm*fs_in_s),
+                       msd[i]*A2_in_nm2/(2*nDims*tm*fs_in_mus)))

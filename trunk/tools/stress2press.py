@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: stress2press.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a file containing stress components (calculated
 #          with the LAMMPS commands 'compute stress/atom' and
 #          'fix ave/spatial'), and converts to corresponding pressures
@@ -12,6 +12,7 @@
 #        - Pn = normal pressure [atm]
 # References: - http://lammps.sandia.gov/doc/compute_stress_atom.html
 #             - Thompson et al, J Chem Phys 131, 154107 (2009)
+#             - Orsi & Essex, Faraday Discuss 161, 249 (2013)
 #             - Orsi & Essex, PLoS ONE 6, e28637 (2011), p. 11
 #             - Orsi et al, J Phys Condens Matter 22, 155106 (2010),
 #               section 5.2
@@ -25,6 +26,7 @@ if len(sys.argv) != 4:
 inFileName = sys.argv[1]
 area = float(sys.argv[2])
 Pn = float(sys.argv[3])
+
 inFile = open(inFileName, "r")
 lines = inFile.readlines()
 inFile.close()

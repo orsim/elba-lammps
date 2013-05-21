@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: sumProfile.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads two or more profiles and calculates sum
 # Syntax: sumProfile.py fileName1 fileName2 ... fileNameN
 # Example: sumProfile.py eppHead.dat eppWat.dat > eppSum.dat

@@ -46,6 +46,6 @@ for line in averages:
     #print line
     str = " "
     for val in avgs:
-        str += "%f " % val
+        str += "%g " % val
     print str
     #sys.exit(-1)

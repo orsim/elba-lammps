@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: lpp2curv.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Process a lateral pressure profile to extract curvature
 #          elastic parameters (per monolayer)
 # Syntax: lpp2curv.py inputFile
@@ -10,7 +10,8 @@
 #        - Coordinates (first col of input file) in Angstrom
 #        - Lateral pressure Pt-Pn (second col of input file) in Atm
 #        - Coordinates' origin = bilayer center
-# References: - Orsi & Essex, PLoS ONE 6, e28637 (2011)
+# References: - Orsi & Essex, Faraday Discuss 161, 249 (2013)
+#             - Orsi & Essex, PLoS ONE 6, e28637 (2011)
 #             - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
 #             - Cantor, Biophys J 80, 2284 (2001)
 #             - Ben-Shaul, in 'Structure and dynamics of membranes',

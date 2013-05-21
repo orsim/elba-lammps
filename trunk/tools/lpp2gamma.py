@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: lpp2gamma.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Integrates a lateral pressure profile to get the corresponding
 #          surface tension (gamma) per monolayer
 # Syntax: lpp2gamma.py inputFile

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: calcAreaComp.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a file containing the time evolution of the interfacial
 #          area of a lipid bilayer (usually the xy area) and calculates
 #          the corresponding area compressibility (stretch) modulus
