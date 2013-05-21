@@ -14,10 +14,6 @@ lipid membranes, PLoS ONE 6: e28637.
 The various folders in the ELBA-LAMMPS toolkit contain usage information 
 in the form of README files. 
 
-- install: this is the place to start, as this directory contains 
-	instructions on how to build LAMMPS with all (and only) the 
-	features necessary to simulate the ELBA model
-
 - examples: various test runs, which can be used to check the LAMMPS build,
 	to understand how to run and analyze ELBA systems, and as starting 
 	points for new simulations 
