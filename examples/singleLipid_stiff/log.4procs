@@ -1,6 +1,8 @@
-LAMMPS (28 May 2012)
+LAMMPS (14 May 2013)
+WARNING: OMP_NUM_THREADS environment is not set. (../comm.cpp:100)
+  using 1 OpenMP thread(s) per MPI task
 units		real
-atom_style	hybrid angle dipole sphere 
+atom_style	hybrid angle dipole sphere
 read_data 	data.singleLipid
   2 = max bonds/atom
   2 = max angles/atom
@@ -15,7 +17,7 @@ read_data 	data.singleLipid
   8 = max # of special neighbors
 include 	forcefield.stiff
 pair_style dipole/sf 12
-special_bonds lj/coul 0.0 1.0 1.0 
+special_bonds lj/coul 0.0 1.0 1.0
   3 = max # of 1-2 neighbors
   3 = max # of special neighbors
 bond_style harmonic
@@ -77,44 +79,44 @@ neigh_modify 	delay 0
 fix		1 all nve/sphere update dipole
 fix 		2 all langevin 303.15 303.15 10.0 48279 omega yes
 
-thermo		100
+thermo		10000
 
-dump		1 all custom 10 dump.trj id type mol x y z mux muy muz
+dump		1 all custom 1000 dump.trj id type mol x y z mux muy muz
 dump_modify	1 sort id
 
 timestep	0.1
-run		1000
-Memory usage per processor = 5.15782 Mbytes
+run		100000
+Memory usage per processor = 4.64373 Mbytes
 Step Temp E_pair E_mol TotEng Press 
        0            0    8.9201824    162828.34    162837.26    18666.469 
-     100     632547.4    7.8514976    97571.508    123976.41    21323.837 
-     200    532507.83  -0.22253679    44909.819    67131.862    14179.914 
-     300    332908.07   0.16924326    15354.068    29246.937     9251.676 
-     400    116300.88     2.492333    6042.1123    10897.996    3910.8965 
-     500    34569.861    6.5837961    3657.6953    5106.9258   0.60003414 
-     600    7417.5938    17.195099    3055.3896    3382.1308   -1546.8553 
-     700    2982.3643    29.995133    2404.3238     2558.777   -1227.2274 
-     800    1609.4261    30.143391    1911.0862    2008.3931    -531.3049 
-     900    921.64362    23.547722    1552.0671    1614.0762   -271.97989 
-    1000    548.97385    19.599931    1321.9423    1364.4517   -151.57596 
-Loop time of 0.035795 on 4 procs for 1000 steps with 15 atoms
+   10000    332.33561    4.2560027     152.6393    170.76411     193.8869 
+   20000    357.50019    4.5009478    54.492139    73.912049    80.732136 
+   30000    341.69862    3.6516645     40.23914    58.150346   -26.518016 
+   40000    333.12959    3.4808897    27.996922    45.379757   -65.736859 
+   50000    247.17767    2.7111625    23.970463    36.996681    12.582201 
+   60000    312.50194    2.8483415    8.2913456    24.180812    18.812251 
+   70000    316.91126    3.3516619     11.73549    28.312284   -1.0616816 
+   80000    446.89861    2.5603198     11.17213    32.382128   -18.196684 
+   90000    260.55257    3.6032457    10.137248    24.613702   -7.6287481 
+  100000    324.21394    4.0192091    9.7287154    27.277807     143.2075 
+Loop time of 1.24266 on 4 procs (4 MPI x 1 OpenMP) for 100000 steps with 15 atoms
 
-Pair  time (%) = 0.00128853 (3.59976)
-Bond  time (%) = 0.00113738 (3.17747)
-Neigh time (%) = 6.57439e-05 (0.183668)
-Comm  time (%) = 0.010771 (30.0909)
-Outpt time (%) = 0.0104319 (29.1434)
-Other time (%) = 0.0121004 (33.8047)
+Pair  time (%) = 0.0864608 (6.95774)
+Bond  time (%) = 0.0711489 (5.72555)
+Neigh time (%) = 6.34789e-05 (0.00510832)
+Comm  time (%) = 0.497827 (40.0615)
+Outpt time (%) = 0.00634295 (0.510434)
+Other time (%) = 0.580814 (46.7397)
 
-Nlocal:    3.75 ave 10 max 0 min
-Histogram: 2 0 0 0 0 1 0 0 0 1
-Nghost:    10.25 ave 15 max 5 min
-Histogram: 1 0 0 1 0 0 0 0 1 1
-Neighs:    14.75 ave 53 max 0 min
-Histogram: 2 1 0 0 0 0 0 0 0 1
+Nlocal:    3.75 ave 9 max 0 min
+Histogram: 2 0 0 0 0 0 1 0 0 1
+Nghost:    10.25 ave 15 max 6 min
+Histogram: 1 1 0 0 0 0 0 1 0 1
+Neighs:    14.5 ave 48 max 0 min
+Histogram: 2 0 1 0 0 0 0 0 0 1
 
-Total # of neighbors = 59
-Ave neighs/atom = 3.93333
+Total # of neighbors = 58
+Ave neighs/atom = 3.86667
 Ave special neighs/atom = 1.86667
-Neighbor list builds = 9
+Neighbor list builds = 16
 Dangerous builds = 0

@@ -1,0 +1,530 @@
+LAMMPS (14 May 2013)
+WARNING: OMP_NUM_THREADS environment is not set. (../comm.cpp:100)
+  using 1 OpenMP thread(s) per MPI task
+units		real
+atom_style	hybrid angle dipole sphere
+read_data 	data.4dopc4dope256wat
+  2 = max bonds/atom
+  2 = max angles/atom
+  orthogonal box = (-8.5 -8.5 -31.5) to (8.5 8.5 31.5)
+  1 by 1 by 4 MPI processor grid
+  376 atoms
+  112 bonds
+  128 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.elba
+pair_style dipole/sf 12.0
+special_bonds lj/coul 0.0 1.0 1.0
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+mass    1   40.000
+mass    2   90.000
+mass    3   90.000
+mass    4   62.000
+mass    5   62.000
+mass    6   42.000
+mass    7   42.000
+
+set type 1 diameter 5.0 # wat dipole
+  256 settings made for diameter
+set type 4 diameter 12.7 # gly dipole
+  8 settings made for diameter
+set type 5 diameter 12.7 # est dipole
+  16 settings made for diameter
+
+pair_coeff    1    1	  0.550  3.050 # wat-wat
+pair_coeff    1    2	  0.725  4.225 # wat-cho
+pair_coeff    1    3	  0.943  4.125 # wat-pho
+pair_coeff    1    4	  0.651  3.825 # wat-gly
+pair_coeff    1    5	  0.710  3.825 # wat-est
+pair_coeff    1    6	  0.554  3.775 # wat-tail
+pair_coeff    1    7	  0.609  3.775 # wat-ami
+pair_coeff    2    2	  1.434  5.400 # cho-cho
+pair_coeff    2    3	  1.434  5.300 # cho-pho
+pair_coeff    2    4	  1.171  5.000 # cho-gly
+pair_coeff    2    5	  1.171  5.000 # cho-est
+pair_coeff    2    6	  1.095  4.950 # cho-tail
+pair_coeff    2    7	  1.095  4.950 # cho-ami
+pair_coeff    3    3	  1.434  5.200 # pho-pho
+pair_coeff    3    4	  1.171  4.900 # pho-gly
+pair_coeff    3    5	  1.171  4.900 # pho-est
+pair_coeff    3    6	  1.095  4.850 # pho-tail
+pair_coeff    3    7	  1.424  4.850 # pho-ami
+pair_coeff    4    4	  0.956  4.600 # gly-gly
+pair_coeff    4    5	  0.956  4.600 # gly-est
+pair_coeff    4    6	  0.894  4.550 # gly-tail
+pair_coeff    4    7	  0.984  4.550 # gly-ami
+pair_coeff    5    5	  0.956  4.600 # est-est
+pair_coeff    5    6	  0.894  4.550 # est-tail
+pair_coeff    5    7	  1.163  4.550 # est-ami
+pair_coeff    6    6	  0.837  4.500 # tail-tail
+pair_coeff    6    7	  0.837  4.500 # tail-ami
+pair_coeff    7    7	  0.837  4.500 # ami-ami
+
+bond_coeff    1    1.506  4.770 # cho-pho
+bond_coeff    2    1.506  4.410 # pho-gly
+bond_coeff    3    1.506  4.140 # gly-est
+bond_coeff    4    1.506  4.095 # est-tail
+bond_coeff    5    1.506  4.050 # tail-tail
+bond_coeff    6    1.506  4.365 # ami-pho
+
+angle_coeff    1  cosine/squared   3.585  115.00
+angle_coeff    2  cosine/squared   3.585   90.00
+angle_coeff    3  cosine/squared   3.585  180.00
+angle_coeff    4  cosine/squared   3.585  120.00
+angle_coeff    5  dipole           1.195    0.00
+
+
+replicate	4 4 1
+  orthogonal box = (-8.5 -8.5 -31.5) to (59.5 59.5 31.5)
+  2 by 2 by 1 MPI processor grid
+  6016 atoms
+  1792 bonds
+  2048 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+
+velocity	all create 0.0 87287
+
+variable	nLips equal 128 # total number of lipids
+variable	nWats equal 4096 # total number of waters
+variable	watVol equal 30.0 # water molecular volume (~30 A^3)
+variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m
+
+variable	Nnvt equal 1000
+variable	Nnpt equal 100000
+variable	Nthe equal 10000
+variable	Ndum equal 10000
+variable	Ne equal 10
+variable	Nthe_e equal ${Nthe}/${Ne}
+variable	Nthe_e equal 10000/${Ne}
+variable	Nthe_e equal 10000/10
+variable	Nres equal 110000
+
+group		lip type 2 3 4 5 6 7
+1920 atoms in group lip
+group		head type 2 3 7
+256 atoms in group head
+group		wat type 1
+4096 atoms in group wat
+group		chol type 2
+64 atoms in group chol
+group		phos type 3
+128 atoms in group phos
+group		gly type 4
+128 atoms in group gly
+group		est type 5
+256 atoms in group est
+group		tail type 6
+1280 atoms in group tail
+group		ami type 7
+64 atoms in group ami
+
+neighbor	1 bin
+neigh_modify	delay 0
+fix		integrate all nve/sphere update dipole
+
+fix 		thermo all langevin 303 303 100 9 omega yes zero yes
+
+fix             removeMomentum all momentum 100 linear 1 1 1 # angular
+
+dump		trj all custom ${Ndum} dump.*.trj id type mol x y z mux muy muz
+dump		trj all custom 10000 dump.*.trj id type mol x y z mux muy muz
+dump_modify	trj sort id pad 9
+
+timestep	0.01
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0    1224661.1    12447.942      1237109      1257067 
+    1000    187.29824    1221753.9     12376.82    1237488.9    1255797.4 
+Loop time of 15.7978 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 14.931 (94.513)
+Bond  time (%) = 0.0613584 (0.388398)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.358107 (2.26681)
+Outpt time (%) = 3.99947e-05 (0.000253166)
+Other time (%) = 0.447315 (2.83149)
+
+Nlocal:    1504 ave 1504 max 1504 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+Nghost:    6496 ave 6496 max 6496 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+Neighs:    173024 ave 173024 max 173024 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 692096
+Ave neighs/atom = 115.043
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 0
+Dangerous builds = 0
+
+timestep	0.1
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+    1000    187.29824    1221753.9     12376.82    1237488.9    1255797.4 
+    2000    15258.238    54830.864    12042.678    340447.22    136396.53 
+Loop time of 16.4291 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 15.3443 (93.3969)
+Bond  time (%) = 0.0619145 (0.376858)
+Neigh time (%) = 0.120649 (0.734363)
+Comm  time (%) = 0.439315 (2.674)
+Outpt time (%) = 3.77893e-05 (0.000230014)
+Other time (%) = 0.462914 (2.81765)
+
+Nlocal:    1504 ave 1509 max 1494 min
+Histogram: 1 0 0 0 0 0 0 1 0 2
+Nghost:    6196.5 ave 6205 max 6179 min
+Histogram: 1 0 0 0 0 0 0 1 0 2
+Neighs:    165323 ave 166512 max 163478 min
+Histogram: 1 0 0 0 0 1 0 0 1 1
+
+Total # of neighbors = 661291
+Ave neighs/atom = 109.922
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 18
+Dangerous builds = 0
+
+timestep	1
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+    2000    15258.238    54830.864    12042.678    340447.22    136396.53 
+    3000    313.39292   -42905.309    5359.1271   -31927.181    1808.9365 
+Loop time of 14.9917 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 13.8232 (92.2059)
+Bond  time (%) = 0.0618342 (0.412456)
+Neigh time (%) = 0.24934 (1.66318)
+Comm  time (%) = 0.419158 (2.79593)
+Outpt time (%) = 3.96967e-05 (0.000264791)
+Other time (%) = 0.438096 (2.92226)
+
+Nlocal:    1504 ave 1515 max 1486 min
+Histogram: 1 0 0 0 0 1 0 0 0 2
+Nghost:    5787.5 ave 5832 max 5743 min
+Histogram: 1 0 0 1 0 0 1 0 0 1
+Neighs:    152434 ave 153840 max 149682 min
+Histogram: 1 0 0 0 0 0 0 1 0 2
+
+Total # of neighbors = 609737
+Ave neighs/atom = 101.353
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 37
+Dangerous builds = 0
+
+timestep	2
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+    3000    313.39292   -42905.309    5359.1271   -31927.181    1808.9365 
+    4000    307.30513   -46377.464     3960.517   -36907.097    707.60514 
+Loop time of 15.454 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 13.7704 (89.1059)
+Bond  time (%) = 0.062483 (0.404316)
+Neigh time (%) = 0.273645 (1.77071)
+Comm  time (%) = 0.909155 (5.88298)
+Outpt time (%) = 3.97563e-05 (0.000257256)
+Other time (%) = 0.438255 (2.83587)
+
+Nlocal:    1504 ave 1511 max 1492 min
+Histogram: 1 0 0 0 0 0 1 0 1 1
+Nghost:    5828 ave 5861 max 5799 min
+Histogram: 1 0 0 1 1 0 0 0 0 1
+Neighs:    154516 ave 155579 max 152961 min
+Histogram: 1 0 0 0 0 1 0 0 1 1
+
+Total # of neighbors = 618062
+Ave neighs/atom = 102.736
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 41
+Dangerous builds = 0
+
+timestep	5
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+    4000    307.30513   -46377.464     3960.517   -36907.097    707.60514 
+    5000    302.52937   -47851.779    3149.7582   -39277.798    331.32416 
+Loop time of 16.0489 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 14.1863 (88.3943)
+Bond  time (%) = 0.0634037 (0.395065)
+Neigh time (%) = 0.675383 (4.20827)
+Comm  time (%) = 0.673759 (4.19815)
+Outpt time (%) = 4.21405e-05 (0.000262575)
+Other time (%) = 0.449996 (2.8039)
+
+Nlocal:    1504 ave 1527 max 1479 min
+Histogram: 1 0 0 1 0 0 0 1 0 1
+Nghost:    5915 ave 5933 max 5882 min
+Histogram: 1 0 0 0 0 0 0 1 1 1
+Neighs:    157809 ave 161721 max 154936 min
+Histogram: 1 1 0 0 0 1 0 0 0 1
+
+Total # of neighbors = 631235
+Ave neighs/atom = 104.926
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 99
+Dangerous builds = 0
+
+unfix 		thermo
+fix 		thermo all langevin 303 303 1000 9 omega yes zero yes
+
+# compute and average area and volume per lipid:
+variable	lipArea equal lx*ly/(${nLips}/2)
+variable	lipArea equal lx*ly/(128/2)
+fix		lipArea lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipArea
+fix		lipArea lip ave/time 10 ${Nthe_e} ${Nthe} v_lipArea
+fix		lipArea lip ave/time 10 1000 ${Nthe} v_lipArea
+fix		lipArea lip ave/time 10 1000 10000 v_lipArea
+variable	lipVol equal (vol-(${nWats}*${watVol}))/${nLips}
+variable	lipVol equal (vol-(4096*${watVol}))/${nLips}
+variable	lipVol equal (vol-(4096*30))/${nLips}
+variable	lipVol equal (vol-(4096*30))/128
+fix		lipVol lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipVol
+fix		lipVol lip ave/time 10 ${Nthe_e} ${Nthe} v_lipVol
+fix		lipVol lip ave/time 10 1000 ${Nthe} v_lipVol
+fix		lipVol lip ave/time 10 1000 10000 v_lipVol
+
+# compute and average pressure:
+variable	P equal press
+fix 		P all ave/time ${Ne} ${Nthe_e} ${Nthe} v_P
+fix 		P all ave/time 10 ${Nthe_e} ${Nthe} v_P
+fix 		P all ave/time 10 1000 ${Nthe} v_P
+fix 		P all ave/time 10 1000 10000 v_P
+
+# compute and average total (translational + rotational) temperature:
+compute 	tempTot all temp/sphere dof all
+fix 		tempTot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempTot
+fix 		tempTot all ave/time 10 ${Nthe_e} ${Nthe} c_tempTot
+fix 		tempTot all ave/time 10 1000 ${Nthe} c_tempTot
+fix 		tempTot all ave/time 10 1000 10000 c_tempTot
+#compute_modify  tempTot extra 3 # default -> no effect
+
+# compute and average rotational temperature:
+compute 	tempRot all temp/sphere dof rotate
+fix 		tempRot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempRot
+fix 		tempRot all ave/time 10 ${Nthe_e} ${Nthe} c_tempRot
+fix 		tempRot all ave/time 10 1000 ${Nthe} c_tempRot
+fix 		tempRot all ave/time 10 1000 10000 c_tempRot
+
+thermo_style custom step press f_P temp f_tempTot f_tempRot f_lipArea f_lipVol
+#thermo_modify   temp tempTot
+thermo		${Nthe}
+thermo		10000
+
+# equilibrate:
+timestep	10
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+    5000    331.32416            0    302.52937            0            0            0            0 
+    6000    82.672864            0    304.92506            0            0            0            0 
+Loop time of 17.7942 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 15.0373 (84.5069)
+Bond  time (%) = 0.0647736 (0.364016)
+Neigh time (%) = 1.44923 (8.14439)
+Comm  time (%) = 0.771403 (4.33515)
+Outpt time (%) = 3.99947e-05 (0.000224763)
+Other time (%) = 0.471428 (2.64934)
+
+Nlocal:    1504 ave 1517 max 1484 min
+Histogram: 1 0 0 0 1 0 0 0 0 2
+Nghost:    6021 ave 6034 max 6013 min
+Histogram: 1 0 2 0 0 0 0 0 0 1
+Neighs:    162172 ave 165064 max 158177 min
+Histogram: 1 0 0 0 0 1 0 1 0 1
+
+Total # of neighbors = 648690
+Ave neighs/atom = 107.827
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 203
+Dangerous builds = 0
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+    6000    82.672864            0    304.92506            0            0            0            0 
+    7000    76.673527            0    300.87591            0            0            0            0 
+Loop time of 17.9194 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 15.0696 (84.0964)
+Bond  time (%) = 0.0651227 (0.36342)
+Neigh time (%) = 1.44184 (8.04624)
+Comm  time (%) = 0.891025 (4.97241)
+Outpt time (%) = 3.88026e-05 (0.00021654)
+Other time (%) = 0.451804 (2.52131)
+
+Nlocal:    1504 ave 1538 max 1491 min
+Histogram: 3 0 0 0 0 0 0 0 0 1
+Nghost:    5992.25 ave 6007 max 5971 min
+Histogram: 1 0 0 0 0 1 0 0 1 1
+Neighs:    162551 ave 169023 max 158478 min
+Histogram: 1 0 2 0 0 0 0 0 0 1
+
+Total # of neighbors = 650204
+Ave neighs/atom = 108.079
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 202
+Dangerous builds = 0
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+    7000    76.673527            0    300.87591            0            0            0            0 
+    8000   -52.824754            0    301.35047            0            0            0            0 
+Loop time of 18.0818 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 15.0705 (83.3461)
+Bond  time (%) = 0.0652059 (0.360616)
+Neigh time (%) = 1.44269 (7.97868)
+Comm  time (%) = 1.01452 (5.61072)
+Outpt time (%) = 3.99947e-05 (0.000221188)
+Other time (%) = 0.48888 (2.70371)
+
+Nlocal:    1504 ave 1526 max 1493 min
+Histogram: 2 0 0 1 0 0 0 0 0 1
+Nghost:    5997.5 ave 6010 max 5979 min
+Histogram: 1 0 0 0 0 1 0 0 1 1
+Neighs:    162189 ave 167460 max 159570 min
+Histogram: 2 0 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 648757
+Ave neighs/atom = 107.839
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 202
+Dangerous builds = 0
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+    8000   -52.824754            0    301.35047            0            0            0            0 
+    9000   -47.291179            0    299.17851            0            0            0            0 
+Loop time of 18.102 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 15.0699 (83.2501)
+Bond  time (%) = 0.0653526 (0.361025)
+Neigh time (%) = 1.45113 (8.01642)
+Comm  time (%) = 1.05501 (5.82818)
+Outpt time (%) = 4.08292e-05 (0.000225551)
+Other time (%) = 0.460519 (2.54403)
+
+Nlocal:    1504 ave 1530 max 1492 min
+Histogram: 2 0 1 0 0 0 0 0 0 1
+Nghost:    5986.25 ave 6000 max 5962 min
+Histogram: 1 0 0 0 0 0 1 0 1 1
+Neighs:    161900 ave 167358 max 158772 min
+Histogram: 1 1 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 647598
+Ave neighs/atom = 107.646
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 203
+Dangerous builds = 0
+run		${Nnvt}
+run		1000
+Memory usage per processor = 5.51345 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+    9000   -47.291179            0    299.17851            0            0            0            0 
+   10000   -25.826631            0       304.59            0            0            0            0 
+Loop time of 18.0815 on 4 procs (4 MPI x 1 OpenMP) for 1000 steps with 6016 atoms
+
+Pair  time (%) = 15.047 (83.2179)
+Bond  time (%) = 0.0653054 (0.361173)
+Neigh time (%) = 1.44872 (8.0122)
+Comm  time (%) = 1.04282 (5.76734)
+Outpt time (%) = 0.0169899 (0.0939631)
+Other time (%) = 0.460616 (2.54745)
+
+Nlocal:    1504 ave 1513 max 1497 min
+Histogram: 1 0 0 1 1 0 0 0 0 1
+Nghost:    6001.75 ave 6046 max 5966 min
+Histogram: 2 0 0 0 0 0 0 1 0 1
+Neighs:    161928 ave 166043 max 160013 min
+Histogram: 2 0 1 0 0 0 0 0 0 1
+
+Total # of neighbors = 647710
+Ave neighs/atom = 107.665
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 203
+Dangerous builds = 0
+
+fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
+
+# compute and average surface tension (gamma) per monolayer:
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*${atmA__in__mN_m}
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*0.010130000000000000115
+fix	gamma all ave/time ${Ne} ${Nthe_e} ${Nthe} v_gamma file gamma.dat
+fix	gamma all ave/time 10 ${Nthe_e} ${Nthe} v_gamma file gamma.dat
+fix	gamma all ave/time 10 1000 ${Nthe} v_gamma file gamma.dat
+fix	gamma all ave/time 10 1000 10000 v_gamma file gamma.dat
+
+# compute and average interface area (bilayer assumed parallel to xy plane):
+variable	xyArea equal lx*ly
+fix 		xyArea all ave/time 1 1 ${Ne} v_xyArea file xyArea.dat
+fix 		xyArea all ave/time 1 1 10 v_xyArea file xyArea.dat
+
+# compute and average box volume:
+variable	boxVol equal vol
+fix 		boxVol all ave/time 1 1 ${Ne} v_boxVol file boxVol.dat
+fix 		boxVol all ave/time 1 1 10 v_boxVol file boxVol.dat
+
+restart		${Nres} restart
+restart		110000 restart
+
+run 		${Nnpt}
+run 		100000
+Memory usage per processor = 5.51411 Mbytes
+Step Press P Temp tempTot tempRot lipArea lipVol 
+   10000   -25.826631            0       304.59            0            0            0            0 
+   20000    38.241372  -0.89833301    309.59804    302.89793    303.04924    70.759815    1297.6108 
+   30000     31.58834    1.3796069    304.14739    303.41061     303.2835    69.610816    1299.1308 
+   40000   -49.095412   0.37299639    303.08138     302.6137    302.77369     69.30369    1294.7622 
+   50000   -13.385476  0.089482672    298.32894    303.04556    303.19117    69.232023    1291.5759 
+   60000   -52.943422    1.7991871    294.80606    303.04243    303.14438     69.29902    1294.2609 
+   70000   -57.536774    1.9332433     300.4894     302.7463    303.14077    68.840662    1292.3623 
+   80000    62.563837   0.45402656    307.46528    302.78467    303.03972    68.927402    1291.6672 
+   90000    43.692333    1.2434325    302.29232    303.00303    302.96292    68.608082    1294.1074 
+  100000    14.364021    1.3903669    309.59098    303.13166    303.35575    67.834163    1295.5234 
+  110000    74.784428  -0.64029856    305.24948    303.22068    303.48035    68.109454    1293.3438 
+Loop time of 1844.83 on 4 procs (4 MPI x 1 OpenMP) for 100000 steps with 6016 atoms
+
+Pair  time (%) = 1549.61 (83.9975)
+Bond  time (%) = 8.41285 (0.456023)
+Neigh time (%) = 141.469 (7.66842)
+Comm  time (%) = 94.7252 (5.13463)
+Outpt time (%) = 0.17191 (0.00931845)
+Other time (%) = 50.4402 (2.73414)
+
+Nlocal:    1504 ave 1547 max 1451 min
+Histogram: 1 0 1 0 0 0 0 0 0 2
+Nghost:    6216.5 ave 6240 max 6197 min
+Histogram: 1 0 0 1 1 0 0 0 0 1
+Neighs:    166020 ave 175265 max 157237 min
+Histogram: 1 1 0 0 0 0 0 0 1 1
+
+Total # of neighbors = 664078
+Ave neighs/atom = 110.385
+Ave special neighs/atom = 0.595745
+Neighbor list builds = 20328
+Dangerous builds = 0
+
+
