@@ -15,6 +15,7 @@ compute 	totT all temp/sphere dof all
 compute 	rotT all temp/sphere dof rotate
 
 thermo_style    custom step pe press temp c_totT c_rotT
+#thermo_modify   norm yes
 thermo		10
 dump		trj all custom 100 dump.*.trj id type mol x y z mux muy muz
 dump_modify	trj sort id pad 6

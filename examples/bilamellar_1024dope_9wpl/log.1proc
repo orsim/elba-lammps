@@ -1,6 +1,8 @@
-LAMMPS (28 May 2012)
+LAMMPS (14 May 2013)
+WARNING: OMP_NUM_THREADS environment is not set. (../comm.cpp:100)
+  using 1 OpenMP thread(s) per MPI task
 units		real
-atom_style	hybrid angle dipole sphere 
+atom_style	hybrid angle dipole sphere
 read_data 	data.1024lip9216wat
   2 = max bonds/atom
   2 = max angles/atom
@@ -21,7 +23,7 @@ special_bonds lj/coul 0.0 1.0 1.0
 bond_style harmonic
 angle_style hybrid cosine/squared dipole
 
-#   atomType  mass 
+#   atomType  mass
 mass    1   40.000  # wat
 mass    2   42.000  # ami
 mass    3   90.000  # phos
@@ -29,8 +31,8 @@ mass    4   62.000  # glyc
 mass    5   62.000  # est
 mass    6   42.000  # tail
 
-# Set diameters. These values are in turn used to obtain the moment of 
-# inertia, used in the rotational integration. 
+# Set diameters. These values are in turn used to obtain the moment of
+# inertia, used in the rotational integration.
 set type 1 diameter 5.0 # wat dipole
   9216 settings made for diameter
 set type 4 diameter 12.7 # gly dipole
@@ -39,7 +41,7 @@ set type 5 diameter 12.7 # est dipole
   2048 settings made for diameter
 
 # Lennard-Jones coefficients:
-#           iType jType	  eps_ij sig_ij 
+#           iType jType	  eps_ij sig_ij
 pair_coeff    1    1	  0.550  3.050 # wat-wat
 pair_coeff    1    2	  0.609  3.775 # wat-ami
 pair_coeff    1    3	  0.943  4.125 # wat-phos
@@ -62,8 +64,8 @@ pair_coeff    5    5	  0.956  4.600 # est-est
 pair_coeff    5    6	  0.894  4.550 # est-tail
 pair_coeff    6    6	  0.837  4.500 # tail-tail
 
-# harmonic bond coefficients:  
-#         bondType   K     r0  
+# harmonic bond coefficients:
+#         bondType   K     r0
 bond_coeff    1    1.506  4.365 # ami--phos
 bond_coeff    2    1.506  4.410 # phos--gly
 bond_coeff    3    1.506  4.140 # gly--est
@@ -71,16 +73,16 @@ bond_coeff    4    1.506  4.095 # est--tail
 bond_coeff    5    1.506  4.050 # tail--tail
 
 # angle coefficients:
-#	  angleType	       K    theta0 
+#	  angleType	       K    theta0
 angle_coeff 1 cosine/squared  3.585 115.00 # ami-phos-gly
 angle_coeff 2 cosine/squared  3.585  90.00 # phos-gly-est
 angle_coeff 3 cosine/squared  3.585 180.00 # gly-est-tail, tail-tail
 angle_coeff 4 cosine/squared  3.585 120.00 # tail-tail-tail (unsat)
 # dipole angle coefficients:
-#	  angleType	K   gamma0  
+#	  angleType	K   gamma0
 angle_coeff 5  dipole 1.195  0.00 # glyDip-phos, estDip-tail
 
-velocity	all create 0.0 87287 
+velocity	all create 0.0 87287
 
 neighbor	1 bin
 neigh_modify	delay 0
@@ -93,70 +95,73 @@ compute 	totT all temp/sphere dof all
 compute 	rotT all temp/sphere dof rotate
 
 thermo_style    custom step pe press temp c_totT c_rotT
+#thermo_modify   norm yes
 thermo		10
 dump		trj all custom 100 dump.*.trj id type mol x y z mux muy muz
 dump_modify	trj sort id pad 6
 
 timestep	2
 run		50
-Memory usage per processor = 32.2923 Mbytes
+WARNING: Inconsistent image flags (../domain.cpp:594)
+Memory usage per processor = 33.7449 Mbytes
 Step PotEng Press Temp totT rotT 
        0   -139785.95   -667.99399            0            0            0 
-      10   -142231.69   -1035.9805    43.065549    28.469717    13.875044 
-      20   -146105.07   -1545.0067    101.11895    66.036404    30.956543 
-      30   -148986.03     -1720.34    142.22778    95.806067    49.388256 
-      40   -151163.95    -1640.288    170.90593     119.4416    67.982132 
-      50   -153173.94   -1457.7537    196.48403    140.88013    85.281953 
-Loop time of 7.0122 on 1 procs for 50 steps with 24576 atoms
+      10   -142223.19   -1035.5832    43.066379    41.687408    40.310134 
+      20   -146055.36   -1542.6955    101.13491    90.600761    80.070296 
+      30   -148852.47   -1714.1043    142.31518    129.18639    116.06286 
+      40   -150904.04   -1627.8277    171.14399    159.47741    147.81732 
+      50   -152755.13   -1436.8512    196.93348    185.47799    174.03005 
+Loop time of 8.30647 on 1 procs (1 MPI x 1 OpenMP) for 50 steps with 24576 atoms
 
-Pair  time (%) = 6.45009 (91.9839)
-Bond  time (%) = 0.107381 (1.53134)
-Neigh time (%) = 0.074456 (1.06181)
-Comm  time (%) = 0.0709767 (1.01219)
-Outpt time (%) = 0.0020597 (0.0293731)
-Other time (%) = 0.307232 (4.38139)
+Pair  time (%) = 7.77064 (93.5493)
+Bond  time (%) = 0.104329 (1.256)
+Neigh time (%) = 0.08129 (0.978634)
+Comm  time (%) = 0.0331511 (0.3991)
+Outpt time (%) = 0.00224781 (0.0270609)
+Other time (%) = 0.314811 (3.78995)
 
 Nlocal:    24576 ave 24576 max 24576 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 Nghost:    22368 ave 22368 max 22368 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    1.9027e+06 ave 1.9027e+06 max 1.9027e+06 min
+Neighs:    1.90269e+06 ave 1.90269e+06 max 1.90269e+06 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1902695
-Ave neighs/atom = 77.4209
+Total # of neighbors = 1902693
+Ave neighs/atom = 77.4208
 Ave special neighs/atom = 1.16667
 Neighbor list builds = 1
 Dangerous builds = 0
 
 timestep	10
 run		50
-Memory usage per processor = 32.2923 Mbytes
+WARNING: Inconsistent image flags (../domain.cpp:594)
+Memory usage per processor = 33.7449 Mbytes
 Step PotEng Press Temp totT rotT 
-      50   -153173.94   -1457.7537    196.48403    140.88013    85.281953 
-      60   -158125.07    65.574996    261.58017    201.35431    141.13665 
-      70   -158491.13    879.66094    280.44068    226.08051    171.72955 
-      80    -158849.7    847.03413    291.58165    246.45377    201.33592 
-      90    -158853.3    741.65371    298.17998    260.74132    223.31326 
-     100   -158950.63    731.70564    304.87535    272.81305    240.76184 
-Loop time of 7.79047 on 1 procs for 50 steps with 24576 atoms
+      50   -152755.13   -1436.8512    196.93348    185.47799    174.03005 
+      60   -157123.52     110.7121    263.98156    254.74153    245.51187 
+      70   -157376.32    950.69656    282.76762    281.88334    281.01053 
+      80   -157514.73      938.871    295.15551    298.97678    302.81021 
+      90   -157358.91    846.54131    301.11637    306.62978    312.15567 
+     100   -157617.35    813.06825    309.19172     313.0973    317.01562 
+Loop time of 9.21018 on 1 procs (1 MPI x 1 OpenMP) for 50 steps with 24576 atoms
 
-Pair  time (%) = 6.46059 (82.9294)
-Bond  time (%) = 0.104252 (1.3382)
-Neigh time (%) = 0.76071 (9.76462)
-Comm  time (%) = 0.0817995 (1.04999)
-Outpt time (%) = 0.0689018 (0.884437)
-Other time (%) = 0.314214 (4.03331)
+Pair  time (%) = 7.83013 (85.016)
+Bond  time (%) = 0.107091 (1.16275)
+Neigh time (%) = 0.825094 (8.9585)
+Comm  time (%) = 0.0448318 (0.486763)
+Outpt time (%) = 0.0730863 (0.793538)
+Other time (%) = 0.329946 (3.58241)
 
 Nlocal:    24576 ave 24576 max 24576 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    22449 ave 22449 max 22449 min
+Nghost:    22454 ave 22454 max 22454 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    1.90704e+06 ave 1.90704e+06 max 1.90704e+06 min
+Neighs:    1.90652e+06 ave 1.90652e+06 max 1.90652e+06 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1907040
-Ave neighs/atom = 77.5977
+Total # of neighbors = 1906516
+Ave neighs/atom = 77.5763
 Ave special neighs/atom = 1.16667
 Neighbor list builds = 10
 Dangerous builds = 0
@@ -164,37 +169,38 @@ Dangerous builds = 0
 fix		barostat all press/berendsen aniso 1 1 1000 modulus 21740
 
 run		100
-Memory usage per processor = 32.2923 Mbytes
+WARNING: Inconsistent image flags (../domain.cpp:594)
+Memory usage per processor = 33.7449 Mbytes
 Step PotEng Press Temp totT rotT 
-     100   -158950.63    731.70564    304.87535    272.81305    240.76184 
-     110      -159240     581.8756    309.02414    280.80757    252.60243 
-     120   -159084.86    511.16969    309.45484    288.04027    266.63741 
-     130   -158886.83    526.15635    310.93182    294.86003    278.80024 
-     140   -158741.91    528.93894    311.73046     299.2277    286.73711 
-     150   -158722.74    493.75965    313.42618    303.94154    294.46926 
-     160   -158767.08    438.13373    316.09372    307.92823    299.77526 
-     170   -158611.06    429.16292    316.12011    310.01779    303.92809 
-     180   -158617.14    308.61558    318.78779    313.15486    307.53467 
-     190   -158466.48    284.04888    318.30494    313.65245    309.01273 
-     200   -158576.86    293.33674    321.12556    315.90404    310.69538 
-Loop time of 15.7434 on 1 procs for 100 steps with 24576 atoms
+     100   -157617.35    813.06825    309.19172     313.0973    317.01562 
+     110   -157951.72    615.45292    313.32024    312.93436    312.56121 
+     120   -157699.04    564.85238    312.28384    313.62397    314.97686 
+     130   -157552.97    531.18856     312.8201    316.49547    320.18373 
+     140   -157687.66    513.29015    317.17052    319.92129    322.68508 
+     150   -157419.11    519.19526    316.85735     319.6261    322.40787 
+     160   -157531.48     501.5533    320.19967    322.47938     324.7722 
+     170   -157597.99    420.46393    321.09696    323.43569    325.78758 
+     180   -157697.06    351.81037     324.3525    324.89935    325.45941 
+     190   -157683.64    315.09871    322.50855    323.17356    323.85172 
+     200   -157669.57    288.32185    321.77749       322.78    323.79565 
+Loop time of 18.6088 on 1 procs (1 MPI x 1 OpenMP) for 100 steps with 24576 atoms
 
-Pair  time (%) = 12.8737 (81.7721)
-Bond  time (%) = 0.228323 (1.45028)
-Neigh time (%) = 1.75439 (11.1437)
-Comm  time (%) = 0.152065 (0.965897)
-Outpt time (%) = 0.0694458 (0.441112)
-Other time (%) = 0.665456 (4.2269)
+Pair  time (%) = 15.5781 (83.7137)
+Bond  time (%) = 0.263758 (1.41738)
+Neigh time (%) = 1.90583 (10.2415)
+Comm  time (%) = 0.0922079 (0.495506)
+Outpt time (%) = 0.0746417 (0.401109)
+Other time (%) = 0.694262 (3.73082)
 
 Nlocal:    24576 ave 24576 max 24576 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    22334 ave 22334 max 22334 min
+Nghost:    22274 ave 22274 max 22274 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    1.87174e+06 ave 1.87174e+06 max 1.87174e+06 min
+Neighs:    1.86733e+06 ave 1.86733e+06 max 1.86733e+06 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1871741
-Ave neighs/atom = 76.1613
+Total # of neighbors = 1867327
+Ave neighs/atom = 75.9817
 Ave special neighs/atom = 1.16667
 Neighbor list builds = 23
 Dangerous builds = 0
