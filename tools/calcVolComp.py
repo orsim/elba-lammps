@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: calcVolComp.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a file containing the time evolution of the simulation
 #          box volume and calculates the corresponding volume
 #          compressibility (bulk) modulus

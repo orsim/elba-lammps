@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: rdf2dat.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a LAMMPS output file containing radial distribution
 #          function g(r) data and sorts such data in |r|g| format
 # Syntax: rdf2dat.py inputFile 

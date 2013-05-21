@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: calcNeighFrac.py
-# Author: Mario Orsi (orsimario at gmail.com)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a LAMMPS ".trj" trajectory (dump) file and, for a
 #          "main" type "i", calculates the fraction of nearest
 #          neighbors of type "i" over the total number of neighbors
@@ -18,7 +18,8 @@
 #          coordinates)
 # Syntax: calcNeighFrac.py trjFile [upper|lower] typeMain typeOther
 # Example: calcNeighFrac.py dump1000.trj 2 7
-# Reference: de Vries et al, J Phys Chem B 2004, 108, 2454
+# References: - Orsi & Essex, Faraday Discuss 2013, 161, 249
+#             - de Vries et al, J Phys Chem B 2004, 108, 2454
 
 import sys, string, linecache
 from math import sqrt

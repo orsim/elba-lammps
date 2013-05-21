@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: press2surfTens.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Calculates the surface tension using the standard formula:
 #          0.5*Lz*(Pzz-0.5(Pxx+Pyy))
 # Syntax: press2surfTens.py Lz Pxx Pyy Pzz

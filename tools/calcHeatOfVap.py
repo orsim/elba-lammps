@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
 # Script: calcHeatOfVap.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Calculates (molar) heat of vaporization from intermolecular
 #          potential energy per mole U and temperature T
 # Syntax: calcHeatOfVap.py U T
 #         U = intermolecular potential energy per mole [kcal/mol]
 #         T = temperature [K]
 # Examples: calcHeatOfVap.py -10 298
-# Notes: - Benchmark values for the heat of vaporization at 298 K:
+# Notes: - Benchmark values for the heat of vaporization of water at 298 K:
 #        i) 11.0 kcal/mol from 'classical calculation' [1,2]
 #        ii) 10.52 kcal/mol from experiment [3]
 #        - Some workers include quantum corrections [4], yet others

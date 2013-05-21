@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Script: calcHeatCap.py
-# Author: Mario Orsi (orsimario at gmail.com, www.soton.ac.uk/~orsi)
+# Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Calculates (molar) heat capacity at constant pressure
 #          from total energy per molecule E
 # Syntax: calcHeatCap.py E1 E2 T1 T2
