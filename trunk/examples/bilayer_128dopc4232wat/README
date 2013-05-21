@@ -14,7 +14,7 @@ data can also be used to calculate compressibility moduli - see the
 'calcAreaComp.py' and 'calcVolComp.py' tools in the 'tools/' dir.
 
 References:
-- Orsi & Essex, Faraday Discuss, submitted
+- Orsi & Essex, Faraday Discuss 161, 249 (2013)
 - Orsi & Essex, PLoS ONE 6, e28637 (2011)
 - Orsi et al, J Phys: Condens Matter 22, 155106 (2010)
 
