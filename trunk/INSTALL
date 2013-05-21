@@ -1,0 +1,10 @@
+*** Installing LAMMPS ***
+
+Detailed information on how to build LAMMPS can be found on the official
+website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
+read the official LAMMPS compilation instructions. 
+
+More specific guidelines used in the Orsi group are available here:
+http://www.orsi.sems.qmul.ac.uk/install.html
+
+Mario Orsi (m.orsi@qmul.ac.uk)
