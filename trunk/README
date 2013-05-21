@@ -5,8 +5,11 @@ functionalities to setup, run and analyze molecular dynamics simulations
 of systems modeled with the ELBA force field.
 
 The ELBA model is described in the following paper:
-- Orsi & Essex, The ELBA force field for coarse-grain modeling of lipid 
-  membranes, PLoS ONE 6: e28637 (2011).
+- Orsi M, Essex JW (2013) Physical properties of mixed bilayers containing 
+lamellar and nonlamellar lipids: insights from coarse-grain molecular 
+dynamics simulations, Faraday Discussions 161: 249. 
+- Orsi M, Essex JW (2011) The ELBA force field for coarse-grain modeling of 
+lipid membranes, PLoS ONE 6: e28637.
 
 The various folders in the ELBA-LAMMPS toolkit contain usage information 
 in the form of README files. 
@@ -26,4 +29,4 @@ in the form of README files.
 
 - viz: status files for visualization of ELBA systems with VMD
 
-Mario Orsi (orsimario@gmail.com)
+Mario Orsi (m.orsi@qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
