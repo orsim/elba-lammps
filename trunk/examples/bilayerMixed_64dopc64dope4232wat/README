@@ -1,8 +1,5 @@
 This example involves the simulation of a mixed DOPC:DOPE 1:1 bilayer.
-
 .1 The system is generated and equilibrated.
 .2 Production run.
-
 This example also shows how to restart ELBA simulations.
-
-Reference: Orsi & Essex, Faraday Discuss, submitted
+Reference: Orsi & Essex, Faraday Discuss, 161: 249 (2013)

@@ -1,7 +1,9 @@
-LAMMPS (28 May 2012)
+LAMMPS (14 May 2013)
+WARNING: OMP_NUM_THREADS environment is not set. (../comm.cpp:100)
+  using 1 OpenMP thread(s) per MPI task
 read_restart    restart.*
-  orthogonal box = (-7.3761 -7.3761 -33.2827) to (58.3761 58.3761 33.2827)
-  2 by 2 by 3 MPI processor grid
+  orthogonal box = (-7.51382 -7.51382 -33.0611) to (58.5138 58.5138 33.0611)
+  1 by 2 by 2 MPI processor grid
   6016 atoms
   1792 bonds
   2048 angles
@@ -74,12 +76,12 @@ angle_coeff    5  dipole           1.195    0.00
 reset_timestep  0
 
 variable	nLips equal 128 # total number of lipids
-variable	nWats equal 4096 # total number of waters 
+variable	nWats equal 4096 # total number of waters
 variable	watVol equal 30.0 # water molecular volume (~30 A^3)
-variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m 
+variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m
 
 variable	Nprd equal 1000000 # production
-variable	Nthe equal 100000 
+variable	Nthe equal 100000
 variable	Ndum equal 100000
 variable	Ne equal 10
 variable	Nr equal 100000
@@ -125,18 +127,18 @@ dump_modify	trj sort id pad 9
 # compute and average area and volume per lipid:
 variable	lipArea equal lx*ly/(${nLips}/2)
 variable	lipArea equal lx*ly/(128/2)
-fix		lipArea lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipArea 
-fix		lipArea lip ave/time 10 ${Nthe_e} ${Nthe} v_lipArea 
-fix		lipArea lip ave/time 10 10000 ${Nthe} v_lipArea 
-fix		lipArea lip ave/time 10 10000 100000 v_lipArea 
+fix		lipArea lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipArea
+fix		lipArea lip ave/time 10 ${Nthe_e} ${Nthe} v_lipArea
+fix		lipArea lip ave/time 10 10000 ${Nthe} v_lipArea
+fix		lipArea lip ave/time 10 10000 100000 v_lipArea
 variable	lipVol equal (vol-(${nWats}*${watVol}))/${nLips}
 variable	lipVol equal (vol-(4096*${watVol}))/${nLips}
 variable	lipVol equal (vol-(4096*30))/${nLips}
 variable	lipVol equal (vol-(4096*30))/128
-fix		lipVol lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipVol 
-fix		lipVol lip ave/time 10 ${Nthe_e} ${Nthe} v_lipVol 
-fix		lipVol lip ave/time 10 10000 ${Nthe} v_lipVol 
-fix		lipVol lip ave/time 10 10000 100000 v_lipVol 
+fix		lipVol lip ave/time ${Ne} ${Nthe_e} ${Nthe} v_lipVol
+fix		lipVol lip ave/time 10 ${Nthe_e} ${Nthe} v_lipVol
+fix		lipVol lip ave/time 10 10000 ${Nthe} v_lipVol
+fix		lipVol lip ave/time 10 10000 100000 v_lipVol
 
 # compute and average pressure:
 variable	P equal press
@@ -147,18 +149,18 @@ fix 		P all ave/time 10 10000 100000 v_P
 
 # compute and average total (translational + rotational) temperature:
 compute 	tempTot all temp/sphere dof all
-fix 		tempTot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempTot 
-fix 		tempTot all ave/time 10 ${Nthe_e} ${Nthe} c_tempTot 
-fix 		tempTot all ave/time 10 10000 ${Nthe} c_tempTot 
-fix 		tempTot all ave/time 10 10000 100000 c_tempTot 
+fix 		tempTot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempTot
+fix 		tempTot all ave/time 10 ${Nthe_e} ${Nthe} c_tempTot
+fix 		tempTot all ave/time 10 10000 ${Nthe} c_tempTot
+fix 		tempTot all ave/time 10 10000 100000 c_tempTot
 #compute_modify  tempTot extra 3 # default -> no effect
 
 # compute and average rotational temperature:
 compute 	tempRot all temp/sphere dof rotate
-fix 		tempRot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempRot 
-fix 		tempRot all ave/time 10 ${Nthe_e} ${Nthe} c_tempRot 
-fix 		tempRot all ave/time 10 10000 ${Nthe} c_tempRot 
-fix 		tempRot all ave/time 10 10000 100000 c_tempRot 
+fix 		tempRot all ave/time ${Ne} ${Nthe_e} ${Nthe} c_tempRot
+fix 		tempRot all ave/time 10 ${Nthe_e} ${Nthe} c_tempRot
+fix 		tempRot all ave/time 10 10000 ${Nthe} c_tempRot
+fix 		tempRot all ave/time 10 10000 100000 c_tempRot
 
 thermo_style custom step press f_P temp f_tempTot f_tempRot f_lipArea f_lipVol
 #thermo_modify   temp tempTot
@@ -213,16 +215,16 @@ fix 	numDensEst est ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		density/number u
 fix 	numDensEst est ave/spatial 10 100000 ${Nf} z center ${Dz} 		density/number units box file numDensEst.zProfile
 fix 	numDensEst est ave/spatial 10 100000 1000000 z center ${Dz} 		density/number units box file numDensEst.zProfile
 fix 	numDensEst est ave/spatial 10 100000 1000000 z center 1 		density/number units box file numDensEst.zProfile
-fix 	numDensTail tail ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile 
-fix 	numDensTail tail ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile 
-fix 	numDensTail tail ave/spatial 10 100000 ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile 
-fix 	numDensTail tail ave/spatial 10 100000 1000000 z center ${Dz} 		density/number units box file numDensTail.zProfile 
-fix 	numDensTail tail ave/spatial 10 100000 1000000 z center 1 		density/number units box file numDensTail.zProfile 
-fix 	numDensAmi ami ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensAmi.zProfile 
-fix 	numDensAmi ami ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensAmi.zProfile 
-fix 	numDensAmi ami ave/spatial 10 100000 ${Nf} z center ${Dz} 		density/number units box file numDensAmi.zProfile 
-fix 	numDensAmi ami ave/spatial 10 100000 1000000 z center ${Dz} 		density/number units box file numDensAmi.zProfile 
-fix 	numDensAmi ami ave/spatial 10 100000 1000000 z center 1 		density/number units box file numDensAmi.zProfile 
+fix 	numDensTail tail ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile
+fix 	numDensTail tail ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile
+fix 	numDensTail tail ave/spatial 10 100000 ${Nf} z center ${Dz} 		density/number units box file numDensTail.zProfile
+fix 	numDensTail tail ave/spatial 10 100000 1000000 z center ${Dz} 		density/number units box file numDensTail.zProfile
+fix 	numDensTail tail ave/spatial 10 100000 1000000 z center 1 		density/number units box file numDensTail.zProfile
+fix 	numDensAmi ami ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensAmi.zProfile
+fix 	numDensAmi ami ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		density/number units box file numDensAmi.zProfile
+fix 	numDensAmi ami ave/spatial 10 100000 ${Nf} z center ${Dz} 		density/number units box file numDensAmi.zProfile
+fix 	numDensAmi ami ave/spatial 10 100000 1000000 z center ${Dz} 		density/number units box file numDensAmi.zProfile
+fix 	numDensAmi ami ave/spatial 10 100000 1000000 z center 1 		density/number units box file numDensAmi.zProfile
 
 compute		stpa all stress/atom
 fix	stress all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] 		units box file stress.zProfile
@@ -267,32 +269,32 @@ fix	stressVir all ave/spatial 10 100000 1000000 z center ${Dz} 		c_stv[1] c_stv[
 fix	stressVir all ave/spatial 10 100000 1000000 z center 1 		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] 		units box file stressVir.zProfile
 
 compute		chgHead head property/atom q
-fix 	qDensHead head ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
-fix 	qDensHead head ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
-fix 	qDensHead head ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
-fix 	qDensHead head ave/spatial 10 100000 1000000 z center ${Dz} 		c_chgHead units box file qDensHead.zProfile 
-fix 	qDensHead head ave/spatial 10 100000 1000000 z center 1 		c_chgHead units box file qDensHead.zProfile 
+fix 	qDensHead head ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile
+fix 	qDensHead head ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile
+fix 	qDensHead head ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_chgHead units box file qDensHead.zProfile
+fix 	qDensHead head ave/spatial 10 100000 1000000 z center ${Dz} 		c_chgHead units box file qDensHead.zProfile
+fix 	qDensHead head ave/spatial 10 100000 1000000 z center 1 		c_chgHead units box file qDensHead.zProfile
 
 compute		dipGly gly property/atom muz
-fix 	muzGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
-fix 	muzGly gly ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
-fix 	muzGly gly ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
-fix 	muzGly gly ave/spatial 10 100000 1000000 z center ${Dz} 		c_dipGly units box file muzGly.zProfile 
-fix 	muzGly gly ave/spatial 10 100000 1000000 z center 1 		c_dipGly units box file muzGly.zProfile 
+fix 	muzGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile
+fix 	muzGly gly ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile
+fix 	muzGly gly ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_dipGly units box file muzGly.zProfile
+fix 	muzGly gly ave/spatial 10 100000 1000000 z center ${Dz} 		c_dipGly units box file muzGly.zProfile
+fix 	muzGly gly ave/spatial 10 100000 1000000 z center 1 		c_dipGly units box file muzGly.zProfile
 
 compute		dipEst est property/atom muz
-fix 	muzEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
-fix 	muzEst est ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
-fix 	muzEst est ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
-fix 	muzEst est ave/spatial 10 100000 1000000 z center ${Dz} 		c_dipEst units box file muzEst.zProfile 
-fix 	muzEst est ave/spatial 10 100000 1000000 z center 1 		c_dipEst units box file muzEst.zProfile 
+fix 	muzEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile
+fix 	muzEst est ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile
+fix 	muzEst est ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_dipEst units box file muzEst.zProfile
+fix 	muzEst est ave/spatial 10 100000 1000000 z center ${Dz} 		c_dipEst units box file muzEst.zProfile
+fix 	muzEst est ave/spatial 10 100000 1000000 z center 1 		c_dipEst units box file muzEst.zProfile
 
 compute		dipWat wat property/atom muz
-fix 	muzWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
-fix 	muzWat wat ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
-fix 	muzWat wat ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
-fix 	muzWat wat ave/spatial 10 100000 1000000 z center ${Dz} 		c_dipWat units box file muzWat.zProfile 
-fix 	muzWat wat ave/spatial 10 100000 1000000 z center 1 		c_dipWat units box file muzWat.zProfile 
+fix 	muzWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile
+fix 	muzWat wat ave/spatial 10 ${Nr} ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile
+fix 	muzWat wat ave/spatial 10 100000 ${Nf} z center ${Dz} 		c_dipWat units box file muzWat.zProfile
+fix 	muzWat wat ave/spatial 10 100000 1000000 z center ${Dz} 		c_dipWat units box file muzWat.zProfile
+fix 	muzWat wat ave/spatial 10 100000 1000000 z center 1 		c_dipWat units box file muzWat.zProfile
 
 compute		msd gly msd com yes
 fix 		msd gly ave/time 1 1 ${Ne} c_msd[4] file gly.msd
@@ -302,39 +304,39 @@ restart		${Nprd} restart
 restart		1000000 restart
 run		${Nprd}
 run		1000000
-Memory usage per processor = 8.1869 Mbytes
+Memory usage per processor = 8.89395 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
-       0    47.803628            0    300.70614            0            0            0            0 
-  100000   -22.037676   0.72008073    304.72967    303.18051    302.93844    67.885465     1293.075 
-  200000    8.0252822    1.4256737    308.94398    303.06246    302.77243    67.999722    1292.4398 
-  300000    24.001267    1.5012253     309.9478    303.27118    303.07143     68.42003    1293.0968 
-  400000   -35.814268   0.69799762    305.14405    303.14411    302.87902    69.902116    1291.7595 
-  500000    52.920896    1.2689734    297.17382    303.13834    302.78607    70.566515    1293.6023 
-  600000    104.74195    1.0433388    303.35194    303.21021     302.9847    70.060536    1292.8211 
-  700000   -122.93293    1.1857414    307.17181    303.26658    302.89482    69.196351    1293.9435 
-  800000   -30.258227    1.1259779    305.10926    303.19151    302.92052    69.772433     1291.823 
-  900000   -110.36338   0.86138175    301.32574    303.04482    302.70025    69.875578    1291.8568 
- 1000000    31.239382   0.99181414    303.10449    303.22995    302.97051    69.605935    1293.3406 
-Loop time of 9323.75 on 12 procs for 1000000 steps with 6016 atoms
+       0     72.39264            0    305.24948            0            0            0            0 
+  100000    8.2932274    1.0742236     302.0249    303.00106    303.10337    67.622477    1292.3633 
+  200000   -12.376595    1.0334564    301.27776    302.89135    303.03216    68.338982    1290.8315 
+  300000    45.181057    1.0320607    306.15717      302.938    303.02404    67.951075    1291.4707 
+  400000   -23.348629    1.1486065    309.63229    302.92392    303.16454    68.021806    1292.2214 
+  500000   -70.734442    1.3123001    301.06514    302.94207      303.192    68.865889    1291.9892 
+  600000   -52.361162    1.1191239    303.66666    302.98223     303.1031    69.377699    1292.9392 
+  700000    102.09755    1.0353245    303.59893    303.02825     303.2738     68.86289     1292.259 
+  800000    15.839093   0.69860289    304.18922    303.01532    303.19678     68.29987    1290.1854 
+  900000   -51.455195    1.0904667    301.38287    303.03258    303.20967    68.693697     1291.061 
+ 1000000   -25.995475    1.4115927     300.4252    302.93371    303.15711    68.280004    1289.5181 
+Loop time of 22296.3 on 4 procs (4 MPI x 1 OpenMP) for 1000000 steps with 6016 atoms
 
-Pair  time (%) = 4360.76 (46.7704)
-Bond  time (%) = 44.493 (0.4772)
-Neigh time (%) = 433.956 (4.6543)
-Comm  time (%) = 3944.31 (42.3039)
-Outpt time (%) = 0.165131 (0.00177108)
-Other time (%) = 540.069 (5.7924)
+Pair  time (%) = 15858.9 (71.128)
+Bond  time (%) = 124.249 (0.557261)
+Neigh time (%) = 1402.29 (6.28931)
+Comm  time (%) = 3900.02 (17.4918)
+Outpt time (%) = 0.172331 (0.000772911)
+Other time (%) = 1010.67 (4.53289)
 
-Nlocal:    501.333 ave 622 max 294 min
-Histogram: 4 0 0 0 0 0 0 0 2 6
-Nghost:    3023.83 ave 3348 max 2416 min
-Histogram: 4 0 0 0 0 0 0 0 0 8
-Neighs:    55246.2 ave 88419 max 16507 min
-Histogram: 4 0 0 0 0 1 3 0 0 4
+Nlocal:    1504 ave 1527 max 1482 min
+Histogram: 1 0 1 0 0 0 1 0 0 1
+Nghost:    5392.5 ave 5418 max 5367 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    165888 ave 194960 max 135790 min
+Histogram: 1 1 0 0 0 0 0 0 1 1
 
-Total # of neighbors = 662955
-Ave neighs/atom = 110.199
+Total # of neighbors = 663552
+Ave neighs/atom = 110.298
 Ave special neighs/atom = 0.595745
-Neighbor list builds = 203383
+Neighbor list builds = 203246
 Dangerous builds = 0
 
 
