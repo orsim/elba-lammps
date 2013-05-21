@@ -2,13 +2,15 @@ This directory contains all versions of the ELBA force field. The general
 features of the ELBA model are described in this paper:
 
 - Orsi M, Essex JW (2011) The ELBA force field for coarse-grain modeling of 
-lipid membranes, PloS ONE 6(12): e28637. DOI:10.1371/journal.pone.0028637
+lipid membranes, PloS ONE 6(12): e28637. 
 
 In general, the ELBA force field is being constantly updated, extended 
 and improved, so using the most recent version is recommended. 
 
 The most recent version is elba-1.1, which is presented in this paper:
 
-- Orsi M, Essex JW (2012) [submitted to Faraday Discuss]
+- Orsi M, Essex JW (2013) Physical properties of mixed bilayers containing 
+lamellar and nonlamellar lipids: insights from coarse-grain molecular 
+dynamics simulations, Faraday Discussions 161: 249. 
 
-Mario Orsi (orsimario@gmail.com)
+Mario Orsi (m.orsi@qmul.ac.uk)

@@ -3,8 +3,10 @@ This is the most recent version, which all users are strongly advised to
 adopt.
 
 The elba-1.1 force field is presented in this paper:
-- Orsi and Essex, Faraday Discuss, submitted
+- Orsi M, Essex JW (2013) Physical properties of mixed bilayers containing 
+lamellar and nonlamellar lipids: insights from coarse-grain molecular 
+dynamics simulations, Faraday Discussions 161: 249. 
 See the supporting information of the paper for an easy-to-read table 
 collecting the elba-1.1 parameters.
 
-Mario Orsi (orsimario@gmail.com), May 2012
+Mario Orsi (m.orsi@qmul.ac.uk)
