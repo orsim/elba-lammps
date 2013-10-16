@@ -8,11 +8,11 @@ variable	nWats equal 4096 # total number of waters
 variable	watVol equal 30.0 # water molecular volume (~30 A^3)
 variable	atmA__in__mN_m equal 0.01013 # 1 atm*A = 0.01013 mN/m 
 
-variable	Nprd equal 1000000 # production
-variable	Nthe equal 100000 
-variable	Ndum equal 100000
+variable	Nprd equal 10000 # production
+variable	Nthe equal 1000 
+variable	Ndum equal 1000
 variable	Ne equal 10
-variable	Nr equal 100000
+variable	Nr equal 1000
 variable	Nf equal ${Nprd}
 variable	Nthe_e equal ${Nthe}/${Ne}
 variable	Dz equal 1.0
