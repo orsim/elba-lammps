@@ -1,0 +1,82 @@
+# Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained 
+# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+
+units real
+atom_style hybrid sphere dipole
+
+lattice	sc 3.1	      
+region box block -10 10 -10 10 -10 10 
+create_box 1 box
+create_atoms 1 box
+
+set group all dipole/random 1234 0.541 # moment/(e*angstrom)
+
+pair_style lj/sf/dipole/sf 12. # rCut/angstrom
+pair_coeff 1 1 0.55 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+variable Mass equal 18.0153 # g/mol
+mass 1 ${Mass}
+set group all mass ${Mass} 
+
+variable Inertia equal 30.0 # amu*A^2
+variable Diameter equal 2*sqrt(5*${Inertia}/(2*${Mass}))
+set group all diameter ${Diameter} # => moment of inertia 
+
+variable Nrun equal 2000
+variable Nf equal ${Nrun}/20
+variable Ne equal 10
+variable Nr equal ${Nf}/${Ne}
+variable Nr_RDF equal 0.5*${Nrun}/${Ne}
+variable Ndump equal ${Nrun}/2
+
+variable watMoleMass equal 18.0153 # /(g/mol)
+variable nAvog equal 6.0221415e23 # Avogadro's number
+variable watMoleculeMass equal (${watMoleMass}/${nAvog}) # /(g/molecule)
+variable A3_in_cm3 equal 1e-24 # Angstrom^3 in cm^3
+
+variable Text equal 298
+variable Pext equal 1.0
+
+velocity all create ${Text} 1234
+
+neighbor 2 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep 10
+
+fix integrate all nve/sphere update dipole
+fix thermostat all langevin ${Text} ${Text} 1000 1234 omega yes zero yes
+fix barostat all press/berendsen iso ${Pext} ${Pext} 1000 modulus 21740
+fix removeMomentum all momentum 1 linear 1 1 1
+
+compute totT all temp/sphere dof all
+fix totT all ave/time ${Ne} ${Nr} ${Nf} c_totT 
+
+compute	rotT all temp/sphere dof rotate
+fix rotT all ave/time ${Ne} ${Nr} ${Nf} c_rotT 
+
+variable P equal press
+fix PAve all ave/time ${Ne} ${Nr} ${Nf} v_P 
+
+variable PE equal pe
+fix PEAve all ave/time ${Ne} ${Nr} ${Nf} v_PE file out.PEAve
+
+variable Dens equal atoms*${watMoleculeMass}/(vol*${A3_in_cm3})
+fix DensAve all ave/time ${Ne} ${Nr} ${Nf} v_Dens file out.DensAve
+
+compute	MSD all msd com yes
+fix MSD all ave/time 1 1 100 c_MSD[4] file out.MSD
+
+compute RDF all rdf 1000
+fix RDF all ave/time ${Ne} ${Nr_RDF} ${Nrun} c_RDF file out.RDF mode vector
+
+thermo_style custom step temp f_totT f_rotT press f_PAve pe f_PEAve &
+	     f_DensAve c_MSD[4]   
+thermo_modify norm yes flush yes
+thermo ${Nf}
+
+dump trj all custom ${Ndump} dump.*.trj id type x y z mux muy muz
+dump_modify trj sort id pad 6
+
+run ${Nrun}
+
