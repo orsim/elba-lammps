@@ -1,0 +1,172 @@
+LAMMPS (30 Sep 2013)
+# Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained
+# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+
+units real
+atom_style hybrid sphere dipole
+
+lattice	sc 3.1
+Lattice spacing in x,y,z = 3.1 3.1 3.1
+region box block -10 10 -10 10 -10 10
+create_box 1 box
+Created orthogonal box = (-31 -31 -31) to (31 31 31)
+  1 by 1 by 1 MPI processor grid
+create_atoms 1 box
+Created 8000 atoms
+
+set group all dipole/random 1234 0.541 # moment/(e*angstrom)
+  8000 settings made for dipole/random
+
+pair_style lj/sf/dipole/sf 12. # rCut/angstrom
+pair_coeff 1 1 0.55 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+variable Mass equal 18.0153 # g/mol
+mass 1 ${Mass}
+mass 1 18.015299999999999869
+set group all mass ${Mass}
+set group all mass 18.015299999999999869
+  8000 settings made for mass
+
+variable Inertia equal 30.0 # amu*A^2
+variable Diameter equal 2*sqrt(5*${Inertia}/(2*${Mass}))
+variable Diameter equal 2*sqrt(5*30/(2*${Mass}))
+variable Diameter equal 2*sqrt(5*30/(2*18.015299999999999869))
+set group all diameter ${Diameter} # => moment of inertia
+set group all diameter 4.0807489547189668144 
+  8000 settings made for diameter
+
+variable Nrun equal 2000
+variable Nf equal  ${Nrun}/20
+variable Nf equal  2000/20
+variable Ne equal 10
+variable Nr equal ${Nf}/${Ne}
+variable Nr equal 100/${Ne}
+variable Nr equal 100/10
+variable Nr_RDF equal 0.5*${Nrun}/${Ne}
+variable Nr_RDF equal 0.5*2000/${Ne}
+variable Nr_RDF equal 0.5*2000/10
+variable Ndump equal ${Nrun}/2
+variable Ndump equal 2000/2
+
+variable watMoleMass equal 18.0153 # /(g/mol)
+variable nAvog equal 6.0221415e23 # Avogadro's number
+variable watMoleculeMass equal (${watMoleMass}/${nAvog}) # /(g/molecule)
+variable watMoleculeMass equal (18.015299999999999869/${nAvog}) 
+variable watMoleculeMass equal (18.015299999999999869/6.02214150000000031e+23) 
+variable A3_in_cm3 equal 1e-24 # Angstrom^3 in cm^3
+
+variable Text equal 298
+variable Pext equal 1.0
+
+velocity all create ${Text} 1234
+velocity all create 298 1234
+
+neighbor 2 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep 10
+
+fix integrate all nve/sphere update dipole
+fix thermostat all langevin ${Text} ${Text} 1000 1234 omega yes zero yes
+fix thermostat all langevin 298 ${Text} 1000 1234 omega yes zero yes
+fix thermostat all langevin 298 298 1000 1234 omega yes zero yes
+fix barostat all press/berendsen iso ${Pext} ${Pext} 1000 modulus 21740
+fix barostat all press/berendsen iso 1 ${Pext} 1000 modulus 21740
+fix barostat all press/berendsen iso 1 1 1000 modulus 21740
+fix removeMomentum all momentum 1 linear 1 1 1
+
+compute totT all temp/sphere dof all
+fix totT all ave/time ${Ne} ${Nr} ${Nf} c_totT
+fix totT all ave/time 10 ${Nr} ${Nf} c_totT
+fix totT all ave/time 10 10 ${Nf} c_totT
+fix totT all ave/time 10 10 100 c_totT
+
+compute	rotT all temp/sphere dof rotate
+fix rotT all ave/time ${Ne} ${Nr} ${Nf} c_rotT
+fix rotT all ave/time 10 ${Nr} ${Nf} c_rotT
+fix rotT all ave/time 10 10 ${Nf} c_rotT
+fix rotT all ave/time 10 10 100 c_rotT
+
+variable P equal press
+fix PAve all ave/time ${Ne} ${Nr} ${Nf} v_P
+fix PAve all ave/time 10 ${Nr} ${Nf} v_P
+fix PAve all ave/time 10 10 ${Nf} v_P
+fix PAve all ave/time 10 10 100 v_P
+
+variable PE equal pe
+fix PEAve all ave/time ${Ne} ${Nr} ${Nf} v_PE file out.PEAve
+fix PEAve all ave/time 10 ${Nr} ${Nf} v_PE file out.PEAve
+fix PEAve all ave/time 10 10 ${Nf} v_PE file out.PEAve
+fix PEAve all ave/time 10 10 100 v_PE file out.PEAve
+
+variable Dens equal atoms*${watMoleculeMass}/(vol*${A3_in_cm3})
+variable Dens equal atoms*2.9915105780892061999e-23/(vol*${A3_in_cm3})
+variable Dens equal atoms*2.9915105780892061999e-23/(vol*9.999999999999999237e-25)
+fix DensAve all ave/time ${Ne} ${Nr} ${Nf} v_Dens file out.DensAve
+fix DensAve all ave/time 10 ${Nr} ${Nf} v_Dens file out.DensAve
+fix DensAve all ave/time 10 10 ${Nf} v_Dens file out.DensAve
+fix DensAve all ave/time 10 10 100 v_Dens file out.DensAve
+
+compute	MSD all msd com yes
+fix MSD all ave/time 1 1 100 c_MSD[4] file out.MSD
+
+compute RDF all rdf 1000
+fix RDF all ave/time ${Ne} ${Nr_RDF} ${Nrun} c_RDF file out.RDF mode vector
+fix RDF all ave/time 10 ${Nr_RDF} ${Nrun} c_RDF file out.RDF mode vector
+fix RDF all ave/time 10 100 ${Nrun} c_RDF file out.RDF mode vector
+fix RDF all ave/time 10 100 2000 c_RDF file out.RDF mode vector
+
+thermo_style custom step temp f_totT f_rotT press f_PAve pe f_PEAve 	     f_DensAve c_MSD[4]
+thermo_modify norm yes flush yes
+thermo ${Nf}
+thermo 100
+
+dump trj all custom ${Ndump} dump.*.trj id type x y z mux muy muz
+dump trj all custom 1000 dump.*.trj id type x y z mux muy muz
+dump_modify trj sort id pad 6
+
+run ${Nrun}
+run 2000
+Memory usage per processor = 16.829 Mbytes
+Step Temp totT rotT Press PAve PotEng PEAve DensAve MSD[4] 
+       0          298            0            0    14797.146            0   -2.6097067            0            0 1.1646432e-26 
+     100    383.92124    474.69551    458.71373   -837.18693    2093.6522   -8.2586306   -7.7168162   0.88814161    7.7161049 
+     200    326.61214    332.07796    316.98725   -791.80869    -979.0591   -8.7355935   -8.5706283   0.89724049     9.517935 
+     300    310.07651    311.34372    306.61044   -626.64938   -809.58327   -8.9924883   -8.9039062   0.93664889    10.806867 
+     400    310.91258    305.80634    301.59318   -515.10986   -458.94147   -9.1451813   -9.0875746   0.96443719    12.222983 
+     500    306.23879    303.12431    301.06556   -161.97035   -225.22853   -9.2218598   -9.1882975   0.98027366    13.691753 
+     600    298.84124    301.01782    301.30472   -122.38514   -163.18335   -9.2515454   -9.2434087   0.98824705    15.055964 
+     700    297.37809    298.90833    297.78691    36.535035   -52.383771   -9.2800261   -9.2704744   0.99255086    16.443383 
+     800    301.75704    298.65468    298.98912   -31.373064    -39.42397   -9.2868783   -9.2867946   0.99554177     17.78504 
+     900    300.80167    298.66851      298.295   -118.16992    12.582587   -9.2994697   -9.2907119   0.99584169    18.992661 
+    1000    298.54029    298.57322    298.70141   -112.89447   -77.402773   -9.3010467    -9.302781   0.99768787    20.249177 
+    1100    299.87682    299.38915    299.65191   -11.752193   -12.115829   -9.3125314   -9.3099086   0.99909976    21.379245 
+    1200    294.65237    297.90248    297.87744     50.09145    11.538642   -9.2996578   -9.3171809    0.9995626     22.65708 
+    1300    301.47577     298.1635    300.58601   -50.682479   -11.410329   -9.3285475   -9.3247099   0.99975123    24.032977 
+    1400    302.23898    299.09498    300.15545   -238.36273    20.083641   -9.3284351   -9.3115305   0.99961912    25.320205 
+    1500    302.09792    299.16295    299.28988    49.615662      10.5862   -9.3343528   -9.3240931    1.0010445    26.565076 
+    1600    302.36632    298.53257    297.45952   -159.50331     11.82954   -9.3114323   -9.3141616   0.99889873     27.88416 
+    1700    295.09404    297.77574    298.26284    39.302847    42.141588   -9.3007776   -9.3045032    0.9990613    29.335988 
+    1800    295.52398    297.68038    296.78683    46.190595   -11.240365   -9.3096169   -9.3085456   0.99940879     30.68776 
+    1900    299.79804    298.64072    297.58611   -10.728274   -40.676712    -9.288828   -9.3180342   0.99997184    32.023657 
+    2000     300.6031    301.22416    300.86923    45.320737    21.136424   -9.2959209   -9.2958034   0.99913507    33.140367 
+Loop time of 296.392 on 1 procs for 2000 steps with 8000 atoms
+
+Pair  time (%) = 265.33 (89.5201)
+Neigh time (%) = 19.2917 (6.50886)
+Comm  time (%) = 1.25726 (0.424187)
+Outpt time (%) = 0.0495899 (0.0167312)
+Other time (%) = 10.463 (3.53014)
+
+Nlocal:    8000 ave 8000 max 8000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    16467 ave 16467 max 16467 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.52958e+06 ave 1.52958e+06 max 1.52958e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 1529576
+Ave neighs/atom = 191.197
+Neighbor list builds = 300
+Dangerous builds = 0
+

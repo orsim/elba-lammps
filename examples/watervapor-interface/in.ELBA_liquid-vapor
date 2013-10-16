@@ -1,0 +1,92 @@
+# Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained 
+# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+
+units real
+atom_style hybrid sphere dipole
+
+lattice	sc 3.1
+region box block -10 10 -10 10 -10 10 
+create_box 1 box
+create_atoms 1 box
+
+variable zlo equal -2.0*lz
+variable zhi equal 2.0*lz
+change_box all z final ${zlo} ${zhi} units box
+
+set group all dipole/random 1234 0.541 # moment/(e*angstrom)
+
+pair_style lj/sf/dipole/sf 12. # rCut/angstrom
+pair_coeff 1 1 0.55 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+variable Mass equal 18.0153 # g/mol
+mass 1 ${Mass}
+set group all mass ${Mass} 
+
+variable Inertia equal 30.0 # amu*A^2
+variable Diameter equal 2*sqrt(5*${Inertia}/(2*${Mass}))
+set group all diameter ${Diameter} # => moment of inertia 
+
+variable Nblock equal 5000
+variable Nrun equal 2.0*${Nblock}
+variable Ndump equal ${Nrun}/2
+variable Ne equal 10
+variable Nr equal ${Nblock}/${Ne}
+variable Nf equal ${Nblock}
+variable Dz equal 0.1
+
+variable A_in_m equal 1e-10 # Angstrom in meter
+variable atm_in_Pa equal 101325 # note: 1 Pa = 1 N/m^2
+variable N_in_mN equal 1e3 # Newton in milliNewton
+variable convFac equal ${A_in_m}*${atm_in_Pa}*${N_in_mN}
+
+variable Text equal 300
+
+velocity all create ${Text} 1234
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep 10
+
+#fix loadBalance all balance 100 z 5 1.05
+
+fix integrate all nve/sphere update dipole
+fix thermostat all langevin ${Text} ${Text} 1000 1234 omega yes zero yes
+fix removeMomentum all momentum 1 linear 1 1 1
+
+variable P equal press
+fix PAve all ave/time ${Ne} ${Nr} ${Nf} v_P 
+
+compute totT all temp/sphere dof all
+fix totT all ave/time ${Ne} ${Nr} ${Nf} c_totT 
+
+compute	rotT all temp/sphere dof rotate
+fix rotT all ave/time ${Ne} ${Nr} ${Nf} c_rotT 
+
+variable xPress equal c_thermo_press[1] 
+variable yPress equal c_thermo_press[2] 
+variable zPress equal c_thermo_press[3]
+
+# Evaluate and average surface tension in mN/m:
+variable st equal 0.5*lz*(v_zPress-0.5*(v_xPress+v_yPress))*${convFac}
+fix st all ave/time ${Ne} ${Nr} ${Nf} v_st 
+
+variable xyArea equal lx*ly
+
+thermo_style custom step temp f_totT f_rotT press f_PAve v_xyArea lz f_st
+thermo_modify norm yes flush yes
+thermo ${Nf}
+
+fix numDens all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+    density/number units box file numDens.zProfile
+
+compute	dipWat all property/atom muz
+fix muzWat all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
+    c_dipWat units box file muzWat.zProfile 
+
+dump trj all custom ${Ndump} dump.*.trj id type x y z mux muy muz
+dump_modify trj sort id pad 6
+
+run ${Nrun}
+
+#write_restart restart.wat

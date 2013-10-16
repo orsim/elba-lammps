@@ -1,0 +1,196 @@
+LAMMPS (30 Sep 2013)
+# Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained
+# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+
+units real
+atom_style hybrid sphere dipole
+
+lattice	sc 3.1065
+Lattice spacing in x,y,z = 3.1065 3.1065 3.1065
+region box block -4 4 -4 4 -4 4
+create_box 1 box
+Created orthogonal box = (-12.426 -12.426 -12.426) to (12.426 12.426 12.426)
+  1 by 1 by 1 MPI processor grid
+create_atoms 1 box
+Created 512 atoms
+
+set group all dipole/random 12345678 0.541 # moment/(e*angstrom)
+  512 settings made for dipole/random
+
+pair_style lj/sf/dipole/sf 12. # rCut/angstrom
+pair_coeff 1 1 0.55 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+variable Mass equal 18.0153 # g/mol
+mass 1 ${Mass}
+mass 1 18.015299999999999869
+set group all mass ${Mass}
+set group all mass 18.015299999999999869
+  512 settings made for mass
+
+variable Inertia equal 30.0 # amu*A^2
+variable Diameter equal 2*sqrt(5*${Inertia}/(2*${Mass}))
+variable Diameter equal 2*sqrt(5*30/(2*${Mass}))
+variable Diameter equal 2*sqrt(5*30/(2*18.015299999999999869))
+set group all diameter ${Diameter} # => moment of inertia
+set group all diameter 4.0807489547189668144 
+  512 settings made for diameter
+
+variable Nequil equal 15000
+variable Nrun equal 3000
+variable Nthermo equal ${Nequil}/20
+variable Nthermo equal 15000/20
+variable Ne equal 10
+variable Nr equal ${Nthermo}/${Ne}
+variable Nr equal 750/${Ne}
+variable Nr equal 750/10
+variable Nf equal ${Nthermo}
+variable Nf equal 750
+
+variable Natoms equal atoms
+
+variable Text equal 298
+velocity all create ${Text} 1234
+velocity all create 298 1234
+
+neighbor 2 bin
+neigh_modify every 1 delay 0 check yes
+
+
+timestep 10.0
+
+fix integrate all nve/sphere update dipole
+fix thermostat all langevin ${Text} ${Text} 100 1234 zero yes
+fix thermostat all langevin 298 ${Text} 100 1234 zero yes
+fix thermostat all langevin 298 298 100 1234 zero yes
+
+compute totT all temp/sphere dof all
+compute_modify totT extra ${Natoms}
+compute_modify totT extra 512
+fix totT all ave/time ${Ne} ${Nr} ${Nf} c_totT
+fix totT all ave/time 10 ${Nr} ${Nf} c_totT
+fix totT all ave/time 10 75 ${Nf} c_totT
+fix totT all ave/time 10 75 750 c_totT
+
+compute	rotT all temp/sphere dof rotate
+compute_modify rotT extra ${Natoms}
+compute_modify rotT extra 512
+fix rotT all ave/time ${Ne} ${Nr} ${Nf} c_rotT
+fix rotT all ave/time 10 ${Nr} ${Nf} c_rotT
+fix rotT all ave/time 10 75 ${Nf} c_rotT
+fix rotT all ave/time 10 75 750 c_rotT
+
+compute keRot all erotate/sphere
+fix keRot all ave/time ${Ne} ${Nr} ${Nf} c_keRot
+fix keRot all ave/time 10 ${Nr} ${Nf} c_keRot
+fix keRot all ave/time 10 75 ${Nf} c_keRot
+fix keRot all ave/time 10 75 750 c_keRot
+
+variable ke equal ke
+fix keAve all ave/time ${Ne} ${Nr} ${Nf} v_ke
+fix keAve all ave/time 10 ${Nr} ${Nf} v_ke
+fix keAve all ave/time 10 75 ${Nf} v_ke
+fix keAve all ave/time 10 75 750 v_ke
+
+variable pe equal pe
+fix peAve all ave/time ${Ne} ${Nr} ${Nf} v_pe
+fix peAve all ave/time 10 ${Nr} ${Nf} v_pe
+fix peAve all ave/time 10 75 ${Nf} v_pe
+fix peAve all ave/time 10 75 750 v_pe
+
+variable etotal equal etotal
+fix etotAve all ave/time ${Ne} ${Nr} ${Nf} v_etotal
+fix etotAve all ave/time 10 ${Nr} ${Nf} v_etotal
+fix etotAve all ave/time 10 75 ${Nf} v_etotal
+fix etotAve all ave/time 10 75 750 v_etotal
+
+thermo_style custom step temp f_totT f_rotT press f_keRot f_keAve f_peAve 	     pe f_etotAve
+thermo_modify flush yes temp totT
+thermo ${Nthermo}
+thermo 750
+
+run ${Nequil}
+run 15000
+Memory usage per processor = 3.79235 Mbytes
+Step Temp totT rotT Press keRot keAve peAve PotEng etotAve 
+       0    178.45078            0            0    14172.845            0            0            0    -1299.751            0 
+     750    300.32665    344.32267    395.81097    763.49214     402.7178     875.8276   -4635.5728   -4802.8021   -3759.7452 
+    1500    313.37352    299.14829    301.02602      781.629    306.27887    760.92094   -4760.7646   -4739.3522   -3999.8437 
+    2250    302.66579     299.5794     301.0058    1630.8822     306.2583    762.01752   -4761.3634   -4731.2335   -3999.3459 
+    3000    304.36559    302.94345    308.30982    1302.4432    313.68977     770.5744   -4741.0278   -4777.8811   -3970.4534 
+    3750    294.98669     302.0846    307.19023    1543.0086    312.55064    768.38982   -4756.0409   -4739.3743   -3987.6511 
+    4500    279.12948    298.10085    299.06137    445.84042    304.27994    758.25664   -4768.4559   -4792.5191   -4010.1993 
+    5250    291.48366    298.14851    298.62251     445.3557    303.83342    758.37788   -4766.7369   -4769.3446    -4008.359 
+    6000    296.39474    300.84832    302.88357    516.92526    308.16884    765.24519   -4754.2611   -4755.5363   -3989.0159 
+    6750    296.99075    296.74392     298.7834    124.33596    303.99712    754.80513   -4785.8999    -4798.431   -4031.0947 
+    7500    306.87171    298.06269    299.28322    908.46856    304.50566    758.15959   -4769.1256   -4797.6394   -4010.9661 
+    8250    299.14978    295.78154    296.02555    721.30462    301.19115     752.3572   -4768.1063   -4710.1529   -4015.7491 
+    9000    282.40513    298.02137    297.31731    876.33741    302.50545    758.05448   -4769.0928   -4764.0996   -4011.0383 
+    9750    301.97595    296.75147    298.59776    1001.2842    303.80824    754.82433   -4767.7947   -4776.2384   -4012.9704 
+   10500    294.46422     299.0662    304.40725    757.10732    309.71911    760.71214   -4758.6475   -4756.9029   -3997.9353 
+   11250    296.58814    301.31994    304.74295    1248.4685    310.06066    766.44481   -4757.1855   -4695.9807   -3990.7407 
+   12000     289.0788    298.41494    300.00691    3.6608098    305.24198    759.05559   -4763.1989   -4781.0487   -4004.1433 
+   12750    298.06986    298.98154    298.76134    571.54986    303.97467    760.49678   -4765.1493   -4745.5254   -4004.6525 
+   13500     294.6033    295.21249     294.3919    861.52006    299.52899    750.90975    -4772.918   -4782.0149   -4022.0082 
+   14250    285.01465    296.40569     300.2367    1037.3177    305.47578    753.94481   -4768.5958   -4767.8588    -4014.651 
+   15000    294.07591    298.18856    300.02774    1213.5893    305.26318    758.47976   -4765.1972    -4731.557   -4006.7174 
+Loop time of 138.758 on 1 procs for 15000 steps with 512 atoms
+
+Pair  time (%) = 128.414 (92.5454)
+Neigh time (%) = 6.339 (4.5684)
+Comm  time (%) = 2.30457 (1.66086)
+Outpt time (%) = 0.00109601 (0.000789873)
+Other time (%) = 1.69916 (1.22455)
+
+Nlocal:    512 ave 512 max 512 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    4396 ave 4396 max 4396 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    97832 ave 97832 max 97832 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 97832
+Ave neighs/atom = 191.078
+Neighbor list builds = 1506
+Dangerous builds = 0
+
+unfix thermostat
+variable PE equal pe
+variable KE equal ke
+variable E equal etotal
+
+fix pe all print 1 "${PE}" file pe.txt screen no
+fix ke all print 1 "${KE}" file ke.txt screen no
+fix etot all print 1 "${E}" file etot.txt screen no
+
+run ${Nrun}
+run 3000
+Memory usage per processor = 3.79235 Mbytes
+Step Temp totT rotT Press keRot keAve peAve PotEng etotAve 
+   15000    294.07591    298.18856    300.02774    1213.5893    305.26318    758.47976   -4765.1972    -4731.557   -4006.7174 
+   15750    297.98717    300.82727    303.08882     2002.133    308.37767    765.19163   -4749.6526   -4742.2944    -3984.461 
+   16500    311.17691    302.45029    301.60454    886.34545    306.86749    769.31999    -4753.923   -4776.4006    -3984.603 
+   17250    310.60022    303.47286    309.23842    334.73889    314.63458    771.92104   -4756.4996   -4775.1815   -3984.5785 
+   18000    291.88676    301.25543    304.29875    972.47225    309.60872     766.2807   -4750.6376   -4726.0974   -3984.3569 
+Loop time of 36.7102 on 1 procs for 3000 steps with 512 atoms
+
+Pair  time (%) = 34.4479 (93.8374)
+Neigh time (%) = 1.51012 (4.11362)
+Comm  time (%) = 0.478402 (1.30318)
+Outpt time (%) = 0.00015974 (0.000435139)
+Other time (%) = 0.273633 (0.745385)
+
+Nlocal:    512 ave 512 max 512 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    4457 ave 4457 max 4457 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    97741 ave 97741 max 97741 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 97741
+Ave neighs/atom = 190.9
+Neighbor list builds = 355
+Dangerous builds = 0
+
+
+
+

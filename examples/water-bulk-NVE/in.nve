@@ -1,0 +1,86 @@
+# Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained 
+# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+
+units real
+atom_style hybrid sphere dipole
+
+lattice	sc 3.1065
+region box block -4 4 -4 4 -4 4 
+create_box 1 box
+create_atoms 1 box
+
+set group all dipole/random 12345678 0.541 # moment/(e*angstrom)
+
+pair_style lj/sf/dipole/sf 12. # rCut/angstrom
+pair_coeff 1 1 0.55 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
+
+variable Mass equal 18.0153 # g/mol
+mass 1 ${Mass}
+set group all mass ${Mass} 
+
+variable Inertia equal 30.0 # amu*A^2
+variable Diameter equal 2*sqrt(5*${Inertia}/(2*${Mass}))
+set group all diameter ${Diameter} # => moment of inertia 
+
+variable Nequil equal 15000
+variable Nrun equal 3000
+variable Nthermo equal ${Nequil}/20
+variable Ne equal 10
+variable Nr equal ${Nthermo}/${Ne}
+variable Nf equal ${Nthermo}
+
+variable Natoms equal atoms
+
+variable Text equal 298
+velocity all create ${Text} 1234
+
+neighbor 2 bin
+neigh_modify every 1 delay 0 check yes
+
+
+timestep 10.0
+
+fix integrate all nve/sphere update dipole
+fix thermostat all langevin ${Text} ${Text} 100 1234 zero yes
+
+compute totT all temp/sphere dof all
+compute_modify totT extra ${Natoms}
+fix totT all ave/time ${Ne} ${Nr} ${Nf} c_totT 
+
+compute	rotT all temp/sphere dof rotate
+compute_modify rotT extra ${Natoms}
+fix rotT all ave/time ${Ne} ${Nr} ${Nf} c_rotT 
+
+compute keRot all erotate/sphere 
+fix keRot all ave/time ${Ne} ${Nr} ${Nf} c_keRot
+
+variable ke equal ke
+fix keAve all ave/time ${Ne} ${Nr} ${Nf} v_ke
+
+variable pe equal pe
+fix peAve all ave/time ${Ne} ${Nr} ${Nf} v_pe
+
+variable etotal equal etotal
+fix etotAve all ave/time ${Ne} ${Nr} ${Nf} v_etotal
+
+thermo_style custom step temp f_totT f_rotT press f_keRot f_keAve f_peAve &
+	     pe f_etotAve  
+thermo_modify flush yes temp totT
+thermo ${Nthermo}
+
+run ${Nequil}
+
+unfix thermostat
+variable PE equal pe
+variable KE equal ke
+variable E equal etotal
+
+fix pe all print 1 "${PE}" file pe.txt screen no
+fix ke all print 1 "${KE}" file ke.txt screen no
+fix etot all print 1 "${E}" file etot.txt screen no
+
+run ${Nrun}
+
+
+
+
