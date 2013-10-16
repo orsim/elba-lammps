@@ -5,6 +5,8 @@ functionalities to setup, run and analyze molecular dynamics simulations
 of systems modeled with the ELBA force field.
 
 The ELBA model is described in the following paper:
+- Orsi, M. (2013) Comparative assessment of the ELBA coarse-grained model 
+for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
 - Orsi M, Essex JW (2013) Physical properties of mixed bilayers containing 
 lamellar and nonlamellar lipids: insights from coarse-grain molecular 
 dynamics simulations, Faraday Discussions 161: 249. 
