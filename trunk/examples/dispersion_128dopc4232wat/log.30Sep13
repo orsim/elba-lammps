@@ -1,6 +1,4 @@
-LAMMPS (14 May 2013)
-WARNING: OMP_NUM_THREADS environment is not set. (../comm.cpp:100)
-  using 1 OpenMP thread(s) per MPI task
+LAMMPS (30 Sep 2013)
 units		real
 atom_style	hybrid angle dipole sphere
 read_data 	data.128lip4232wat
@@ -16,7 +14,7 @@ read_data 	data.128lip4232wat
   6 = max # of 1-4 neighbors
   8 = max # of special neighbors
 include 	forcefield.elba
-pair_style dipole/sf 12.0
+pair_style lj/sf/dipole/sf 12.0
 special_bonds lj/coul 0.0 1.0 1.0
   3 = max # of 1-2 neighbors
   3 = max # of special neighbors
@@ -97,7 +95,7 @@ dump_modify	trj sort id pad 6
 
 timestep	2
 run		100
-WARNING: Inconsistent image flags (../domain.cpp:594)
+WARNING: Inconsistent image flags (../domain.cpp:607)
 Memory usage per processor = 13.772 Mbytes
 Step Temp E_pair E_mol TotEng Press 
        0            0   -47525.741    2210.0041   -45315.737    2392.2208 
@@ -111,14 +109,14 @@ Step Temp E_pair E_mol TotEng Press
       80    223.58412   -51748.542    1911.4809   -45737.654   -949.11473 
       90    222.46315   -51658.517    1895.3685   -45684.295   -838.79742 
      100    223.53417   -51603.786    1889.9431   -45615.352   -797.71059 
-Loop time of 5.6394 on 1 procs (1 MPI x 1 OpenMP) for 100 steps with 6152 atoms
+Loop time of 5.94006 on 1 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 5.28928 (93.7916)
-Bond  time (%) = 0.0281944 (0.499955)
-Neigh time (%) = 0.0802081 (1.42228)
-Comm  time (%) = 0.0269289 (0.477514)
-Outpt time (%) = 0.035501 (0.629518)
-Other time (%) = 0.179284 (3.17914)
+Pair  time (%) = 5.57767 (93.8993)
+Bond  time (%) = 0.030767 (0.517957)
+Neigh time (%) = 0.0829871 (1.39708)
+Comm  time (%) = 0.0388923 (0.654746)
+Outpt time (%) = 0.0361803 (0.609089)
+Other time (%) = 0.173561 (2.92188)
 
 Nlocal:    6152 ave 6152 max 6152 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -135,7 +133,7 @@ Dangerous builds = 0
 
 timestep	10
 run		100
-WARNING: Inconsistent image flags (../domain.cpp:594)
+WARNING: Inconsistent image flags (../domain.cpp:607)
 Memory usage per processor = 13.772 Mbytes
 Step Temp E_pair E_mol TotEng Press 
      100    223.53417   -51603.786    1889.9431   -45615.352   -797.71059 
@@ -149,14 +147,14 @@ Step Temp E_pair E_mol TotEng Press
      180    276.00854   -50421.863    2064.0631   -43297.194    3.5265879 
      190    276.84624   -50338.981    2070.4924   -43192.523   -26.342808 
      200    284.52712   -50298.059    2038.1189   -43043.146    99.217991 
-Loop time of 6.08913 on 1 procs (1 MPI x 1 OpenMP) for 100 steps with 6152 atoms
+Loop time of 6.41401 on 1 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 5.3159 (87.3015)
-Bond  time (%) = 0.0288539 (0.473859)
-Neigh time (%) = 0.487676 (8.00897)
-Comm  time (%) = 0.0343964 (0.564882)
-Outpt time (%) = 0.0355537 (0.583888)
-Other time (%) = 0.186747 (3.06689)
+Pair  time (%) = 5.61496 (87.5421)
+Bond  time (%) = 0.0307624 (0.479613)
+Neigh time (%) = 0.504404 (7.86409)
+Comm  time (%) = 0.0474885 (0.740386)
+Outpt time (%) = 0.0356207 (0.555357)
+Other time (%) = 0.180777 (2.81847)
 
 Nlocal:    6152 ave 6152 max 6152 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -174,7 +172,7 @@ Dangerous builds = 0
 fix		baro all press/berendsen aniso 1 1 500 modulus 21740
 
 run 		100
-WARNING: Inconsistent image flags (../domain.cpp:594)
+WARNING: Inconsistent image flags (../domain.cpp:607)
 Memory usage per processor = 13.772 Mbytes
 Step Temp E_pair E_mol TotEng Press Volume 
      200    284.52712   -50298.059    2038.1189   -43043.146    99.217991    293440.52 
@@ -188,14 +186,14 @@ Step Temp E_pair E_mol TotEng Press Volume
      280    291.98625   -50001.976    2093.0691    -42555.35    118.77424    294917.05 
      290    296.92856   -50059.235    2097.1903    -42517.87   -41.921074    294996.07 
      300    294.57474    -49979.91    2108.3412   -42470.551    139.04619    295294.07 
-Loop time of 6.14928 on 1 procs (1 MPI x 1 OpenMP) for 100 steps with 6152 atoms
+Loop time of 6.48402 on 1 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 5.30809 (86.3205)
-Bond  time (%) = 0.0349839 (0.56891)
-Neigh time (%) = 0.540419 (8.78833)
-Comm  time (%) = 0.0348592 (0.566882)
-Outpt time (%) = 0.0355191 (0.577614)
-Other time (%) = 0.195409 (3.17775)
+Pair  time (%) = 5.61231 (86.5561)
+Bond  time (%) = 0.0366268 (0.564878)
+Neigh time (%) = 0.558843 (8.61878)
+Comm  time (%) = 0.0478406 (0.737823)
+Outpt time (%) = 0.0357933 (0.552024)
+Other time (%) = 0.192599 (2.97036)
 
 Nlocal:    6152 ave 6152 max 6152 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
