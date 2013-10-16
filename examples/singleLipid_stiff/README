@@ -1,6 +1,0 @@
-This example uses a set of very stiff rigidity constants for intramolecular
-interactions. Though unrealistic, this enables checking of the reference
-(equilibrium) values for bonds and angles.
-
-To visualize, convert the .trj file using the 'trj2pdb.py' tool, and then
-load the 'lipid1.vmd' state file in 'viz/'.
