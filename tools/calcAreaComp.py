@@ -5,10 +5,10 @@
 # Purpose: Reads a file containing the time evolution of the interfacial
 #          area of a lipid bilayer (usually the xy area) and calculates
 #          the corresponding area compressibility (stretch) modulus
-# Syntax: calcAreaComp.py inputFile temperature
-# Notes: - inputFile format = total box xy-area/nm^2 | total box vol/nm^3 
-#        - the second colum (box vol) is optional
-# Example: calcAreaComp.py area_volume.dat 303.15
+# Syntax: python calcAreaComp.py inputFile temperature
+# Notes: - inputFile format = step | total box xy-area [A^2]  
+#        - the first column (step) is not used
+# Example: python calcAreaComp.py xyArea.dat 303.15
 # References: - Orsi & Essex, PLoS ONE 6, e28637 (2011)
 #             - Orsi et al, J Phys Condens Matter 22: 155106 (2010)
 #              section 5.1.2
@@ -23,7 +23,7 @@ A4_in_nm4 = 1e-4 # 1 Angstrom^4 = 10^(-4) nm^4
 J_nm2__in__dyn_cm = 1e21 # 1 J/nm^2 = 10^21 dyn/cm
 
 if len(sys.argv) != 3:
-  print "Syntax: calcAreaComp.py inputFile temperature/K"
+  print "Syntax: python calcAreaComp.py inputFile temperature/K"
   sys.exit()
 
 inFileName = sys.argv[1]
@@ -49,7 +49,7 @@ for line in lines:
     if line[0] != '#': # ignore comments
         dataCounter = dataCounter + 1
         words = string.split( line )
-        area = float(words[0]);
+        area = float(words[1]); # second column
         areaSum += area
         squareAreaSum += area**2
         if dataCounter <= nData/2 : # first half of data
@@ -71,8 +71,8 @@ print "Mean interface area = %.2f A^2" % meanArea
 meanSquaredAreaFluct = squareAreaSum / nData - meanArea**2
 #print "meanSquaredAreaFluct = %6.3f A^4" % meanSquaredAreaFluct
 # convert A -> nm:
-#meanArea *= A2_in_nm2 
-#meanSquaredAreaFluct *= A4_in_nm4
+meanArea *= A2_in_nm2 
+meanSquaredAreaFluct *= A4_in_nm4
 # computing modulus:
 KA = kB*T * meanArea / meanSquaredAreaFluct # [ J / nm^2 ]
 # convert J/nm^2 -> 10^21 dyn/cm:
@@ -87,8 +87,8 @@ meanArea1 = areaSum1 / nData1;
 meanSquaredAreaFluct1 = squareAreaSum1 / nData1 - meanArea1**2
 #print "meanSquaredAreaFluct1 = %6.3f A^4" % meanSquaredAreaFluct1
 # convert A -> nm:
-#meanArea1 *= A2_in_nm2 
-#meanSquaredAreaFluct1 *= A4_in_nm4
+meanArea1 *= A2_in_nm2 
+meanSquaredAreaFluct1 *= A4_in_nm4
 # computing modulus:
 KA1 = kB*T * meanArea1 / meanSquaredAreaFluct1 # [ J / nm^2 ]
 # conversion considering that J/nm^2 = 10^21 dyn/cm
@@ -103,8 +103,8 @@ meanArea2 = areaSum2 / nData2;
 meanSquaredAreaFluct2 = squareAreaSum2 / nData2 - meanArea2**2
 #print "meanSquaredAreaFluct2 = %6.3f A^4" % meanSquaredAreaFluct2
 # convert A -> nm:
-#meanArea2 *= A2_in_nm2 
-#meanSquaredAreaFluct2 *= A4_in_nm4
+meanArea2 *= A2_in_nm2 
+meanSquaredAreaFluct2 *= A4_in_nm4
 # computing modulus:
 KA2 = kB*T * meanArea2 / meanSquaredAreaFluct2 # [ J / nm^2 ]
 # conversion considering that J/nm^2 = 10^21 dyn/cm

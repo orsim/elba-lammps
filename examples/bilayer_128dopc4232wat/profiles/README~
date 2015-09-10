@@ -1,6 +1,0 @@
-*** Protocol to obtain membrane profiles ***
-- run the 'bilayer_128dopc4232wat' example
-- run edp.sh tool to obtain electron density profiles (edp*.dat)
-- run epp.sh tool to obtain electron potential profiles (epp*.dat)
-- run stress2press.py tool to obtain lateral pressure profile (lpp.dat)
-

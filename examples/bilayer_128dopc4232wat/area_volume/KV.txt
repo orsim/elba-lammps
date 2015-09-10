@@ -1,0 +1,13 @@
+
+T = 303.00 K
+
+Mean box volume = 296366.20 A^3
+KV_total = 25.06 kbar
+
+KV_1 = 18.43 kbar
+
+KV_2 = 40.13 kbar
+
+KV_avg12 = 29.28 kbar
+Standard error = 10.85 kbar
+

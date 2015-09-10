@@ -1,0 +1,130 @@
+LAMMPS (10 Aug 2015)
+units		real
+atom_style	hybrid angle dipole sphere
+read_data 	data.singleLipid
+  orthogonal box = (-20 -20 -20) to (40 40 40)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  15 atoms
+  scanning bonds ...
+  2 = max bonds/atom
+  scanning angles ...
+  2 = max angles/atom
+  reading bonds ...
+  14 bonds
+  reading angles ...
+  16 angles
+  3 = max # of 1-2 neighbors
+  3 = max # of 1-3 neighbors
+  6 = max # of 1-4 neighbors
+  8 = max # of special neighbors
+include 	forcefield.stiff
+pair_style lj/sf/dipole/sf 12
+special_bonds lj/coul 0.0 1.0 1.0
+  3 = max # of 1-2 neighbors
+  3 = max # of special neighbors
+bond_style harmonic
+angle_style hybrid cosine/squared dipole
+
+mass    1   40.000
+mass    2   90.000
+mass    3   90.000
+mass    4   62.000
+mass    5   62.000
+mass    6   42.000
+
+set type 1 diameter 5.0 # wat dipole
+  0 settings made for diameter
+set type 4 diameter 12.7 # gly dipole
+  1 settings made for diameter
+set type 5 diameter 12.7 # est dipole
+  2 settings made for diameter
+
+pair_coeff    1    1	  0.1 3.000
+pair_coeff    1    2	  0.1 4.100
+pair_coeff    1    3	  0.1 4.100
+pair_coeff    1    4	  0.1 3.800
+pair_coeff    1    5	  0.1 3.800
+pair_coeff    1    6	  0.1 3.750
+pair_coeff    2    2	  0.1 5.200
+pair_coeff    2    3	  0.1 5.200
+pair_coeff    2    4	  0.1 4.900
+pair_coeff    2    5	  0.1 4.900
+pair_coeff    2    6	  0.1 4.850
+pair_coeff    3    3	  0.1 5.200
+pair_coeff    3    4	  0.1 4.900
+pair_coeff    3    5	  0.1 4.900
+pair_coeff    3    6	  0.1 4.850
+pair_coeff    4    4	  0.1 4.600
+pair_coeff    4    5	  0.1 4.600
+pair_coeff    4    6	  0.1 4.550
+pair_coeff    5    5	  0.1 4.600
+pair_coeff    5    6	  0.1 4.550
+pair_coeff    6    6	  0.1 4.500
+
+bond_coeff    1     1506.0  4.680
+bond_coeff    2     1506.0  4.410
+bond_coeff    3     1506.0  4.140
+bond_coeff    4     1506.0  4.095
+bond_coeff    5     1506.0  4.050
+
+angle_coeff    1  cosine/squared 35851  115.00
+angle_coeff    2  cosine/squared 35851   90.00
+angle_coeff    3  cosine/squared 35851  180.00
+angle_coeff    4  cosine/squared 35851  120.00
+angle_coeff    5  dipole   1000.0  0.0
+
+velocity	all create 0.0 87287
+
+neighbor	2 bin
+neigh_modify 	delay 0
+
+fix		1 all nve/sphere update dipole
+fix 		2 all langevin 303.15 303.15 10.0 48279 omega yes
+
+thermo		10000
+
+dump		1 all custom 1000 dump.trj id type mol x y z mux muy muz
+dump_modify	1 sort id
+
+timestep	0.1
+run		100000
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+Memory usage per processor = 6.5942 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0    8.9201824    162828.34    162837.26    18666.469 
+   10000    410.10438    3.0490456    108.20458    128.36783    21.691852 
+   20000    294.28618    3.0043284     49.06823    64.353515   -78.919381 
+   30000    379.76901    2.7182924    24.106069    42.672631    18.699606 
+   40000    333.50808    2.6138286    23.053297    39.584865   -100.77235 
+   50000    363.50064    2.4607841    16.249465    33.879618   -94.201825 
+   60000     300.6804     2.356872     12.57471    27.479379   -32.247597 
+   70000    375.10068    2.8016332    11.992443     30.44753      92.6388 
+   80000    306.16079    3.7740468    10.636348    27.186895   -45.557328 
+   90000    284.48344    2.9829499    12.622638    27.477464    25.546381 
+  100000    240.27677    3.7818494    9.7596733    23.568594    46.617767 
+Loop time of 1.16439 on 1 procs for 100000 steps with 15 atoms
+
+Pair  time (%) = 0.314919 (27.0457)
+Bond  time (%) = 0.279233 (23.9809)
+Neigh time (%) = 0.00015831 (0.0135959)
+Comm  time (%) = 0.0725825 (6.23349)
+Outpt time (%) = 0.00480294 (0.412484)
+Other time (%) = 0.492699 (42.3138)
+
+Nlocal:    15 ave 15 max 15 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    58 ave 58 max 58 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 58
+Ave neighs/atom = 3.86667
+Ave special neighs/atom = 1.86667
+Neighbor list builds = 15
+Dangerous builds = 0

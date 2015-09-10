@@ -5,8 +5,13 @@ functionalities to setup, run and analyze molecular dynamics simulations
 of systems modeled with the ELBA force field.
 
 The ELBA model is described in the following papers:
-- Orsi, M. (2013) Comparative assessment of the ELBA coarse-grained model 
-for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+
+- Ding W, Palaiokostas M, Orsi M. Stress testing the ELBA water model, 
+Molecular Simulation, DOI: 10.1080/08927022.2015.1047367
+- Orsi, M (2014) Comparative assessment of the ELBA coarse-grained model 
+for water, Molecular Physics, 112: 1566.
+- Orsi, M., W. Ding, M. Palaiokostas (2014) Direct Mixing of Atomistic Solutes 
+and Coarse-Grained Water, Journal of Chemical Theory and Computation, 10: 4684.
 - Orsi M, Essex JW (2013) Physical properties of mixed bilayers containing 
 lamellar and nonlamellar lipids: insights from coarse-grain molecular 
 dynamics simulations, Faraday Discussions 161: 249. 

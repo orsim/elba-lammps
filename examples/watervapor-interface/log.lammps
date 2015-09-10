@@ -1,6 +1,6 @@
-LAMMPS (30 Sep 2013)
+LAMMPS (10 Aug 2015)
 # Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained
-# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+# model for water, Molecular Physics, 112, 1566-1576 (2014)
 
 units real
 atom_style hybrid sphere dipole
@@ -29,17 +29,17 @@ pair_coeff 1 1 0.55 3.05 # epsilon_ij/(kcal/mol), sigma_ij/angstrom
 
 variable Mass equal 18.0153 # g/mol
 mass 1 ${Mass}
-mass 1 18.015299999999999869
+mass 1 18.0153
 set group all mass ${Mass}
-set group all mass 18.015299999999999869
+set group all mass 18.0153
   8000 settings made for mass
 
 variable Inertia equal 30.0 # amu*A^2
 variable Diameter equal 2*sqrt(5*${Inertia}/(2*${Mass}))
 variable Diameter equal 2*sqrt(5*30/(2*${Mass}))
-variable Diameter equal 2*sqrt(5*30/(2*18.015299999999999869))
+variable Diameter equal 2*sqrt(5*30/(2*18.0153))
 set group all diameter ${Diameter} # => moment of inertia
-set group all diameter 4.0807489547189668144 
+set group all diameter 4.08074895471897 
   8000 settings made for diameter
 
 variable Nblock equal 5000
@@ -59,9 +59,9 @@ variable A_in_m equal 1e-10 # Angstrom in meter
 variable atm_in_Pa equal 101325 # note: 1 Pa = 1 N/m^2
 variable N_in_mN equal 1e3 # Newton in milliNewton
 variable convFac equal ${A_in_m}*${atm_in_Pa}*${N_in_mN}
-variable convFac equal 1.0000000000000000364e-10*${atm_in_Pa}*${N_in_mN}
-variable convFac equal 1.0000000000000000364e-10*101325*${N_in_mN}
-variable convFac equal 1.0000000000000000364e-10*101325*1000
+variable convFac equal 1e-10*${atm_in_Pa}*${N_in_mN}
+variable convFac equal 1e-10*101325*${N_in_mN}
+variable convFac equal 1e-10*101325*1000
 
 variable Text equal 300
 
@@ -105,7 +105,7 @@ variable zPress equal c_thermo_press[3]
 
 # Evaluate and average surface tension in mN/m:
 variable st equal 0.5*lz*(v_zPress-0.5*(v_xPress+v_yPress))*${convFac}
-variable st equal 0.5*lz*(v_zPress-0.5*(v_xPress+v_yPress))*0.010132499999999999146
+variable st equal 0.5*lz*(v_zPress-0.5*(v_xPress+v_yPress))*0.0101325
 fix st all ave/time ${Ne} ${Nr} ${Nf} v_st
 fix st all ave/time 10 ${Nr} ${Nf} v_st
 fix st all ave/time 10 500 ${Nf} v_st
@@ -118,18 +118,18 @@ thermo_modify norm yes flush yes
 thermo ${Nf}
 thermo 5000
 
-fix numDens all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz}     density/number units box file numDens.zProfile
-fix numDens all ave/spatial 10 ${Nr} ${Nf} z center ${Dz}     density/number units box file numDens.zProfile
-fix numDens all ave/spatial 10 500 ${Nf} z center ${Dz}     density/number units box file numDens.zProfile
-fix numDens all ave/spatial 10 500 5000 z center ${Dz}     density/number units box file numDens.zProfile
-fix numDens all ave/spatial 10 500 5000 z center 0.10000000000000000555     density/number units box file numDens.zProfile
+compute C all chunk/atom bin/1d z center ${Dz} units box
+compute C all chunk/atom bin/1d z center 0.1 units box
+fix numDens all ave/chunk ${Ne} ${Nr} ${Nf} C density/number     file numDens.zProfile
+fix numDens all ave/chunk 10 ${Nr} ${Nf} C density/number     file numDens.zProfile
+fix numDens all ave/chunk 10 500 ${Nf} C density/number     file numDens.zProfile
+fix numDens all ave/chunk 10 500 5000 C density/number     file numDens.zProfile
 
 compute	dipWat all property/atom muz
-fix muzWat all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz}     c_dipWat units box file muzWat.zProfile
-fix muzWat all ave/spatial 10 ${Nr} ${Nf} z center ${Dz}     c_dipWat units box file muzWat.zProfile
-fix muzWat all ave/spatial 10 500 ${Nf} z center ${Dz}     c_dipWat units box file muzWat.zProfile
-fix muzWat all ave/spatial 10 500 5000 z center ${Dz}     c_dipWat units box file muzWat.zProfile
-fix muzWat all ave/spatial 10 500 5000 z center 0.10000000000000000555     c_dipWat units box file muzWat.zProfile
+fix muzWat all ave/chunk ${Ne} ${Nr} ${Nf} C c_dipWat file muzWat.zProfile
+fix muzWat all ave/chunk 10 ${Nr} ${Nf} C c_dipWat file muzWat.zProfile
+fix muzWat all ave/chunk 10 500 ${Nf} C c_dipWat file muzWat.zProfile
+fix muzWat all ave/chunk 10 500 5000 C c_dipWat file muzWat.zProfile
 
 dump trj all custom ${Ndump} dump.*.trj id type x y z mux muy muz
 dump trj all custom 5000 dump.*.trj id type x y z mux muy muz
@@ -137,29 +137,34 @@ dump_modify trj sort id pad 6
 
 run ${Nrun}
 run 10000
-Memory usage per processor = 12.8292 Mbytes
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+Memory usage per processor = 11.3424 Mbytes
 Step Temp totT rotT Press PAve xyArea Lz st 
        0          300            0            0    3701.3629            0         3844          248            0 
-    5000    301.76887    305.84148    304.53462   -4.6946716   -50.004657         3844          248    79.402178 
-   10000    307.20308    300.20065    300.33421    -13.74057   -52.663861         3844          248    74.145164 
-Loop time of 1302.19 on 1 procs for 10000 steps with 8000 atoms
+    5000    303.79456    305.63227    304.38886   -37.596287   -53.285716         3844          248    88.246869 
+   10000    301.00922    300.30369     300.1444   -4.8099863   -51.193359         3844          248    75.779735 
+Loop time of 1188.18 on 1 procs for 10000 steps with 8000 atoms
 
-Pair  time (%) = 1194.98 (91.7671)
-Neigh time (%) = 77.7734 (5.97251)
-Comm  time (%) = 4.38349 (0.336624)
-Outpt time (%) = 0.0450828 (0.00346207)
-Other time (%) = 25.006 (1.9203)
+Pair  time (%) = 1078.78 (90.7929)
+Neigh time (%) = 77.7451 (6.54321)
+Comm  time (%) = 7.84633 (0.660366)
+Outpt time (%) = 0.045403 (0.00382123)
+Other time (%) = 23.7601 (1.99971)
 
 Nlocal:    8000 ave 8000 max 8000 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    8882 ave 8882 max 8882 min
+Nghost:    8720 ave 8720 max 8720 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    1.39407e+06 ave 1.39407e+06 max 1.39407e+06 min
+Neighs:    1.39026e+06 ave 1.39026e+06 max 1.39026e+06 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 1394070
-Ave neighs/atom = 174.259
-Neighbor list builds = 1451
+Total # of neighbors = 1390260
+Ave neighs/atom = 173.782
+Neighbor list builds = 1457
 Dangerous builds = 0
 
 #write_restart restart.wat

@@ -1,0 +1,11 @@
+
+T = 303.00 K
+
+Mean interface area = 4676.82 A^2
+KA_total = 1259.84 dyn/cm
+
+KA_1 = 3322.63 dyn/cm
+KA_2 = 779.67 dyn/cm
+KA_avg12 = 2051.15 dyn/cm
+Standard error = 1271.48 dyn/cm
+

@@ -1,0 +1,4 @@
+One lipid, no water. This 'minimal' example can be useful, e.g., 
+for debugging purposes.
+To visualize, convert the .trj file using the 'trj2pdb.py' tool, and then
+load the 'lipid1.vmd' state file in 'viz/'.

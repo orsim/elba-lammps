@@ -1,9 +1,9 @@
 *** Protocol to obtain membrane profiles ***
 
-For the followig guidelines to work, you must have the ELBA-LAMMPS
-tools available in your working directory. You can simply copy all the 
-tools in the working directory, or you can add elba-lammps/tools to 
-your path (recommended).
+The followig protocol is based on the scripts in elba-lammps/tools. 
+You can simply copy all the tools in the working directory, or you can 
+add elba-lammps/tools to your path, or you can call the tools with:
+$ python PATH-TO-ELBA-LAMMPS-TOOLS/tool.py input.
 
 - Run the 'bilayer_128dopc4232wat' example. This will generate various
   	'.zProfile' files which can be postprocessed as described in the
@@ -16,7 +16,7 @@ your path (recommended).
 	As explained in the comments at the top of 'stress2press.py', 
 	you need to supply an input file (in this case 'stress.zProfile')
 	and a value for the interfacial area (typically this can be 
-	obtained as lipidArea * numberOfLipidsPerLeaflet)
+	obtained as lipidArea * numberOfLipidsPerLeaflet).
 
 
 

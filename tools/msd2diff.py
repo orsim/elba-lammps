@@ -4,18 +4,18 @@
 # Author: Mario Orsi (m.orsi at qmul.ac.uk, www.orsi.sems.qmul.ac.uk)
 # Purpose: Reads a file containing timestep & mean-squared displacement,
 #          and converts to corresponding diffusion coefficient
-# Syntax: msd2diff.py inputFile timeStep nDimensions
+# Syntax: python msd2diff.py inputFile timeStep nDimensions
 #         timeStep = MD integration time step in fs
 #         nDimensions = # of dimensions to consider for diffusion coeff,
 #                       typically: 3 for 3-dimensional diff (e.g., bulk
 #                       water), 2 for 2-dimensional diff (e.g., lipid
 #                       'lateral' motion inside a bilayer)
 # Notes: - input msd data are in Angstrom^2
-# Examples: - msd2diff.py wat.msd 3 > wat.diff
-#           - msd2diff.py lip.msd 2 > lip.diff
-# References: - Orsi & Essex, Faraday Discuss 161, 249 (2013)
-#             - Orsi & Essex, PLoS ONE 6, e28637 (2011)
-#             - Orsi et al, J Phys Condens Matter 22, 155106 (2010)
+# Examples: - python msd2diff.py wat.msd 3 > wat.diff
+#           - python msd2diff.py lip.msd 2 > lip.diff
+# References: - Orsi, Mol. Phys. 112: 1566-1576 (2014)
+#             - Ding, Palaiokostas, Orsi, Molecular Simulation, 
+#               DOI: 10.1080/08927022.2015.1047367
 #             - Rapaport, The Art of Molecular Dynamics Simulation
 #               (2004), 2nd ed, p.122
 #             - Xiang, J Phys Chem B 103, 385 (1999)
@@ -23,7 +23,7 @@
 import sys, string
 
 if len(sys.argv) != 4:
-  print "Syntax: msd2diff.py inputFile timeStep nDimensions"
+  print "Syntax: python msd2diff.py inputFile timeStep nDimensions"
   sys.exit()
 
 inFileName = sys.argv[1]

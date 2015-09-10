@@ -1,5 +1,8 @@
-# Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained 
-# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+# References: 
+# - Orsi M, Comparative assessment of the ELBA coarse-grained 
+#   model for water, Molecular Physics, 112, 1566-1576 (2014)
+# - Ding W, Palaiokostas M, Orsi M, Stress testing the ELBA water model, 
+#   Molecular Simulation, DOI: 10.1080/08927022.2015.1047367
 
 units real
 atom_style hybrid sphere dipole

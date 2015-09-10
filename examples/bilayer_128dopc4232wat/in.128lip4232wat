@@ -80,66 +80,72 @@ fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
 
 run		${Neqnpt}
 
-fix 	numDensLip lip ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensLip.zProfile
-fix 	numDensWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensWat.zProfile
-fix 	numDensChol chol ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensChol.zProfile
-fix 	numDensPhos phos ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensPhos.zProfile
-fix 	numDensGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensGly.zProfile
-fix 	numDensEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensEst.zProfile
-fix 	numDensTail tail ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		density/number units box file numDensTail.zProfile 
+compute LIP lip chunk/atom bin/1d z center ${Dz} units box 
+fix numDensLip lip ave/chunk ${Ne} ${Nr} ${Nf} LIP density/number &
+    file numDensLip.zProfile
 
-compute		stpa all stress/atom
-fix	stress all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
-		c_stpa[1] c_stpa[2] c_stpa[3] c_stpa[4] c_stpa[5] c_stpa[6] &
-		units box file stress.zProfile
+compute WAT wat chunk/atom bin/1d z center ${Dz} units box 
+fix numDensWat wat ave/chunk ${Ne} ${Nr} ${Nf} WAT density/number &
+    file numDensWat.zProfile
 
-compute		stke all stress/atom ke
-fix	stressKinEn all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
-		c_stke[1] c_stke[2] c_stke[3] c_stke[4] c_stke[5] c_stke[6] &
-		units box file stressKinEn.zProfile
+compute CHOL chol chunk/atom bin/1d z center ${Dz} units box 
+fix numDensChol chol ave/chunk ${Ne} ${Nr} ${Nf} CHOL density/number &
+    file numDensChol.zProfile
 
-compute		stnb all stress/atom pair
-fix	stressNonBond all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
-		c_stnb[1] c_stnb[2] c_stnb[3] c_stnb[4] c_stnb[5] c_stnb[6] &
-		units box file stressNonBond.zProfile
+compute PHOS phos chunk/atom bin/1d z center ${Dz} units box 
+fix numDensPhos phos ave/chunk ${Ne} ${Nr} ${Nf} PHOS density/number &
+    file numDensPhos.zProfile
 
-compute		stb all stress/atom bond
-fix	stressBond all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
-		c_stb[1] c_stb[2] c_stb[3] c_stb[4] c_stb[5] c_stb[6] &
-		units box file stressBond.zProfile
+compute GLY gly chunk/atom bin/1d z center ${Dz} units box 
+fix numDensGly gly ave/chunk ${Ne} ${Nr} ${Nf} GLY density/number &
+    file numDensGly.zProfile
 
-compute		sta all stress/atom angle
-fix	stressAngle all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
-		c_sta[1] c_sta[2] c_sta[3] c_sta[4] c_sta[5] c_sta[6] &
-		units box file stressAngle.zProfile
+compute EST est chunk/atom bin/1d z center ${Dz} units box 
+fix numDensEst est ave/chunk ${Ne} ${Nr} ${Nf} EST density/number &
+    file numDensEst.zProfile
 
-compute		stv all stress/atom virial # check this is redundant
-fix	stressVir all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} &
-		c_stv[1] c_stv[2] c_stv[3] c_stv[4] c_stv[5] c_stv[6] &
-		units box file stressVir.zProfile
+compute TAIL tail chunk/atom bin/1d z center ${Dz} units box 
+fix numDensTail tail ave/chunk ${Ne} ${Nr} ${Nf} TAIL density/number &
+    file numDensTail.zProfile 
 
-compute		chgHead head property/atom q
-fix 	qDensHead head ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		c_chgHead units box file qDensHead.zProfile 
+compute S all chunk/atom bin/1d z center ${Dz} units box 
 
-compute		dipGly gly property/atom muz
-fix 	muzGly gly ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		c_dipGly units box file muzGly.zProfile 
+compute	stpa all stress/atom NULL
+fix stress all ave/chunk ${Ne} ${Nr} ${Nf} S c_stpa[1] c_stpa[2] c_stpa[3] &
+    c_stpa[4] c_stpa[5] c_stpa[6] file stress.zProfile
 
-compute		dipEst est property/atom muz
-fix 	muzEst est ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		c_dipEst units box file muzEst.zProfile 
+compute	stke all stress/atom NULL ke
+fix stressKE all ave/chunk ${Ne} ${Nr} ${Nf} S c_stke[1] c_stke[2] c_stke[3] &
+    c_stke[4] c_stke[5] c_stke[6] file stressKinEn.zProfile
 
-compute		dipWat wat property/atom muz
-fix 	muzWat wat ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-		c_dipWat units box file muzWat.zProfile 
+compute	stnb all stress/atom NULL pair
+fix stressNB all ave/chunk ${Ne} ${Nr} ${Nf} S c_stnb[1] c_stnb[2] c_stnb[3] &
+    c_stnb[4] c_stnb[5] c_stnb[6] file stressNonBond.zProfile
+
+compute	stb all stress/atom NULL bond
+fix stressB all ave/chunk ${Ne} ${Nr} ${Nf} S c_stb[1] c_stb[2] c_stb[3] &
+    c_stb[4] c_stb[5] c_stb[6] file stressBond.zProfile
+
+compute	sta all stress/atom NULL angle
+fix stressA all ave/chunk ${Ne} ${Nr} ${Nf} S c_sta[1] c_sta[2] c_sta[3] &
+    c_sta[4] c_sta[5] c_sta[6] file stressAngle.zProfile
+
+compute	stv all stress/atom NULL virial # check this is redundant
+fix stressV all ave/chunk ${Ne} ${Nr} ${Nf} S c_stv[1] c_stv[2] c_stv[3] &
+    c_stv[4] c_stv[5] c_stv[6] file stressVir.zProfile
+
+compute H head chunk/atom bin/1d z center ${Dz} units box 
+compute	chgH head property/atom q
+fix qDensHead head ave/chunk ${Ne} ${Nr} ${Nf} H c_chgH file qDensHead.zProfile 
+
+compute	dipGly gly property/atom muz
+fix muzGly gly ave/chunk ${Ne} ${Nr} ${Nf} GLY c_dipGly file muzGly.zProfile 
+
+compute	dipEst est property/atom muz
+fix muzEst est ave/chunk ${Ne} ${Nr} ${Nf} EST c_dipEst file muzEst.zProfile 
+
+compute	dipWat wat property/atom muz
+fix muzWat wat ave/chunk ${Ne} ${Nr} ${Nf} WAT c_dipWat file muzWat.zProfile 
 
 compute		msd gly msd com yes
 fix 		msd gly ave/time 1 1 ${Ne} c_msd[4] file gly.msd

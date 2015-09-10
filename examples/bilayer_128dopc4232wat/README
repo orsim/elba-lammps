@@ -14,30 +14,34 @@ data can also be used to calculate compressibility moduli - see the
 'calcAreaComp.py' and 'calcVolComp.py' tools in the 'tools/' dir.
 
 References:
-- Orsi, Mol. Phys., Doi:10.1080/00268976.2013.844373 (2013)
+- Ding W, Palaiokostas M, Orsi M. Stress testing the ELBA water model, 
+Molecular Simulation, DOI: 10.1080/08927022.2015.1047367
+- Orsi, Mol. Phys. 112: 1566 (2014)
 - Orsi & Essex, Faraday Discuss. 161, 249 (2013)
 - Orsi & Essex, PLoS ONE 6, e28637 (2011)
 - Orsi et al, J. Phys.: Condens. Matter. 22, 155106 (2010)
 
-Example of analysis protocol (for post-processing):
+Example of post-processing:
 
-- calcVolComp.py xyArea.dat temp | tee KV
-- calcAreaComp.py xyArea.dat temp | tee KA
+- python calcVolComp.py xyArea.dat temp | tee KV
+- python calcAreaComp.py xyArea.dat temp | tee KA
 
-- stress2press.py stress.zProfile xyArea Pz > pi-tot.dat
+- python stress2press.py stress.zProfile xyArea Pz > pi-tot.dat
 - mv zP_xx_yy_zz_xy_xz_yz.dat zP_xx_yy_zz_xy_xz_yz-tot.dat
 
-- stress2press.py stressKinEn.zProfile xyArea Pz > pi-ke.dat
+- python stress2press.py stressKinEn.zProfile xyArea Pz > pi-ke.dat
 - mv zP_xx_yy_zz_xy_xz_yz.dat zP_xx_yy_zz_xy_xz_yz-ke.dat
 
-- stress2press.py stressNonBond.zProfile xyArea Pz > pi-nb.dat
+- python stress2press.py stressNonBond.zProfile xyArea Pz > pi-nb.dat
 - mv zP_xx_yy_zz_xy_xz_yz.dat zP_xx_yy_zz_xy_xz_yz-nb.dat 
 
-- stress2press.py stressVir.zProfile xyArea Pz > pi-vir.dat
+- python stress2press.py stressVir.zProfile xyArea Pz > pi-vir.dat
 - mv zP_xx_yy_zz_xy_xz_yz.dat zP_xx_yy_zz_xy_xz_yz-vir.dat
 
-- stress2press.py stressBond.zProfile xyArea Pz > pi-b.dat
+- python stress2press.py stressBond.zProfile xyArea Pz > pi-b.dat
 - mv zP_xx_yy_zz_xy_xz_yz.dat zP_xx_yy_zz_xy_xz_yz-b.dat
 
-- stress2press.py stressAngle.zProfile xyArea Pz > pi-a.dat
+- python stress2press.py stressAngle.zProfile xyArea Pz > pi-a.dat
 - mv zP_xx_yy_zz_xy_xz_yz.dat zP_xx_yy_zz_xy_xz_yz-a.dat
+
+For example, xyArea=4676.82 and Pz=1.0. 

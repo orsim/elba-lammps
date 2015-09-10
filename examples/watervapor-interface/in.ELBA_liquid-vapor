@@ -1,5 +1,5 @@
 # Reference: M. Orsi, Comparative assessment of the ELBA coarse-grained 
-# model for water, Molecular Physics, DOI:10.1080/00268976.2013.844373
+# model for water, Molecular Physics, 112, 1566-1576 (2014)
 
 units real
 atom_style hybrid sphere dipole
@@ -77,12 +77,12 @@ thermo_style custom step temp f_totT f_rotT press f_PAve v_xyArea lz f_st
 thermo_modify norm yes flush yes
 thermo ${Nf}
 
-fix numDens all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-    density/number units box file numDens.zProfile
+compute C all chunk/atom bin/1d z center ${Dz} units box
+fix numDens all ave/chunk ${Ne} ${Nr} ${Nf} C density/number &
+    file numDens.zProfile
 
 compute	dipWat all property/atom muz
-fix muzWat all ave/spatial ${Ne} ${Nr} ${Nf} z center ${Dz} & 
-    c_dipWat units box file muzWat.zProfile 
+fix muzWat all ave/chunk ${Ne} ${Nr} ${Nf} C c_dipWat file muzWat.zProfile 
 
 dump trj all custom ${Ndump} dump.*.trj id type x y z mux muy muz
 dump_modify trj sort id pad 6

@@ -1,13 +1,18 @@
-LAMMPS (30 Sep 2013)
+LAMMPS (10 Aug 2015)
 units		real
 atom_style	hybrid angle dipole sphere
 read_data 	data.128lip4232wat
-  2 = max bonds/atom
-  2 = max angles/atom
   orthogonal box = (-34.0863 -34.0863 -31.5696) to (34.0863 34.0863 31.5696)
   1 by 1 by 1 MPI processor grid
+  reading atoms ...
   6152 atoms
+  scanning bonds ...
+  2 = max bonds/atom
+  scanning angles ...
+  2 = max angles/atom
+  reading bonds ...
   1792 bonds
+  reading angles ...
   2048 angles
   3 = max # of 1-2 neighbors
   3 = max # of 1-3 neighbors
@@ -95,8 +100,13 @@ dump_modify	trj sort id pad 6
 
 timestep	2
 run		100
-WARNING: Inconsistent image flags (../domain.cpp:607)
-Memory usage per processor = 13.772 Mbytes
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 13
+  ghost atom cutoff = 13
+WARNING: Inconsistent image flags (../domain.cpp:756)
+Memory usage per processor = 14.2518 Mbytes
 Step Temp E_pair E_mol TotEng Press 
        0            0   -47525.741    2210.0041   -45315.737    2392.2208 
       10    64.443653   -48569.076    2198.9983   -45188.506    1412.4764 
@@ -109,14 +119,14 @@ Step Temp E_pair E_mol TotEng Press
       80    223.58412   -51748.542    1911.4809   -45737.654   -949.11473 
       90    222.46315   -51658.517    1895.3685   -45684.295   -838.79742 
      100    223.53417   -51603.786    1889.9431   -45615.352   -797.71059 
-Loop time of 5.94006 on 1 procs for 100 steps with 6152 atoms
+Loop time of 5.43905 on 1 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 5.57767 (93.8993)
-Bond  time (%) = 0.030767 (0.517957)
-Neigh time (%) = 0.0829871 (1.39708)
-Comm  time (%) = 0.0388923 (0.654746)
-Outpt time (%) = 0.0361803 (0.609089)
-Other time (%) = 0.173561 (2.92188)
+Pair  time (%) = 5.05786 (92.9916)
+Bond  time (%) = 0.0457711 (0.841527)
+Neigh time (%) = 0.084465 (1.55294)
+Comm  time (%) = 0.0489335 (0.89967)
+Outpt time (%) = 0.036149 (0.66462)
+Other time (%) = 0.165873 (3.04966)
 
 Nlocal:    6152 ave 6152 max 6152 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -133,8 +143,8 @@ Dangerous builds = 0
 
 timestep	10
 run		100
-WARNING: Inconsistent image flags (../domain.cpp:607)
-Memory usage per processor = 13.772 Mbytes
+WARNING: Inconsistent image flags (../domain.cpp:756)
+Memory usage per processor = 14.2518 Mbytes
 Step Temp E_pair E_mol TotEng Press 
      100    223.53417   -51603.786    1889.9431   -45615.352   -797.71059 
      110    227.52978   -51259.992    1934.8426     -45153.4   -599.34989 
@@ -147,14 +157,14 @@ Step Temp E_pair E_mol TotEng Press
      180    276.00854   -50421.863    2064.0631   -43297.194    3.5265879 
      190    276.84624   -50338.981    2070.4924   -43192.523   -26.342808 
      200    284.52712   -50298.059    2038.1189   -43043.146    99.217991 
-Loop time of 6.41401 on 1 procs for 100 steps with 6152 atoms
+Loop time of 5.97668 on 1 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 5.61496 (87.5421)
-Bond  time (%) = 0.0307624 (0.479613)
-Neigh time (%) = 0.504404 (7.86409)
-Comm  time (%) = 0.0474885 (0.740386)
-Outpt time (%) = 0.0356207 (0.555357)
-Other time (%) = 0.180777 (2.81847)
+Pair  time (%) = 5.09747 (85.2893)
+Bond  time (%) = 0.0444896 (0.744387)
+Neigh time (%) = 0.512799 (8.58)
+Comm  time (%) = 0.112633 (1.88455)
+Outpt time (%) = 0.0362465 (0.606466)
+Other time (%) = 0.173042 (2.89529)
 
 Nlocal:    6152 ave 6152 max 6152 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -172,8 +182,8 @@ Dangerous builds = 0
 fix		baro all press/berendsen aniso 1 1 500 modulus 21740
 
 run 		100
-WARNING: Inconsistent image flags (../domain.cpp:607)
-Memory usage per processor = 13.772 Mbytes
+WARNING: Inconsistent image flags (../domain.cpp:756)
+Memory usage per processor = 14.2518 Mbytes
 Step Temp E_pair E_mol TotEng Press Volume 
      200    284.52712   -50298.059    2038.1189   -43043.146    99.217991    293440.52 
      210    281.47162   -50270.307    2051.8077   -43057.727    58.491618    293665.22 
@@ -186,14 +196,14 @@ Step Temp E_pair E_mol TotEng Press Volume
      280    291.98625   -50001.976    2093.0691    -42555.35    118.77424    294917.05 
      290    296.92856   -50059.235    2097.1903    -42517.87   -41.921074    294996.07 
      300    294.57474    -49979.91    2108.3412   -42470.551    139.04619    295294.07 
-Loop time of 6.48402 on 1 procs for 100 steps with 6152 atoms
+Loop time of 6.04771 on 1 procs for 100 steps with 6152 atoms
 
-Pair  time (%) = 5.61231 (86.5561)
-Bond  time (%) = 0.0366268 (0.564878)
-Neigh time (%) = 0.558843 (8.61878)
-Comm  time (%) = 0.0478406 (0.737823)
-Outpt time (%) = 0.0357933 (0.552024)
-Other time (%) = 0.192599 (2.97036)
+Pair  time (%) = 5.09438 (84.2365)
+Bond  time (%) = 0.0469346 (0.776073)
+Neigh time (%) = 0.568181 (9.39497)
+Comm  time (%) = 0.118439 (1.95841)
+Outpt time (%) = 0.0361836 (0.598303)
+Other time (%) = 0.18359 (3.03569)
 
 Nlocal:    6152 ave 6152 max 6152 min
 Histogram: 1 0 0 0 0 0 0 0 0 0

@@ -1,10 +1,24 @@
-*** Installing LAMMPS ***
-
 Detailed information on how to build LAMMPS can be found on the official
-website (http://lammps.sandia.gov). Before building LAMMPS for ELBA, please
-read the official LAMMPS compilation instructions. 
+website (http://lammps.sandia.gov). Before trying to run ELBA, please
+read the official LAMMPS compilation instructions, and check that your 
+LAMMPS installation can reproduce the official LAMMPS example simulations. 
 
-More specific guidelines used in the Orsi group are available here:
-http://www.orsi.sems.qmul.ac.uk/install.html
+To run the ELBA model, you have at least two options:
 
-Mario Orsi (m.orsi@qmul.ac.uk)
+1) Use the "Pre-built Ubuntu Linux executables" 
+   (http://lammps.sandia.gov/download.html#ubuntu)
+   The corresponding executable "lammps-daily" is built with everything 
+   needed, so you can run ELBA straight away.
+
+2) Download and extract a LAMMPS tarball 
+   (http://lammps.sandia.gov/download.html#tar)
+   This gives you the flexibility to include/exclude packages, and modify
+   the source code. However, to be able to run ELBA, you need to:
+      i) Go to the source (src/) directory:
+      $ cd lammps-DDMMMYY/src 
+      ii) Load these additional packages:
+      $ make yes-dipole yes-user-misc
+      iii) Compile/recompile with
+      $ make mpi
+
+Mario Orsi (m.orsi@qmul.ac.uk, www.orsi.sems.qmul.ac.uk)

@@ -16,8 +16,8 @@
 #          contains z coordinates that centered at 0 (so that the two
 #          monolayers can be identify from their positive vs negative
 #          coordinates)
-# Syntax: calcNeighFrac.py trjFile [upper|lower] typeMain typeOther
-# Example: calcNeighFrac.py dump1000.trj 2 7
+# Syntax: python calcNeighFrac.py trjFile [upper|lower] typeMain typeOther
+# Example: python calcNeighFrac.py dump1000.trj 2 7
 # References: - Orsi & Essex, Faraday Discuss 2013, 161, 249
 #             - de Vries et al, J Phys Chem B 2004, 108, 2454
 
@@ -33,7 +33,7 @@ def Wrap( distance, edge ):
   return distance
 
 if len(sys.argv) != 5:
-  print "Syntax: calcNeighFrac.py trjFile [upper|lower] typeMain typeOther"
+  print "Syntax: python calcNeighFrac.py trjFile [upper|lower] typeMain typeOther"
   sys.exit()
 
 inFileName = sys.argv[1]

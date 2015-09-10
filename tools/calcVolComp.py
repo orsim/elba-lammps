@@ -5,9 +5,11 @@
 # Purpose: Reads a file containing the time evolution of the simulation
 #          box volume and calculates the corresponding volume
 #          compressibility (bulk) modulus
-# Syntax: calcVolComp.py inputFile temperature
-# Note: input vol data are in Angstrom^3
-# Example: calcVolComp.py boxVol.dat 303.15
+# Syntax: python calcVolComp.py inputFile temperature
+# Notes: - input file is assumed to have 2-column "step | volume" format
+#        - input volume is in Angstrom^3
+#        - input file 1st column (step) is not used
+# Example: python calcVolComp.py boxVol.dat 303.15
 # Reference: - Orsi et al, J Phys Condens Matter 22: 155106 (2010),
 #              section 5.1.2
 
@@ -20,7 +22,7 @@ A6_in_nm6 = 1e-6 # 1 Angstrom^6 = 10^(-6) nm^6
 J_nm3__in__kbar = 1e19 # 1 J/nm^3 = 10^19 kbar
 
 if len(sys.argv) != 3:
-  print "Syntax: calcVolComp.py inputFile temperature"
+  print "Syntax: python calcVolComp.py inputFile temperature"
   sys.exit()
 
 inFileName = sys.argv[1]

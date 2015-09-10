@@ -1,13 +1,18 @@
-LAMMPS (30 Sep 2013)
+LAMMPS (10 Aug 2015)
 units		real
 atom_style	hybrid angle dipole sphere
 read_data 	data.4dopc4dope256wat
-  2 = max bonds/atom
-  2 = max angles/atom
   orthogonal box = (-8.5 -8.5 -31.5) to (8.5 8.5 31.5)
   1 by 1 by 1 MPI processor grid
+  reading atoms ...
   376 atoms
+  scanning bonds ...
+  2 = max bonds/atom
+  scanning angles ...
+  2 = max angles/atom
+  reading bonds ...
   112 bonds
+  reading angles ...
   128 angles
   3 = max # of 1-2 neighbors
   3 = max # of 1-3 neighbors
@@ -139,18 +144,23 @@ dump_modify	trj sort id pad 9
 timestep	0.01
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 13
+  ghost atom cutoff = 13
+Memory usage per processor = 14.6612 Mbytes
 Step Temp E_pair E_mol TotEng Press 
        0            0    1224661.1    12447.942      1237109      1257067 
     1000    189.40229    1221728.1    12375.198    1237499.2    1255781.6 
-Loop time of 63.791 on 1 procs for 1000 steps with 6016 atoms
+Loop time of 57.0717 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 61.3483 (96.1707)
-Bond  time (%) = 0.253566 (0.397495)
+Pair  time (%) = 54.7652 (95.9587)
+Bond  time (%) = 0.328837 (0.576182)
 Neigh time (%) = 0 (0)
-Comm  time (%) = 0.441873 (0.692689)
-Outpt time (%) = 5.4121e-05 (8.48411e-05)
-Other time (%) = 1.74725 (2.73902)
+Comm  time (%) = 0.323882 (0.5675)
+Outpt time (%) = 5.96046e-05 (0.000104438)
+Other time (%) = 1.65365 (2.8975)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -168,18 +178,18 @@ Dangerous builds = 0
 timestep	0.1
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Temp E_pair E_mol TotEng Press 
     1000    189.40229    1221728.1    12375.198    1237499.2    1255781.6 
     2000    15205.742    54151.906    11956.377    338740.73    135131.37 
-Loop time of 66.0126 on 1 procs for 1000 steps with 6016 atoms
+Loop time of 59.2208 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 63.057 (95.5226)
-Bond  time (%) = 0.254932 (0.386186)
-Neigh time (%) = 0.500676 (0.758455)
-Comm  time (%) = 0.452389 (0.685306)
-Outpt time (%) = 5.38826e-05 (8.16247e-05)
-Other time (%) = 1.74759 (2.64735)
+Pair  time (%) = 56.3316 (95.1212)
+Bond  time (%) = 0.330212 (0.557594)
+Neigh time (%) = 0.489776 (0.827033)
+Comm  time (%) = 0.415778 (0.702081)
+Outpt time (%) = 5.10216e-05 (8.61548e-05)
+Other time (%) = 1.65344 (2.79199)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -197,18 +207,18 @@ Dangerous builds = 0
 timestep	1
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Temp E_pair E_mol TotEng Press 
     2000    15205.742    54151.906    11956.377    338740.73    135131.37 
     3000    311.18481   -42877.908    5350.4737   -31948.024    1946.7385 
-Loop time of 60.0598 on 1 procs for 1000 steps with 6016 atoms
+Loop time of 54.0595 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 56.6677 (94.3522)
-Bond  time (%) = 0.255418 (0.425274)
-Neigh time (%) = 1.03298 (1.71992)
-Comm  time (%) = 0.42199 (0.702616)
-Outpt time (%) = 5.38826e-05 (8.9715e-05)
-Other time (%) = 1.68158 (2.79985)
+Pair  time (%) = 50.6597 (93.711)
+Bond  time (%) = 0.330742 (0.611811)
+Neigh time (%) = 1.01245 (1.87284)
+Comm  time (%) = 0.469221 (0.867972)
+Outpt time (%) = 5.53131e-05 (0.000102319)
+Other time (%) = 1.58732 (2.93624)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -226,18 +236,18 @@ Dangerous builds = 0
 timestep	2
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Temp E_pair E_mol TotEng Press 
     3000    311.18481   -42877.908    5350.4737   -31948.024    1946.7385 
     4000    306.94471   -46429.905    4004.3247   -36922.193    602.70619 
-Loop time of 60.2321 on 1 procs for 1000 steps with 6016 atoms
+Loop time of 54.1068 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 56.7213 (94.1713)
-Bond  time (%) = 0.261035 (0.433382)
-Neigh time (%) = 1.13489 (1.88419)
-Comm  time (%) = 0.426536 (0.708154)
-Outpt time (%) = 5.29289e-05 (8.7875e-05)
-Other time (%) = 1.68822 (2.80286)
+Pair  time (%) = 50.5932 (93.5062)
+Bond  time (%) = 0.333699 (0.616742)
+Neigh time (%) = 1.11039 (2.05222)
+Comm  time (%) = 0.48049 (0.88804)
+Outpt time (%) = 5.57899e-05 (0.000103111)
+Other time (%) = 1.58897 (2.93673)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -255,18 +265,18 @@ Dangerous builds = 0
 timestep	5
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Temp E_pair E_mol TotEng Press 
     4000    306.94471   -46429.905    4004.3247   -36922.193    602.70619 
     5000    299.16236    -47949.97    3215.9249   -39370.192      189.773 
-Loop time of 63.4419 on 1 procs for 1000 steps with 6016 atoms
+Loop time of 57.4606 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 58.1892 (91.7205)
-Bond  time (%) = 0.263637 (0.415557)
-Neigh time (%) = 2.77798 (4.37878)
-Comm  time (%) = 0.465695 (0.73405)
-Outpt time (%) = 5.60284e-05 (8.83145e-05)
-Other time (%) = 1.74533 (2.75107)
+Pair  time (%) = 51.9936 (90.4855)
+Bond  time (%) = 0.336419 (0.585477)
+Neigh time (%) = 2.71898 (4.7319)
+Comm  time (%) = 0.758027 (1.31921)
+Outpt time (%) = 5.26905e-05 (9.16984e-05)
+Other time (%) = 1.65361 (2.87782)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -331,136 +341,136 @@ thermo		10000
 timestep	10
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
     5000      189.773            0    299.16236            0            0            0            0 
-    6000    184.48333            0     305.8009            0            0            0            0 
-Loop time of 69.6548 on 1 procs for 1000 steps with 6016 atoms
+    6000    110.08646            0    303.97177            0            0            0            0 
+Loop time of 63.862 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 61.2199 (87.8904)
-Bond  time (%) = 0.268385 (0.385307)
-Neigh time (%) = 5.88675 (8.45132)
-Comm  time (%) = 0.532217 (0.764078)
-Outpt time (%) = 7.08103e-05 (0.000101659)
-Other time (%) = 1.74752 (2.50883)
+Pair  time (%) = 54.8281 (85.8539)
+Bond  time (%) = 0.340972 (0.533919)
+Neigh time (%) = 5.75998 (9.01941)
+Comm  time (%) = 1.25829 (1.97032)
+Outpt time (%) = 7.24792e-05 (0.000113494)
+Other time (%) = 1.67465 (2.62229)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    12406 ave 12406 max 12406 min
+Nghost:    12449 ave 12449 max 12449 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    650846 ave 650846 max 650846 min
+Neighs:    651131 ave 651131 max 651131 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 650846
-Ave neighs/atom = 108.186
+Total # of neighbors = 651131
+Ave neighs/atom = 108.233
 Ave special neighs/atom = 0.595745
 Neighbor list builds = 201
 Dangerous builds = 0
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
-    6000    184.48333            0     305.8009            0            0            0            0 
-    7000   -199.78068            0    299.72539            0            0            0            0 
-Loop time of 69.8885 on 1 procs for 1000 steps with 6016 atoms
+    6000    110.08646            0    303.97177            0            0            0            0 
+    7000   -167.18327            0    301.09195            0            0            0            0 
+Loop time of 63.9978 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 61.4233 (87.8876)
-Bond  time (%) = 0.27215 (0.389405)
-Neigh time (%) = 5.9041 (8.44789)
-Comm  time (%) = 0.538873 (0.771047)
-Outpt time (%) = 7.10487e-05 (0.00010166)
-Other time (%) = 1.74996 (2.50394)
+Pair  time (%) = 54.9061 (85.7938)
+Bond  time (%) = 0.343062 (0.536053)
+Neigh time (%) = 5.80262 (9.06692)
+Comm  time (%) = 1.27034 (1.98498)
+Outpt time (%) = 7.10487e-05 (0.000111018)
+Other time (%) = 1.67557 (2.61816)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    12491 ave 12491 max 12491 min
+Nghost:    12429 ave 12429 max 12429 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    650877 ave 650877 max 650877 min
+Neighs:    650337 ave 650337 max 650337 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 650877
-Ave neighs/atom = 108.191
+Total # of neighbors = 650337
+Ave neighs/atom = 108.101
 Ave special neighs/atom = 0.595745
-Neighbor list builds = 202
+Neighbor list builds = 203
 Dangerous builds = 0
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
-    7000   -199.78068            0    299.72539            0            0            0            0 
-    8000   -86.671563            0    300.92104            0            0            0            0 
-Loop time of 69.8101 on 1 procs for 1000 steps with 6016 atoms
+    7000   -167.18327            0    301.09195            0            0            0            0 
+    8000  0.032129242            0    298.24864            0            0            0            0 
+Loop time of 63.9167 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 61.344 (87.8727)
-Bond  time (%) = 0.270566 (0.387574)
-Neigh time (%) = 5.90367 (8.45675)
-Comm  time (%) = 0.538745 (0.771729)
-Outpt time (%) = 7.20024e-05 (0.00010314)
-Other time (%) = 1.75306 (2.51119)
+Pair  time (%) = 54.8142 (85.7587)
+Bond  time (%) = 0.343966 (0.538147)
+Neigh time (%) = 5.81002 (9.08998)
+Comm  time (%) = 1.27145 (1.98923)
+Outpt time (%) = 7.29561e-05 (0.000114142)
+Other time (%) = 1.67705 (2.62381)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    12450 ave 12450 max 12450 min
+Nghost:    12519 ave 12519 max 12519 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    650238 ave 650238 max 650238 min
+Neighs:    650868 ave 650868 max 650868 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 650238
-Ave neighs/atom = 108.085
+Total # of neighbors = 650868
+Ave neighs/atom = 108.189
 Ave special neighs/atom = 0.595745
-Neighbor list builds = 202
+Neighbor list builds = 203
 Dangerous builds = 0
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
-    8000   -86.671563            0    300.92104            0            0            0            0 
-    9000   -120.44213            0    309.35171            0            0            0            0 
-Loop time of 70.0254 on 1 procs for 1000 steps with 6016 atoms
+    8000  0.032129242            0    298.24864            0            0            0            0 
+    9000   -127.83923            0    308.95014            0            0            0            0 
+Loop time of 63.9363 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 61.4759 (87.7909)
-Bond  time (%) = 0.275154 (0.392935)
-Neigh time (%) = 5.96769 (8.52218)
-Comm  time (%) = 0.549185 (0.784266)
-Outpt time (%) = 6.98566e-05 (9.97591e-05)
-Other time (%) = 1.75737 (2.50962)
+Pair  time (%) = 54.8156 (85.7346)
+Bond  time (%) = 0.345011 (0.539616)
+Neigh time (%) = 5.82177 (9.10557)
+Comm  time (%) = 1.27741 (1.99794)
+Outpt time (%) = 7.03335e-05 (0.000110005)
+Other time (%) = 1.67649 (2.62212)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    12541 ave 12541 max 12541 min
+Nghost:    12470 ave 12470 max 12470 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    649383 ave 649383 max 649383 min
+Neighs:    648926 ave 648926 max 648926 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 649383
-Ave neighs/atom = 107.943
+Total # of neighbors = 648926
+Ave neighs/atom = 107.867
 Ave special neighs/atom = 0.595745
 Neighbor list builds = 204
 Dangerous builds = 0
 run		${Nnvt}
 run		1000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
-    9000   -120.44213            0    309.35171            0            0            0            0 
-   10000   -120.14501            0    304.56427            0            0            0            0 
-Loop time of 70.1924 on 1 procs for 1000 steps with 6016 atoms
+    9000   -127.83923            0    308.95014            0            0            0            0 
+   10000    13.692674            0    301.81931            0            0            0            0 
+Loop time of 63.9168 on 1 procs for 1000 steps with 6016 atoms
 
-Pair  time (%) = 61.6372 (87.8118)
-Bond  time (%) = 0.282299 (0.402179)
-Neigh time (%) = 5.93414 (8.45411)
-Comm  time (%) = 0.560718 (0.798831)
-Outpt time (%) = 0.0172849 (0.024625)
-Other time (%) = 1.76078 (2.5085)
+Pair  time (%) = 54.8088 (85.7502)
+Bond  time (%) = 0.344863 (0.539549)
+Neigh time (%) = 5.79678 (9.06926)
+Comm  time (%) = 1.2732 (1.99196)
+Outpt time (%) = 0.017339 (0.0271274)
+Other time (%) = 1.67583 (2.62189)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    12540 ave 12540 max 12540 min
+Nghost:    12554 ave 12554 max 12554 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    650155 ave 650155 max 650155 min
+Neighs:    649974 ave 649974 max 649974 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 650155
-Ave neighs/atom = 108.071
+Total # of neighbors = 649974
+Ave neighs/atom = 108.041
 Ave special neighs/atom = 0.595745
 Neighbor list builds = 203
 Dangerous builds = 0
@@ -469,7 +479,7 @@ fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
 
 # compute and average surface tension (gamma) per monolayer:
 variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*${atmA__in__mN_m}
-variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*0.010130000000000000115
+variable	gamma equal (0.5*lz*(pzz-0.5*(pxx+pyy))/3)*0.01013
 fix	gamma all ave/time ${Ne} ${Nthe_e} ${Nthe} v_gamma file gamma.dat
 fix	gamma all ave/time 10 ${Nthe_e} ${Nthe} v_gamma file gamma.dat
 fix	gamma all ave/time 10 1000 ${Nthe} v_gamma file gamma.dat
@@ -490,39 +500,39 @@ restart		110000 restart
 
 run 		${Nnpt}
 run 		100000
-Memory usage per processor = 14.5157 Mbytes
+Memory usage per processor = 14.6612 Mbytes
 Step Press P Temp tempTot tempRot lipArea lipVol 
-   10000   -120.14501            0    304.56427            0            0            0            0 
-   20000   -4.4694661  -0.51474899     299.8202    302.85673    303.03964    71.083833    1300.2676 
-   30000    84.871817    2.0240606    300.24523    302.92671    303.03647    70.448999    1299.0823 
-   40000   -72.504459   0.52400206    301.28328    302.98687    303.09719    69.909731    1295.2643 
-   50000   -47.986393   0.50451893     308.0884    303.25684    303.44707    69.671315     1295.588 
-   60000   -32.520536   0.36695025    305.12643    303.23635    303.44572    69.076267    1297.4503 
-   70000    94.060441   0.52684542    299.10411    302.97648    303.03956    68.892709     1293.414 
-   80000    103.38083    2.5485664    299.57824    302.96722    303.17491    68.363994    1290.2997 
-   90000   -47.839949     1.531841    305.91295    303.06149    303.21836    68.288498    1294.2974 
-  100000   -59.531363    1.4301973    306.60443    302.61857    303.03863    67.926367    1292.4332 
-  110000   -136.69412   0.72129037    302.11615    303.22429    303.28339    67.489755    1293.9796 
-Loop time of 7222.31 on 1 procs for 100000 steps with 6016 atoms
+   10000    13.692674            0    301.81931            0            0            0            0 
+   20000    85.353869  -0.93481294    297.77884    302.99303    303.20684    71.210931    1299.0471 
+   30000    100.47066     2.170856    302.37763    303.15003    303.08887    70.188405    1297.5149 
+   40000       32.116    1.1571343    301.18098     303.3097      303.486    70.478583    1296.8678 
+   50000    8.8286609    1.5719867    303.66133    303.32865    303.49731    70.542104     1296.789 
+   60000    -33.95994   -1.0305907    302.41506    303.27534    303.38835    70.442412     1297.589 
+   70000   -35.862319   0.58673019    303.33348    303.06682    302.97799    70.232892     1295.513 
+   80000   -38.736517   0.69955827    304.73713    303.10418    303.28248    69.737931    1293.7534 
+   90000   -47.066145    2.1768546    306.32687    303.26135    303.43343    70.019878    1294.5317 
+  100000   -1.9113495   0.92301528    310.20205    302.85032    302.91694    69.504044    1294.8311 
+  110000    1.3962386  -0.79742517    303.59017    302.86427     302.9405    69.209538    1293.1876 
+Loop time of 6582.95 on 1 procs for 100000 steps with 6016 atoms
 
-Pair  time (%) = 6354.43 (87.9833)
-Bond  time (%) = 35.2384 (0.487911)
-Neigh time (%) = 581.393 (8.04997)
-Comm  time (%) = 59.8281 (0.828379)
-Outpt time (%) = 0.177263 (0.00245439)
-Other time (%) = 191.243 (2.64795)
+Pair  time (%) = 5633.05 (85.5704)
+Bond  time (%) = 43.7527 (0.664636)
+Neigh time (%) = 584.642 (8.88115)
+Comm  time (%) = 137.461 (2.08814)
+Outpt time (%) = 0.18861 (0.00286512)
+Other time (%) = 183.85 (2.79282)
 
 Nlocal:    6016 ave 6016 max 6016 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Nghost:    12916 ave 12916 max 12916 min
+Nghost:    12800 ave 12800 max 12800 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
-Neighs:    665043 ave 665043 max 665043 min
+Neighs:    664589 ave 664589 max 664589 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
 
-Total # of neighbors = 665043
-Ave neighs/atom = 110.546
+Total # of neighbors = 664589
+Ave neighs/atom = 110.47
 Ave special neighs/atom = 0.595745
-Neighbor list builds = 20336
+Neighbor list builds = 20338
 Dangerous builds = 0
 
 

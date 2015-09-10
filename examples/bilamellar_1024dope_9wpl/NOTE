@@ -1,0 +1,6 @@
+Multibilayers: when generating the "data.*" file, make sure 
+	that no atom is outside the box edges. This can happen especially
+	with low water content (lipid headgroups can "stick out" of the box).
+	In problematic cases, it is possible to generate an initial
+	structure with Brahms from scratch, as this will ensure that all
+	lipid atoms are within the box edges (at least initially).
