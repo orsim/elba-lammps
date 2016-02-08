@@ -6,17 +6,22 @@ of systems modeled with the ELBA force field.
 
 The ELBA model is described in the following papers:
 
-- Ding W, Palaiokostas M, Orsi M. Stress testing the ELBA water model, 
-Molecular Simulation, DOI: 10.1080/08927022.2015.1047367
-- Orsi, M (2014) Comparative assessment of the ELBA coarse-grained model 
-for water, Molecular Physics, 112: 1566.
-- Orsi, M., W. Ding, M. Palaiokostas (2014) Direct Mixing of Atomistic Solutes 
-and Coarse-Grained Water, Journal of Chemical Theory and Computation, 10: 4684.
-- Orsi M, Essex JW (2013) Physical properties of mixed bilayers containing 
-lamellar and nonlamellar lipids: insights from coarse-grain molecular 
-dynamics simulations, Faraday Discussions 161: 249. 
-- Orsi M, Essex JW (2011) The ELBA force field for coarse-grain modeling of 
-lipid membranes, PLoS ONE 6: e28637.
+* _Stress testing the ELBA water model_,
+  W. Ding, M. Palaiokostas, and M. Orsi,
+  [Mol. Simul. 42, 1 (2016)](http://dx.doi.org/10.1080/08927022.2015.1047367).
+* _Comparative assessment of the ELBA coarse-grained model for water_,
+  M. Orsi,
+  [Mol. Phys. 112, 1 (2014)](http://dx.doi.org/10.1080/00268976.2013.844373).
+* _Direct Mixing of Atomistic Solutes and Coarse-Grained Water_,
+  M. Orsi, W. Ding, and M. Palaiokostas,
+  [J. Chem. Theory Comput. 10, 4684 (2014)](http://dx.doi.org/10.1021/ct500065k).
+* _Physical properties of mixed bilayers containing lamellar and nonlamellar lipids:
+  insights from coarse-grain molecular dynamics simulations_,
+  M. Orsi and J. W. Essex,
+  [Faraday Discuss. 161, 249 (2013)](http://dx.doi.org/10.1039/c2fd20110k).
+* _The ELBA force field for coarse-grain modeling of lipid membranes_,
+  M. Orsi and J. W. Essex,
+  [PLoS One 6, e28637 (2011)](http://dx.doi.org/10.1371/journal.pone.0028637).
 
 The various folders in the ELBA-LAMMPS toolkit contain usage information 
 in the form of README files. 
